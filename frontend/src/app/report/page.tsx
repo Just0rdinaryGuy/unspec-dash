@@ -249,7 +249,7 @@ export default function ReportPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-// Add min-h and min-w to prevent Recharts 0-size calculation error
+                        {/* Add min-h and min-w to prevent Recharts 0-size calculation error */}
                         <div className="h-[400px] min-h-[400px] w-full min-w-0">
                             <ResponsiveContainer width="100%" height="100%">
                                 <ComposedChart
