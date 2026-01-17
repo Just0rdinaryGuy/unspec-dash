@@ -294,7 +294,7 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                                 </DialogHeader>
                                 <div className="py-4">
                                     <Input
-                                        placeholder="Contoh: Area Utara"
+                                        placeholder="Contoh: STO mana kek terserah"
                                         value={newBookmarkName}
                                         onChange={(e) => setNewBookmarkName(e.target.value)}
                                     />
