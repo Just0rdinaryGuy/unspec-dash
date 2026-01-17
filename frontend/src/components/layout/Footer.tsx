@@ -5,7 +5,7 @@ export default function Footer() {
     const currentYear = new Date().getFullYear()
 
     return (
-        <footer className="w-full py-6 mt-auto border-t bg-card/50 backdrop-blur-sm">
+        <footer className="w-full py-4 mt-auto border-t bg-card/50 backdrop-blur-sm">
             <div className="container flex flex-col items-center justify-center gap-4">
 
                 {/* Social Icons */}
