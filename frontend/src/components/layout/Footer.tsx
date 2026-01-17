@@ -42,10 +42,9 @@ export default function Footer() {
                 {/* Separator */}
                 <div className="w-full max-w-[500px] h-px bg-border/50" />
 
-                {/* Copyright */}
                 <div className="text-center text-sm text-muted-foreground">
                     <p>
-                        &copy; 2024 - {currentYear} Just0rdinaryGuy. Dibuat dengan Next.js & Shadcn/ui.
+                        &copy; {currentYear > 2026 ? `2026 - ${currentYear}` : "2026"} Just0rdinaryGuy. Dibuat dengan Next.js & Shadcn/ui.
                     </p>
                 </div>
             </div>
