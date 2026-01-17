@@ -48,7 +48,6 @@ export default function MobileSidebar() {
                     <div>
                         <h2 className="text-lg font-bold">Unspec Dash</h2>
                         <p className="text-xs text-muted-foreground">By Just0rdinaryGuy</p>
-                        <br className="my-1" />
                         <p className="text-xs text-muted-foreground">Excel Prima Bara</p>
                     </div>
                     <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>

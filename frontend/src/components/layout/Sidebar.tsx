@@ -50,7 +50,6 @@ export default function Sidebar() {
                     Monitoring Unspec
                 </h1>
                 <p className="text-sm text-muted-foreground">by Just0rdinaryGuy</p>
-                <br />
                 <p className="text-sm text-muted-foreground">Excel Prima Bara</p>
             </div>
 
