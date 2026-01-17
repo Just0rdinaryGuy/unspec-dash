@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-    title: "Monitoring Unspec Dashboard",
-    description: "Dashboard Monitoring Unspec - Pantau Kualitas Jaringan",
+    title: "WOC (Warga Online Ceria)",
+    description: "WOC (Warga Online Ceria) yang pengen libur terus 🥴 ",
 };
 
 export default function RootLayout({
