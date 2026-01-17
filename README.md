@@ -1451,13 +1451,13 @@ Project ini adalah software Proprietary/Private. Dilarang mendistribusikan ulang
 
 **Acknowledgments:**
 - PT Telkom Akses - untuk use case dan requirements
-- Tim Balikpapan - untuk user feedback
+- Tim HD WOC Balikpapan - untuk user feedback
 
 ---
 
 ## 📞 Support
 
-**Issues:** 
+**Issues:* mikir aja sendiri :)* 
 
 **Telegram:** @exprimb
 
