@@ -51,6 +51,3 @@ postgres_data/
 # Backup files
 *.backup
 *.bak
-
-# Artifacts (brain folder)
-.gemini/
