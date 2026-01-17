@@ -56,7 +56,7 @@ interface FilterOptions {
 interface SavedBookmark {
     id: string
     name: string
-    value: string // The STO string
+    value: string
 }
 
 export default function FilterBar({ filters, setFilters, onExport }: FilterBarProps) {
@@ -74,7 +74,6 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     const [newBookmarkName, setNewBookmarkName] = useState("")
 
-    // Load saved bookmarks from local storage
     useEffect(() => {
         const saved = localStorage.getItem("sto_filter_bookmarks")
         if (saved) {
@@ -86,7 +85,6 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
         }
     }, [])
 
-    // Fetch filter options on mount
     useEffect(() => {
         const fetchFilters = async () => {
             try {
@@ -104,7 +102,6 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
         fetchFilters()
     }, [])
 
-    // Debounced search
     useEffect(() => {
         const timer = setTimeout(() => {
             setFilters({ ...filters, search: searchInput })
@@ -171,7 +168,7 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
     }
 
     const deleteBookmark = (id: string, e: React.MouseEvent) => {
-        e.stopPropagation() // Prevent dropdown selection
+        e.stopPropagation()
         const updatedBookmarks = bookmarks.filter(b => b.id !== id)
         setBookmarks(updatedBookmarks)
         localStorage.setItem("sto_filter_bookmarks", JSON.stringify(updatedBookmarks))
@@ -188,7 +185,6 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
             <CardContent className="p-4 space-y-4">
                 {/* Row 1: Search, Date, Ticket Status */}
                 <div className="flex flex-col md:flex-row gap-3">
-                    {/* Search - Grows to fill space */}
                     <div className="flex-1 relative">
                         <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -199,7 +195,6 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                         />
                     </div>
 
-                    {/* Date Filter */}
                     <div className="w-full md:w-[180px]">
                         <Select
                             value={filters.date || "ALL"}
@@ -217,7 +212,6 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                         </Select>
                     </div>
 
-                    {/* Ticket Status Filter */}
                     <div className="w-full md:w-[180px]">
                         <Select
                             value={filters.status || "ALL"}
@@ -236,25 +230,31 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                     </div>
                 </div>
 
-                {/* Row 2: STO, Bookmark, Spec Status, Export */}
-                <div className="flex flex-col md:flex-row gap-3 items-center">
-                    {/* STO Filter - Grows */}
-                    <div className="flex-1 w-full md:max-w-2xl flex gap-2">
-                        <div className="flex-1">
-                            <MultiSelect
-                                options={options.sto_list.map(sto => ({ label: sto, value: sto }))}
-                                selected={filters.sto ? filters.sto.split(",") : []}
-                                onChange={(values) => setFilters({ ...filters, sto: values.join(",") })}
-                                placeholder="Pilih STO (Multiple)"
-                                className="bg-background"
-                            />
-                        </div>
+                {/* Row 2: Unified Control Bar */}
+                {/* Everything in one flex container to keep them together */}
+                <div className="flex flex-col xl:flex-row gap-3 items-start xl:items-center">
 
-                        {/* Bookmark Dropdown */}
+                    {/* STO MultiSelect - This grows to take available space */}
+                    <div className="flex-1 w-full min-w-0">
+                        <MultiSelect
+                            options={options.sto_list.map(sto => ({ label: sto, value: sto }))}
+                            selected={filters.sto ? filters.sto.split(",") : []}
+                            onChange={(values) => setFilters({ ...filters, sto: values.join(",") })}
+                            placeholder="Pilih STO (Multiple)"
+                            className="bg-background w-full"
+                            maxCount={10} // Show extensive list of items
+                        />
+                    </div>
+
+                    {/* Right Side Controls Grouped Together */}
+                    {/* Wrapped in a flex container that stays together */}
+                    <div className="flex flex-wrap gap-2 w-full xl:w-auto items-center shrink-0">
+
+                        {/* Bookmarks */}
                         <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="bg-background px-3" title="Bookmarks">
+                                    <Button variant="outline" className="bg-background px-3 whitespace-nowrap" title="Bookmarks">
                                         <Bookmark className="h-4 w-4 mr-2" />
                                         Bookmarks
                                     </Button>
@@ -288,17 +288,16 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
-                            {/* Save Dialog */}
                             <DialogContent>
                                 <DialogHeader>
                                     <DialogTitle>Simpan Filter STO</DialogTitle>
                                     <DialogDescription>
-                                        Beri nama untuk kombinasi STO yang sedang dipilih agar mudah diakses nanti.
+                                        Beri nama bookmark ini.
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="py-4">
                                     <Input
-                                        placeholder="Contoh: STO Jakarta Full"
+                                        placeholder="Contoh: Area Utara"
                                         value={newBookmarkName}
                                         onChange={(e) => setNewBookmarkName(e.target.value)}
                                     />
@@ -309,11 +308,9 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
-                    </div>
 
-                    <div className="flex gap-3 w-full md:w-auto">
-                        {/* Spec Status Filter */}
-                        <div className="w-full md:w-[150px]">
+                        {/* Spec Status */}
+                        <div className="w-[140px]">
                             <Select
                                 value={filters.specStatus || "ALL"}
                                 onValueChange={(value) => setFilters({ ...filters, specStatus: value === "ALL" ? "" : value })}
@@ -330,25 +327,24 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                             </Select>
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex gap-2 ml-auto">
-                            <Button
-                                onClick={handleExportExcel}
-                                variant="outline"
-                                size="sm"
-                                disabled={loading}
-                                className="bg-green-600 hover:bg-green-700 text-white hover:text-white border-green-600 whitespace-nowrap"
-                            >
-                                <FileSpreadsheet className="h-4 w-4 mr-2" />
-                                {loading ? "..." : "Export"}
-                            </Button>
+                        {/* Export Button */}
+                        <Button
+                            onClick={handleExportExcel}
+                            variant="outline"
+                            size="sm" // Matches other inputs better
+                            disabled={loading}
+                            className="bg-green-600 hover:bg-green-700 text-white hover:text-white border-green-600 whitespace-nowrap h-10 px-4"
+                        >
+                            <FileSpreadsheet className="h-4 w-4 mr-2" />
+                            {loading ? "..." : "Export"}
+                        </Button>
 
-                            {hasActiveFilters && (
-                                <Button onClick={clearFilters} variant="ghost" size="icon" title="Clear Filters">
-                                    <X className="h-4 w-4" />
-                                </Button>
-                            )}
-                        </div>
+                        {/* Clear Button (X) */}
+                        {hasActiveFilters && (
+                            <Button onClick={clearFilters} variant="ghost" size="icon" title="Clear Filters" className="h-10 w-10">
+                                <X className="h-4 w-4" />
+                            </Button>
+                        )}
                     </div>
                 </div>
             </CardContent>

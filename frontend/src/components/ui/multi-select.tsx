@@ -31,6 +31,7 @@ interface MultiSelectProps {
     onChange: (value: string[]) => void
     placeholder?: string
     className?: string
+    maxCount?: number
 }
 
 export function MultiSelect({
@@ -39,6 +40,7 @@ export function MultiSelect({
     onChange,
     placeholder = "Select items...",
     className,
+    maxCount = 3,
 }: MultiSelectProps) {
     const [open, setOpen] = React.useState(false)
 
@@ -53,41 +55,43 @@ export function MultiSelect({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className={cn("w-full justify-between hover:bg-background", className)}
+                    className={cn("w-full justify-between hover:bg-background h-auto min-h-10", className)}
                 >
-                    <div className="flex flex-wrap gap-1 items-center overflow-hidden">
+                    <div className="flex flex-wrap gap-1 items-center justify-start max-w-full">
                         {selected.length === 0 && <span className="text-muted-foreground font-normal">{placeholder}</span>}
-                        {selected.length > 0 && selected.length <= 2 && (
-                            selected.map((item) => (
-                                <Badge
-                                    variant="secondary"
-                                    key={item}
-                                    className="mr-1 mb-1 px-1 font-normal"
-                                >
-                                    {item}
-                                    <div
-                                        role="button"
-                                        className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer"
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter") {
-                                                handleUnselect(item)
-                                            }
-                                        }}
-                                        onMouseDown={(e) => {
-                                            e.preventDefault()
-                                            e.stopPropagation()
-                                        }}
-                                        onClick={() => handleUnselect(item)}
+                        {selected.length > 0 && (
+                            <>
+                                {selected.slice(0, maxCount).map((item) => (
+                                    <Badge
+                                        variant="secondary"
+                                        key={item}
+                                        className="mr-1 mb-1 px-1 font-normal"
                                     >
-                                        <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                                    </div>
-                                </Badge>
-                            ))
-                        )}
-                        {selected.length > 2 && (
-                            <Badge variant="secondary" className="mr-1 mb-1 font-normal">
-                                {selected.length} items selected
-                            </Badge>
+                                        {item}
+                                        <div
+                                            role="button"
+                                            className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer"
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    handleUnselect(item)
+                                                }
+                                            }}
+                                            onMouseDown={(e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                            }}
+                                            onClick={() => handleUnselect(item)}
+                                        >
+                                            <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                                        </div>
+                                    </Badge>
+                                ))}
+                                {selected.length > maxCount && (
+                                    <Badge variant="secondary" className="mr-1 mb-1 font-normal">
+                                        +{selected.length - maxCount} more
+                                    </Badge>
+                                )}
+                            </>
                         )}
                     </div>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
