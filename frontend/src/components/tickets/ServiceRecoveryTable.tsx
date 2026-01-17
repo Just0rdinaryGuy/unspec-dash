@@ -232,7 +232,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
             <div
                 className={cn(
                     "cursor-pointer hover:bg-muted/50 px-1 rounded min-h-[20px] w-full text-sm flex items-center",
-                    !value && "text-muted-foreground/50 italic",
+                    !value ? "text-muted-foreground/50 italic select-none" : "select-text",
                     className
                 )}
                 onDoubleClick={() => setIsEditing(true)}
@@ -325,7 +325,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
 
                                         return (
                                             <TableRow key={ticket.id} className="hover:bg-muted/50">
-                                                <TableCell className="text-sm text-muted-foreground">{formatDate(ticket.tgl)}</TableCell>
+                                                <TableCell className="text-sm text-muted-foreground select-none">{formatDate(ticket.tgl)}</TableCell>
                                                 <TableCell>
                                                     <EditableCell
                                                         value={ticket.sto}
@@ -366,10 +366,10 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                     />
                                                 </TableCell>
 
-                                                <TableCell className="text-center font-mono text-xs">
+                                                <TableCell className="text-center font-mono text-xs select-none">
                                                     <div className={cn(redamanAwal.color)}>{redamanAwal.value}</div>
                                                 </TableCell>
-                                                <TableCell className="text-center font-mono text-xs">
+                                                <TableCell className="text-center font-mono text-xs select-none">
                                                     {ticket.redaman_akhir ? (
                                                         <div className={cn(formatPower(ticket.redaman_akhir).color)}>
                                                             {formatPower(ticket.redaman_akhir).value}
@@ -380,7 +380,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                 </TableCell>
 
                                                 {/* Status RFO Editable */}
-                                                <TableCell>
+                                                <TableCell className="select-none">
                                                     <input
                                                         className="bg-transparent border-none w-full text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 placeholder:text-muted-foreground/30"
                                                         defaultValue={ticket.status_rfo}
@@ -394,7 +394,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                 </TableCell>
 
                                                 {/* Status Tiket Select */}
-                                                <TableCell>
+                                                <TableCell className="select-none">
                                                     <select
                                                         className={cn(
                                                             "text-xs font-bold rounded px-2 py-1 border-none focus:outline-none cursor-pointer",
