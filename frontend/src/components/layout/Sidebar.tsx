@@ -49,7 +49,7 @@ export default function Sidebar() {
                 <h1 className="text-xl font-bold text-foreground">
                     Monitoring Unspec Dashboard
                 </h1>
-                <p className="text-sm text-muted-foreground">by Just0rdinaryGuy</p>
+                <p className="text-sm text-muted-foreground">by Just0rdinaryGuy - Excel Prima Bara</p>
             </div>
 
             {/* Navigation */}

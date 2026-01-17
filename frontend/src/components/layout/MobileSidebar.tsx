@@ -47,7 +47,7 @@ export default function MobileSidebar() {
                 <div className="p-6 border-b border-border flex justify-between items-center bg-card">
                     <div>
                         <h2 className="text-lg font-bold">Unspec Dash</h2>
-                        <p className="text-xs text-muted-foreground">Mobile Menu</p>
+                        <p className="text-xs text-muted-foreground">By Just0rdinaryGuy</p>
                     </div>
                     <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
                         <X className="h-5 w-5" />
