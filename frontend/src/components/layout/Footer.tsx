@@ -20,7 +20,7 @@ export default function Footer() {
                         <span className="sr-only">GitHub</span>
                     </Link>
                     <Link
-                        href="https://t.me/Just0rdinaryGuy"
+                        href="https://t.me/exprimb"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
