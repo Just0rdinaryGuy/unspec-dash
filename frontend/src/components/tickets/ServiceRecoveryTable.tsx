@@ -293,7 +293,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                                 handleSave(ticket.id, 'nama_teknisi', newValue)
                                                             }
                                                         }}
-                                                        data-placeholder="Nama Teknisi"
+                                                        data-placeholder="Nama Tim Teknisi"
                                                     >
                                                         {ticket.nama_teknisi}
                                                     </div>
@@ -335,7 +335,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                     <input
                                                         className="bg-transparent border-none w-full text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 placeholder:text-muted-foreground/30"
                                                         defaultValue={ticket.status_rfo}
-                                                        placeholder="Status RFO"
+                                                        placeholder="RFO / Perbaikan"
                                                         onBlur={(e) => {
                                                             if (e.target.value !== ticket.status_rfo) {
                                                                 handleSave(ticket.id, 'status_rfo', e.target.value)
