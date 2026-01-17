@@ -8,6 +8,7 @@ interface DashboardLayoutProps {
 }
 
 import MobileSidebar from "./MobileSidebar"
+import Footer from "./Footer"
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
@@ -28,6 +29,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 <div className="container mx-auto p-4 md:p-6 lg:p-8 flex-1">
                     {children}
                 </div>
+                <Footer />
             </main>
         </div>
     )
