@@ -908,6 +908,8 @@ class RealDataService:
             return None
             
         # Update allowed fields
+        if "sto" in updates:
+            node.sto = updates["sto"]
         if "nama_teknisi" in updates:
             node.nama_teknisi = updates["nama_teknisi"]
         if "no_tiket" in updates:

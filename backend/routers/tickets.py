@@ -74,6 +74,7 @@ def get_available_dates(db: Session = Depends(get_db)):
 
 from pydantic import BaseModel
 class TicketUpdate(BaseModel):
+    sto: Optional[str] = None
     odp: Optional[str] = None
     no_tiket: Optional[str] = None
     nama_teknisi: Optional[str] = None
