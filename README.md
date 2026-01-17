@@ -902,7 +902,7 @@ Jika error saat upload:
 | rx_power_after | FLOAT | RX power dari ukur massal | -20.3 |
 | spec_status | VARCHAR | SPEC atau UNSPEC | "SPEC" |
 | ticket_status | VARCHAR | Status tiket | "OPEN" / "CLOSED" |
-| nama_teknisi | VARCHAR | Nama teknisi yang handle | "Ahmad" |
+| nama_teknisi | VARCHAR | Nama teknisi yang handle | "Raffy Jomok" |
 | status_rfo | VARCHAR | Status RFO | "PERBAIKAN_FIBER" |
 | no_tiket | VARCHAR | Nomor tiket | "INC123456" |
 | tanggal_ukur_ulang | DATETIME | Tanggal ukur ulang | 2026-01-15 |
@@ -954,10 +954,10 @@ Jika error saat upload:
 | Column | Type | Description | Example |
 |--------|------|-------------|---------|
 | id | INTEGER | Primary key | 1 |
-| username | VARCHAR | Username (unique) | "ahmad_tech" |
+| username | VARCHAR | Username (unique) | "raffy_jomok" |
 | nik | VARCHAR | NIK karyawan (unique) | "3374012345678901" |
 | password_hash | VARCHAR | Hashed password (bcrypt) | "$2b$12$..." |
-| full_name | VARCHAR | Nama lengkap | "Ahmad Teknisi" |
+| full_name | VARCHAR | Nama lengkap | "Raffy Jomok" |
 | role | VARCHAR | Role user | "user" / "admin" / "developer" |
 | is_active | BOOLEAN | Status active | TRUE / FALSE |
 | created_at | TIMESTAMP | Waktu register | 2026-01-17 09:00:00 |
