@@ -182,73 +182,70 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
 
     return (
         <Card className="shadow-sm border-muted/40">
-            <CardContent className="p-4 space-y-4">
-                {/* Row 1: Search, Date, Ticket Status */}
-                <div className="flex flex-col md:flex-row gap-3">
-                    <div className="flex-1 relative">
+            <CardContent className="p-4">
+                <div className="grid grid-cols-1 xl:grid-cols-[1fr_auto] gap-4">
+                    {/* Row 1 Left: Search */}
+                    <div className="relative">
                         <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Cari ND atau ODP..."
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
-                            className="pl-9 bg-background"
+                            className="pl-9 bg-background w-full"
                         />
                     </div>
 
-                    <div className="w-full md:w-[180px]">
-                        <Select
-                            value={filters.date || "ALL"}
-                            onValueChange={(value) => setFilters({ ...filters, date: value === "ALL" ? "" : value })}
-                        >
-                            <SelectTrigger className="bg-background">
-                                <SelectValue placeholder="Pilih Tanggal" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="ALL">Latest Data</SelectItem>
-                                {options.available_dates && options.available_dates.map(date => (
-                                    <SelectItem key={date} value={date}>{date}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                    {/* Row 1 Right: Date & Status */}
+                    <div className="flex flex-col md:flex-row gap-2 w-full xl:w-auto">
+                        <div className="w-full md:w-[180px]">
+                            <Select
+                                value={filters.date || "ALL"}
+                                onValueChange={(value) => setFilters({ ...filters, date: value === "ALL" ? "" : value })}
+                            >
+                                <SelectTrigger className="bg-background">
+                                    <SelectValue placeholder="Pilih Tanggal" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="ALL">Latest Data</SelectItem>
+                                    {options.available_dates && options.available_dates.map(date => (
+                                        <SelectItem key={date} value={date}>{date}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="w-full md:w-[180px]">
+                            <Select
+                                value={filters.status || "ALL"}
+                                onValueChange={(value) => setFilters({ ...filters, status: value === "ALL" ? "" : value })}
+                            >
+                                <SelectTrigger className="bg-background">
+                                    <SelectValue placeholder="Status Tiket" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="ALL">Semua Status</SelectItem>
+                                    <SelectItem value="PROGRESS">PROGRESS</SelectItem>
+                                    <SelectItem value="KENDALA">KENDALA</SelectItem>
+                                    <SelectItem value="CLOSED">CLOSED</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
 
-                    <div className="w-full md:w-[180px]">
-                        <Select
-                            value={filters.status || "ALL"}
-                            onValueChange={(value) => setFilters({ ...filters, status: value === "ALL" ? "" : value })}
-                        >
-                            <SelectTrigger className="bg-background">
-                                <SelectValue placeholder="Status Tiket" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="ALL">Semua Status</SelectItem>
-                                <SelectItem value="PROGRESS">PROGRESS</SelectItem>
-                                <SelectItem value="KENDALA">KENDALA</SelectItem>
-                                <SelectItem value="CLOSED">CLOSED</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-
-                {/* Row 2: Unified Control Bar */}
-                {/* Everything in one flex container to keep them together */}
-                <div className="flex flex-col xl:flex-row gap-3 items-start xl:items-center">
-
-                    {/* STO MultiSelect - This grows to take available space */}
-                    <div className="flex-1 w-full min-w-0">
+                    {/* Row 2 Left: STO */}
+                    <div className="w-full min-w-0">
                         <MultiSelect
                             options={options.sto_list.map(sto => ({ label: sto, value: sto }))}
                             selected={filters.sto ? filters.sto.split(",") : []}
                             onChange={(values) => setFilters({ ...filters, sto: values.join(",") })}
                             placeholder="Pilih STO (Multiple)"
                             className="bg-background w-full"
-                            maxCount={10} // Show extensive list of items
+                            maxCount={10}
                         />
                     </div>
 
-                    {/* Right Side Controls Grouped Together */}
-                    {/* Wrapped in a flex container that stays together */}
-                    <div className="flex flex-wrap gap-2 w-full xl:w-auto items-center shrink-0">
+                    {/* Row 2 Right: Controls */}
+                    <div className="flex flex-wrap gap-2 w-full xl:w-auto items-center justify-start xl:justify-end">
 
                         {/* Bookmarks */}
                         <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
