@@ -307,8 +307,7 @@ export default function ReportPage() {
                                     {data.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                                                No reports found for this month.
-                                                {(user?.role === 'admin' || user?.role === 'developer') && ""}
+                                                Tidak ada data di bulan ini.
                                             </TableCell>
                                         </TableRow>
                                     ) : (
