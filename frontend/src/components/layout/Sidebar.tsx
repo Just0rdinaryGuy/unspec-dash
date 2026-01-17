@@ -49,7 +49,7 @@ export default function Sidebar() {
                 <h1 className="text-xl font-bold text-foreground">
                     Warga Online Ceria
                 </h1>
-                <p className="text-sm text-muted-foreground">Web Warga WOC yang dapat dikembangkan lagi agar kerja rewel</p>
+                <p className="text-sm text-muted-foreground">Web Warga WOC yang dapat dikembangkan lagi agar kerja ga rewel</p>
             </div>
 
             {/* Navigation */}
