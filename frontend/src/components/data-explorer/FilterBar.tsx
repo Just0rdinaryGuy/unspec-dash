@@ -168,6 +168,7 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
     }
 
     const deleteBookmark = (id: string, e: React.MouseEvent) => {
+        e.preventDefault()
         e.stopPropagation()
         const updatedBookmarks = bookmarks.filter(b => b.id !== id)
         setBookmarks(updatedBookmarks)
@@ -195,7 +196,7 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                         />
                     </div>
 
-                    {/* Row 1 Right: Date & Status */}
+                    {/* Row 1 Right: Date (Status removed) */}
                     <div className="flex flex-col md:flex-row gap-2 w-full xl:w-auto">
                         <div className="w-full md:w-[180px]">
                             <Select
@@ -210,23 +211,6 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                                     {options.available_dates && options.available_dates.map(date => (
                                         <SelectItem key={date} value={date}>{date}</SelectItem>
                                     ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="w-full md:w-[180px]">
-                            <Select
-                                value={filters.status || "ALL"}
-                                onValueChange={(value) => setFilters({ ...filters, status: value === "ALL" ? "" : value })}
-                            >
-                                <SelectTrigger className="bg-background">
-                                    <SelectValue placeholder="Status Tiket" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="ALL">Semua Status</SelectItem>
-                                    <SelectItem value="PROGRESS">PROGRESS</SelectItem>
-                                    <SelectItem value="KENDALA">KENDALA</SelectItem>
-                                    <SelectItem value="CLOSED">CLOSED</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
