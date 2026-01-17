@@ -291,50 +291,52 @@ export default function UserManagement() {
                         onChange={e => setSearch(e.target.value)}
                     />
                 </div>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Username</TableHead>
-                            <TableHead>Full Name</TableHead>
-                            <TableHead>NIK</TableHead>
-                            <TableHead>Role</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filteredUsers.map(user => (
-                            <TableRow key={user.id}>
-                                <TableCell className="font-medium">{user.username}</TableCell>
-                                <TableCell>{user.full_name}</TableCell>
-                                <TableCell>{user.nik}</TableCell>
-                                <TableCell>
-                                    <Badge variant={
-                                        user.role === 'admin' ? 'default' :
-                                            user.role === 'developer' ? 'secondary' : 'outline'
-                                    }>
-                                        {user.role}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <Badge variant={user.is_active ? 'outline' : 'destructive'} className={user.is_active ? "text-green-600 border-green-600" : ""}>
-                                        {user.is_active ? 'Active' : 'Inactive'}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="text-right space-x-2">
-                                    <Button variant="ghost" size="icon" onClick={() => openEdit(user)}>
-                                        <Pencil className="h-4 w-4" />
-                                    </Button>
-                                    {currentUser?.id !== user.id && (
-                                        <Button variant="ghost" size="icon" onClick={() => handleDelete(user.id)} className="text-red-500 hover:text-red-700">
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    )}
-                                </TableCell>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Username</TableHead>
+                                <TableHead>Full Name</TableHead>
+                                <TableHead>NIK</TableHead>
+                                <TableHead>Role</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {filteredUsers.map(user => (
+                                <TableRow key={user.id}>
+                                    <TableCell className="font-medium">{user.username}</TableCell>
+                                    <TableCell>{user.full_name}</TableCell>
+                                    <TableCell>{user.nik}</TableCell>
+                                    <TableCell>
+                                        <Badge variant={
+                                            user.role === 'admin' ? 'default' :
+                                                user.role === 'developer' ? 'secondary' : 'outline'
+                                        }>
+                                            {user.role}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant={user.is_active ? 'outline' : 'destructive'} className={user.is_active ? "text-green-600 border-green-600" : ""}>
+                                            {user.is_active ? 'Active' : 'Inactive'}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell className="text-right space-x-2">
+                                        <Button variant="ghost" size="icon" onClick={() => openEdit(user)}>
+                                            <Pencil className="h-4 w-4" />
+                                        </Button>
+                                        {currentUser?.id !== user.id && (
+                                            <Button variant="ghost" size="icon" onClick={() => handleDelete(user.id)} className="text-red-500 hover:text-red-700">
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </CardContent>
         </Card>
     )
