@@ -494,7 +494,18 @@ class RealDataService:
                 func.date(NetworkNodeDB.import_date) == target_date
             ).delete(synchronize_session=False)
             
-            # 2. Bulk insert new data
+            # 2. Fix Sequence (CRITICAL FIX for Duplicate ID Error)
+            # Postgres sequence might be out of sync if data was inserted manually or migrated
+            try:
+                from sqlalchemy import text
+                # Reset sequence to MAX(id)
+                self.db.execute(text(
+                    "SELECT setval('network_nodes_id_seq', COALESCE((SELECT MAX(id) FROM network_nodes), 0) + 1, false);"
+                ))
+            except Exception as seq_err:
+                print(f"Warning: Could not reset sequence (ignorable if not Postgres): {seq_err}")
+
+            # 3. Bulk insert new data
             nodes_to_insert = []
             row_num = 1
             
