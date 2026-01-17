@@ -19,6 +19,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {
@@ -180,6 +181,9 @@ export default function UserManagement() {
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>{editingUser ? "Edit User" : "Add New User"}</DialogTitle>
+                            <DialogDescription>
+                                {editingUser ? "Make changes to user account here." : "Create a new user account."}
+                            </DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
