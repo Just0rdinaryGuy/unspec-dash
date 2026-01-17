@@ -38,7 +38,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8005:8000"
     environment:
       - CORS_ORIGINS=http://localhost:3000
       - DATABASE_URL=postgresql://gpon_user:gpon_secure_pass_2026@postgres:5432/gpon_network
