@@ -43,6 +43,19 @@ except Exception as e:
     print(f"✗ Error creating tables: {e}")
     sys.exit(1)
 
+# Clear existing data (Truncate)
+print("\n[2.5/5] Clearing existing data (Truncate)...")
+try:
+    with postgres_engine.connect() as conn:
+        print("  Cleaning daily_reports, network_nodes, users...")
+        # Urutan penting karena foreign key constraints
+        conn.execute(text("TRUNCATE TABLE daily_reports, network_nodes, users RESTART IDENTITY CASCADE"))
+        conn.commit()
+    print("✓ Existing data cleared")
+except Exception as e:
+    print(f"✗ Error clearing data: {e}")
+    sys.exit(1)
+
 # Read from SQLite
 print("\n[3/5] Reading data dari SQLite...")
 try:
