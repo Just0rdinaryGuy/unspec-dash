@@ -272,14 +272,26 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
                                     {bookmarks.length > 0 && <DropdownMenuSeparator />}
 
                                     {bookmarks.map(b => (
-                                        <DropdownMenuItem key={b.id} onClick={() => applyBookmark(b.value)} className="justify-between group">
-                                            <span className="truncate mr-2">{b.name}</span>
-                                            <Trash2
-                                                className="h-3 w-3 text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                onClick={(e) => deleteBookmark(b.id, e)}
+                                        <div key={b.id} className="relative flex items-center">
+                                            <DropdownMenuItem
+                                                onClick={() => applyBookmark(b.value)}
+                                                className="flex-1 cursor-pointer pr-8"
+                                            >
+                                                <span className="truncate">{b.name}</span>
+                                            </DropdownMenuItem>
+                                            <div
+                                                role="button"
+                                                className="absolute right-2 p-1 hover:bg-muted rounded-sm cursor-pointer z-50 text-muted-foreground hover:text-red-500"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    deleteBookmark(b.id, e)
+                                                }}
                                                 onPointerDown={(e) => e.stopPropagation()}
-                                            />
-                                        </DropdownMenuItem>
+                                            >
+                                                <Trash2 className="h-3 w-3" />
+                                            </div>
+                                        </div>
                                     ))}
 
                                     {bookmarks.length === 0 && (
