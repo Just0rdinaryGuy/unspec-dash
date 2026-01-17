@@ -92,7 +92,8 @@ export default function ReportPage() {
         try {
             const token = localStorage.getItem("token")
             // Pass month as 1-indexed (month+1) buat backend
-            const res = await fetch(`${API_BASE_URL}/api/reports?month=${selectedMonth + 1}&year=${selectedYear}`, {
+            // Add trailing slash to avoid 307 Redirect -> Mixed Content issues
+            const res = await fetch(`${API_BASE_URL}/api/reports/?month=${selectedMonth + 1}&year=${selectedYear}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             if (res.ok) {
