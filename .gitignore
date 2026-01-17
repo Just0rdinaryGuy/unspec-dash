@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.next/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Migration scripts (temporary)
+backend/migrate_*.py
+backend/check_*.py
+backend/analyze_*.py
+backend/fix_*.py
+backend/sync_*.py
+backend/verify_*.py
+backend/test_*.py
+
+# Uploaded debug files
+backend/debug_*.xlsx
+
+# Docker volumes
+postgres_data/
+
+# Backup files
+*.backup
+*.bak
+
+# Artifacts (brain folder)
+.gemini/
