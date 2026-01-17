@@ -164,6 +164,85 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
         return <ArrowDown className="ml-2 h-4 w-4" />
     }
 
+    // Helper Component for Editable Cells
+    const EditableCell = ({
+        value,
+        field,
+        id,
+        placeholder,
+        className
+    }: {
+        value: string,
+        field: string,
+        id: number,
+        placeholder?: string,
+        className?: string
+    }) => {
+        const [isEditing, setIsEditing] = useState(false)
+        const [tempValue, setTempValue] = useState(value)
+
+        useEffect(() => {
+            setTempValue(value)
+        }, [value])
+
+        if (isEditing) {
+            return (
+                <div
+                    contentEditable
+                    suppressContentEditableWarning
+                    className={cn(
+                        "bg-background ring-1 ring-primary w-full outline-none px-1 rounded min-h-[20px] text-sm",
+                        className
+                    )}
+                    onBlur={(e) => {
+                        const newValue = e.currentTarget.textContent || ''
+                        if (newValue !== value) {
+                            handleSave(id, field, newValue)
+                        }
+                        setIsEditing(false)
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault()
+                            e.currentTarget.blur()
+                        }
+                    }}
+                    ref={(el) => {
+                        if (el) {
+                            el.focus()
+                            // Place cursor at end
+                            const range = document.createRange()
+                            const sel = window.getSelection()
+                            if (sel && el.childNodes.length > 0) {
+                                range.setStart(el.childNodes[0], el.textContent?.length || 0)
+                                range.collapse(true)
+                                sel.removeAllRanges()
+                                sel.addRange(range)
+                            }
+                        }
+                    }}
+                    data-placeholder={placeholder}
+                >
+                    {tempValue}
+                </div>
+            )
+        }
+
+        return (
+            <div
+                className={cn(
+                    "cursor-pointer hover:bg-muted/50 px-1 rounded min-h-[20px] w-full text-sm flex items-center",
+                    !value && "text-muted-foreground/50 italic",
+                    className
+                )}
+                onDoubleClick={() => setIsEditing(true)}
+                title="Double click to edit"
+            >
+                {value || placeholder || '-'}
+            </div>
+        )
+    }
+
     // Format tanggal dari ISO string
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr)
@@ -246,81 +325,51 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
 
                                         return (
                                             <TableRow key={ticket.id} className="hover:bg-muted/50">
-                                                <TableCell className="text-sm text-muted-foreground select-none">{formatDate(ticket.tgl)}</TableCell>
+                                                <TableCell className="text-sm text-muted-foreground">{formatDate(ticket.tgl)}</TableCell>
                                                 <TableCell>
-                                                    <div
-                                                        contentEditable
-                                                        suppressContentEditableWarning
-                                                        className="bg-transparent w-full font-medium text-sm focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 min-h-[20px]"
-                                                        onBlur={(e) => {
-                                                            const newValue = e.currentTarget.textContent || ''
-                                                            if (newValue !== ticket.sto) {
-                                                                handleSave(ticket.id, 'sto', newValue)
-                                                            }
-                                                        }}
-                                                    >
-                                                        {ticket.sto}
-                                                    </div>
+                                                    <EditableCell
+                                                        value={ticket.sto}
+                                                        field="sto"
+                                                        id={ticket.id}
+                                                        className="font-medium"
+                                                    />
                                                 </TableCell>
-                                                <TableCell className="font-mono text-xs text-muted-foreground bg-muted/20">{ticket.nd || '-'}</TableCell>
+                                                <TableCell className="font-mono text-xs text-muted-foreground bg-muted/20 select-text">{ticket.nd || '-'}</TableCell>
 
                                                 {/* ODP Editable */}
                                                 <TableCell>
-                                                    <div
-                                                        contentEditable
-                                                        suppressContentEditableWarning
-                                                        className="bg-transparent w-full text-sm focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 min-h-[20px]"
-                                                        onBlur={(e) => {
-                                                            const newValue = e.currentTarget.textContent || ''
-                                                            if (newValue !== ticket.odp) {
-                                                                handleSave(ticket.id, 'odp', newValue)
-                                                            }
-                                                        }}
-                                                    >
-                                                        {ticket.odp}
-                                                    </div>
+                                                    <EditableCell
+                                                        value={ticket.odp}
+                                                        field="odp"
+                                                        id={ticket.id}
+                                                    />
                                                 </TableCell>
 
                                                 {/* Teknisi Editable */}
                                                 <TableCell>
-                                                    <div
-                                                        contentEditable
-                                                        suppressContentEditableWarning
-                                                        className="bg-transparent w-full text-sm focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 min-h-[20px]"
-                                                        onBlur={(e) => {
-                                                            const newValue = e.currentTarget.textContent || ''
-                                                            if (newValue !== ticket.nama_teknisi) {
-                                                                handleSave(ticket.id, 'nama_teknisi', newValue)
-                                                            }
-                                                        }}
-                                                        data-placeholder="Nama Tim Teknisi"
-                                                    >
-                                                        {ticket.nama_teknisi}
-                                                    </div>
+                                                    <EditableCell
+                                                        value={ticket.nama_teknisi}
+                                                        field="nama_teknisi"
+                                                        id={ticket.id}
+                                                        placeholder="Nama Tim Teknisi"
+                                                    />
                                                 </TableCell>
 
                                                 {/* No Tiket Editable */}
                                                 <TableCell>
-                                                    <div
-                                                        contentEditable
-                                                        suppressContentEditableWarning
-                                                        className="bg-transparent w-full text-xs font-mono focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 min-h-[20px]"
-                                                        onBlur={(e) => {
-                                                            const newValue = e.currentTarget.textContent || ''
-                                                            if (newValue !== ticket.no_tiket) {
-                                                                handleSave(ticket.id, 'no_tiket', newValue)
-                                                            }
-                                                        }}
-                                                        data-placeholder="No Tiket"
-                                                    >
-                                                        {ticket.no_tiket}
-                                                    </div>
+                                                    <EditableCell
+                                                        value={ticket.no_tiket}
+                                                        field="no_tiket"
+                                                        id={ticket.id}
+                                                        placeholder="No Tiket"
+                                                        className="font-mono text-xs"
+                                                    />
                                                 </TableCell>
 
-                                                <TableCell className="text-center font-mono text-xs select-none">
+                                                <TableCell className="text-center font-mono text-xs">
                                                     <div className={cn(redamanAwal.color)}>{redamanAwal.value}</div>
                                                 </TableCell>
-                                                <TableCell className="text-center font-mono text-xs select-none">
+                                                <TableCell className="text-center font-mono text-xs">
                                                     {ticket.redaman_akhir ? (
                                                         <div className={cn(formatPower(ticket.redaman_akhir).color)}>
                                                             {formatPower(ticket.redaman_akhir).value}
@@ -331,7 +380,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                 </TableCell>
 
                                                 {/* Status RFO Editable */}
-                                                <TableCell className="select-none">
+                                                <TableCell>
                                                     <input
                                                         className="bg-transparent border-none w-full text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 placeholder:text-muted-foreground/30"
                                                         defaultValue={ticket.status_rfo}
@@ -345,7 +394,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                 </TableCell>
 
                                                 {/* Status Tiket Select */}
-                                                <TableCell className="select-none">
+                                                <TableCell>
                                                     <select
                                                         className={cn(
                                                             "text-xs font-bold rounded px-2 py-1 border-none focus:outline-none cursor-pointer",
