@@ -2,7 +2,7 @@
 
 > **Sistem Monitoring dan Manajemen Jaringan berbasis Web untuk PT Telkom Akses**
 
-Platform web modern yang dirancang khusus untuk membantu tim Telkom Balikpapan dalam memonitor, menganalisis, dan mengelola node jaringan GPON yang mengalami Unspec (redaman tidak sesuai standar). Aplikasi ini menyediakan dashboard real-time, sistem pelaporan otomatis, dan tracking tiket service recovery.
+Platform web modern yang dirancang khusus untuk membantu tim HD WOC Balikpapan dalam memonitor, menganalisis, dan mengelola node jaringan yang mengalami Unspec (redaman tidak sesuai standar). Aplikasi ini menyediakan dashboard real-time, sistem pelaporan otomatis, dan tracking tiket service recovery.
 
 ---
 
@@ -28,7 +28,7 @@ Platform web modern yang dirancang khusus untuk membantu tim Telkom Balikpapan d
 
 ### Latar Belakang
 
-Dalam operasional jaringan GPON (Gigabit Passive Optical Network) PT Telkom, salah satu parameter kritis yang harus dipantau adalah **redaman** (signal loss) pada setiap node pelanggan. Redaman yang tidak sesuai standar (UNSPEC) dapat menyebabkan degradasi kualitas layanan atau bahkan service down.
+Dalam operasional jaringan GPON (Gigabit Passive Optical Network) PT Telkom Akses, salah satu parameter kritis yang harus dipantau adalah **redaman** (signal loss) pada setiap node pelanggan. Redaman yang tidak sesuai standar (UNSPEC) dapat menyebabkan degradasi kualitas layanan atau bahkan service down.
 
 Sebelumnya, proses monitoring dan reporting dilakukan secara manual menggunakan Excel, yang memiliki beberapa kendala:
 - **Inefficient**: Update data memakan waktu lama
