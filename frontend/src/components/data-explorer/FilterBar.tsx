@@ -44,6 +44,7 @@ interface FilterBarProps {
     }
     setFilters: (filters: any) => void
     onExport?: () => void
+    showStatusFilter?: boolean
 }
 
 interface FilterOptions {
@@ -59,7 +60,7 @@ interface SavedBookmark {
     value: string
 }
 
-export default function FilterBar({ filters, setFilters, onExport }: FilterBarProps) {
+export default function FilterBar({ filters, setFilters, onExport, showStatusFilter = true }: FilterBarProps) {
     const [searchInput, setSearchInput] = useState("")
     const [options, setOptions] = useState<FilterOptions>({
         sto_list: [],
@@ -196,7 +197,7 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                         />
                     </div>
 
-                    {/* Row 1 Right: Date (Status removed) */}
+                    {/* Row 1 Right: Date & Status */}
                     <div className="flex flex-col md:flex-row gap-2 w-full xl:w-auto">
                         <div className="w-full md:w-[180px]">
                             <Select
@@ -214,6 +215,25 @@ export default function FilterBar({ filters, setFilters, onExport }: FilterBarPr
                                 </SelectContent>
                             </Select>
                         </div>
+
+                        {showStatusFilter && (
+                            <div className="w-full md:w-[180px]">
+                                <Select
+                                    value={filters.status || "ALL"}
+                                    onValueChange={(value) => setFilters({ ...filters, status: value === "ALL" ? "" : value })}
+                                >
+                                    <SelectTrigger className="bg-background">
+                                        <SelectValue placeholder="Status Tiket" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="ALL">Semua Status</SelectItem>
+                                        <SelectItem value="PROGRESS">PROGRESS</SelectItem>
+                                        <SelectItem value="KENDALA">KENDALA</SelectItem>
+                                        <SelectItem value="CLOSED">CLOSED</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        )}
                     </div>
 
                     {/* Row 2 Left: STO */}

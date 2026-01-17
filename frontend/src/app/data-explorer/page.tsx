@@ -25,7 +25,7 @@ export default function DataExplorerPage() {
                 </div>
 
                 {/* Filter Bar */}
-                <FilterBar filters={filters} setFilters={setFilters} />
+                <FilterBar filters={filters} setFilters={setFilters} showStatusFilter={false} />
 
                 {/* Main Data Table */}
                 <NetworkDataTable filters={filters} />
