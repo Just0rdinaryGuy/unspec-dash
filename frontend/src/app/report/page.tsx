@@ -308,7 +308,7 @@ export default function ReportPage() {
                                         <TableRow>
                                             <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                                                 No reports found for this month.
-                                                {(user?.role === 'admin' || user?.role === 'developer') && " Click 'Generate Today' to create one."}
+                                                {(user?.role === 'admin' || user?.role === 'developer') && ""}
                                             </TableCell>
                                         </TableRow>
                                     ) : (
