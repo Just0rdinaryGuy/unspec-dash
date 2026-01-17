@@ -144,13 +144,13 @@ def export_excel_nodes(
     
     output.seek(0)
     
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = f"network_data_{timestamp}.xlsx"
+    date_str = datetime.now().strftime('%d-%m-%Y')
+    filename = f"Data Unspec {date_str}.xlsx"
     
     return StreamingResponse(
         output,
         media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        headers={"Content-Disposition": f"attachment; filename={filename}"}
+        headers={"Content-Disposition": f"attachment; filename=\"{filename}\""}
     )
 
 @router.get("/filters")

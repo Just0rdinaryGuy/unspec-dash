@@ -61,8 +61,9 @@ def export_service_recovery_tickets(
             
     output.seek(0)
     
+    date_str = date.today().strftime('%d-%m-%Y')
     headers = {
-        'Content-Disposition': f'attachment; filename="ServiceRecovery_{date.today()}.xlsx"'
+        'Content-Disposition': f'attachment; filename="Status Ticket Unspec {date_str}.xlsx"'
     }
     return StreamingResponse(output, headers=headers, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
