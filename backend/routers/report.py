@@ -56,6 +56,48 @@ async def generate_today_report(
         print(f"ERROR GENERATING REPORT: {e}")
         raise HTTPException(status_code=500, detail=f"Error generating report: {str(e)}")
 
+@router.post("/regenerate-all")
+async def regenerate_all_reports(
+    target: int = Query(127, description="Target daily unspec"),
+    db: Session = Depends(get_db)
+):
+    """
+    Regenerate laporan harian untuk SEMUA tanggal yang ada di database.
+    Ini berguna kalau ada data yang diimport tapi reportnya belum dibuat.
+    """
+    from services.real_data_service import RealDataService
+    service = RealDataService(db)
+    
+    try:
+        # Get all unique dates from network_nodes table
+        distinct_dates = db.query(
+            func.date(NetworkNodeDB.import_date).label('date')
+        ).distinct().all()
+        
+        generated_count = 0
+        reports = []
+        
+        for (date_obj,) in distinct_dates:
+            if date_obj:
+                report = service.generate_daily_report(date_obj, target)
+                reports.append({
+                    "date": date_obj.isoformat(),
+                    "total_saldo": report.total_saldo,
+                    "close": report.close,
+                    "saldo_lama": report.saldo_lama
+                })
+                generated_count += 1
+        
+        return {
+            "status": "success",
+            "message": f"Regenerated {generated_count} daily reports",
+            "reports": reports
+        }
+        
+    except Exception as e:
+        print(f"ERROR REGENERATING REPORTS: {e}")
+        raise HTTPException(status_code=500, detail=f"Error regenerating reports: {str(e)}")
+
 @router.put("/{report_date}", response_model=DailyReportResponse)
 async def update_report(
     report_date: date,

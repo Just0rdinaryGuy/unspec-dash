@@ -100,6 +100,18 @@ async def upload_excel_files(
                 service = RealDataService(db)
                 result = service.update_redaman_values(parsed_data)
                 
+                # --- Generate Report after Redaman Update ---
+                from datetime import date
+                today = date.today()
+                report = service.generate_daily_report(today)
+                result["report_generated"] = True
+                result["report_summary"] = {
+                    "total": report.total_saldo,
+                    "close": report.close,
+                    "target": report.target
+                }
+                # ------------------------------------------
+                
                 return JSONResponse(content=result)
             else:
                 # File Unspec sendirian ga support partial update
