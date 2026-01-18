@@ -126,6 +126,8 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
             if (filters.search) params.append("search", filters.search)
             if (filters.date && filters.date !== "ALL") params.append("date_filter", filters.date)
 
+            console.log("Export filters:", filters)
+            console.log("Export URL params:", params.toString())
             window.open(`${API_BASE_URL}/api/data-explorer/export-excel?${params.toString()}`, '_blank')
         } catch (error) {
             console.error("Error exporting:", error)
@@ -226,7 +228,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
                                         <SelectValue placeholder="Status Tiket" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="ALL">Semua Status</SelectItem>
+                                        <SelectItem value="ALL">All Status</SelectItem>
                                         <SelectItem value="PROGRESS">PROGRESS</SelectItem>
                                         <SelectItem value="KENDALA">KENDALA</SelectItem>
                                         <SelectItem value="CLOSED">CLOSED</SelectItem>
@@ -333,7 +335,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
                                     <SelectValue placeholder="Redaman Status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="ALL">Semua Redaman</SelectItem>
+                                    <SelectItem value="ALL">All Redaman</SelectItem>
                                     {options.redaman_status_list.map(status => (
                                         <SelectItem key={status} value={status}>{status}</SelectItem>
                                     ))}
