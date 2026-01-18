@@ -299,8 +299,8 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                     <TableHead onClick={() => handleSort("redaman_akhir")} className="w-[100px] font-semibold cursor-pointer text-center hover:bg-muted">
                                         <div className="flex items-center justify-center">Redaman After <SortIcon field="redaman_akhir" /></div>
                                     </TableHead>
-                                    <TableHead className="w-[100px] font-semibold text-center">
-                                        <div className="flex items-center justify-center">HVC</div>
+                                    <TableHead onClick={() => handleSort("hvc_category")} className="w-[100px] font-semibold cursor-pointer text-center hover:bg-muted">
+                                        <div className="flex items-center justify-center">HVC <SortIcon field="hvc_category" /></div>
                                     </TableHead>
                                     <TableHead onClick={() => handleSort("status_rfo")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">RFO / Perbaikan <SortIcon field="status_rfo" /></div>

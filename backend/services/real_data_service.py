@@ -739,6 +739,7 @@ class RealDataService:
                 "no_tiket": NetworkNodeDB.no_tiket,
                 "redaman_awal": NetworkNodeDB.rx_power_before,
                 "redaman_akhir": NetworkNodeDB.rx_power_after,
+                "hvc_category": NetworkNodeDB.hvc_category,
                 "status_rfo": NetworkNodeDB.status_rfo,
                 "ticket_status": NetworkNodeDB.ticket_status
             }
