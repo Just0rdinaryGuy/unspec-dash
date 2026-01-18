@@ -39,7 +39,7 @@ interface ServiceRecoveryTableProps {
     filters: {
         status: string
         sto: string
-        specStatus: string
+        redamanStatus: string
         date?: string
         search?: string
     }
@@ -79,7 +79,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
             if (filters.status && filters.status !== "ALL") params.append("status", filters.status)
             if (filters.sto && filters.sto !== "ALL") params.append("sto", filters.sto)
             if (filters.date && filters.date !== "ALL") params.append("date_filter", filters.date)
-            if (filters.specStatus && filters.specStatus !== "ALL") params.append("spec_status", filters.specStatus)
+            if (filters.redamanStatus && filters.redamanStatus !== "ALL") params.append("redaman_status", filters.redamanStatus)
             if (filters.search) params.append("search", filters.search)
 
             // Params pagination

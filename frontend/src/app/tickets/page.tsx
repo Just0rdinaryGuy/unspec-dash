@@ -13,7 +13,7 @@ export default function TicketsPage() {
         status: "",
         sto: "",
         sector: "",
-        specStatus: "",
+        redamanStatus: "",
         search: "",
         date: ""
     })
