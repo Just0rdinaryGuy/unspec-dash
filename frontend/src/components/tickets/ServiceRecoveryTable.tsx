@@ -323,7 +323,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                     </TableRow>
                                 ) : data.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={10} className="h-32 text-center">
+                                        <TableCell colSpan={12} className="h-32 text-center">
                                             Tidak ada ticket yang sesuai filter
                                         </TableCell>
                                     </TableRow>
