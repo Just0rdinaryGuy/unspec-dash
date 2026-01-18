@@ -9,7 +9,7 @@ export default function DataExplorerPage() {
     const [filters, setFilters] = useState({
         sto: "",
         sector: "",
-        specStatus: "",
+        redamanStatus: "",
         search: ""
     })
 

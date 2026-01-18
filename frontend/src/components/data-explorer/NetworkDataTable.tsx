@@ -26,7 +26,7 @@ interface NetworkDataTableProps {
     filters: {
         sto: string
         sector: string
-        specStatus: string
+        redamanStatus: string
         search: string
     }
 }
@@ -54,7 +54,7 @@ export default function NetworkDataTable({ filters }: NetworkDataTableProps) {
 
             if (filters.sto) params.append("sto", filters.sto)
             if (filters.sector) params.append("sector", filters.sector)
-            if (filters.specStatus) params.append("spec_status", filters.specStatus)
+            if (filters.redamanStatus) params.append("spec_status", filters.redamanStatus)
             if (filters.search) params.append("search", filters.search)
 
             const response = await fetch(`${API_BASE_URL}/api/data-explorer/nodes?${params}`)

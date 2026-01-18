@@ -122,7 +122,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
             const params = new URLSearchParams()
             if (filters.sto) params.append("sto", filters.sto)
             if (filters.sector) params.append("sector", filters.sector)
-            if (filters.specStatus) params.append("spec_status", filters.specStatus)
+            if (filters.redamanStatus) params.append("spec_status", filters.redamanStatus)
             if (filters.search) params.append("search", filters.search)
             if (filters.date && filters.date !== "ALL") params.append("date_filter", filters.date)
 
@@ -139,7 +139,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
         setFilters({
             sto: "",
             sector: "",
-            specStatus: "",
+            redamanStatus: "",
             search: ""
         })
         setSearchInput("")
@@ -180,7 +180,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
         setFilters({ ...filters, sto: stoValue })
     }
 
-    const hasActiveFilters = filters.sto || filters.sector || filters.specStatus || filters.search
+    const hasActiveFilters = filters.sto || filters.sector || filters.redamanStatus || filters.search
 
     return (
         <Card className="shadow-sm border-muted/40">
@@ -323,18 +323,18 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
                             </DialogContent>
                         </Dialog>
 
-                        {/* Spec Status */}
+                        {/* Redaman Status */}
                         <div className="w-[140px]">
                             <Select
-                                value={filters.specStatus || "ALL"}
-                                onValueChange={(value) => setFilters({ ...filters, specStatus: value === "ALL" ? "" : value })}
+                                value={filters.redamanStatus || "ALL"}
+                                onValueChange={(value) => setFilters({ ...filters, redamanStatus: value === "ALL" ? "" : value })}
                             >
                                 <SelectTrigger className="bg-background">
-                                    <SelectValue placeholder="Spec Status" />
+                                    <SelectValue placeholder="Redaman Status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="ALL">Semua Spec</SelectItem>
-                                    {options.spec_status_list.map(status => (
+                                    <SelectItem value="ALL">Semua Redaman</SelectItem>
+                                    {options.redaman_status_list.map(status => (
                                         <SelectItem key={status} value={status}>{status}</SelectItem>
                                     ))}
                                 </SelectContent>
