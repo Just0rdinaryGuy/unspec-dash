@@ -855,6 +855,8 @@ class RealDataService:
     def export_service_recovery_tickets(
         self,
         status: Optional[str] = None, 
+        sto: Optional[str] = None,
+        date_filter: Optional[date] = None,
         search: Optional[str] = None
     ):
         """Export service recovery tickets to Excel matching the table format"""
