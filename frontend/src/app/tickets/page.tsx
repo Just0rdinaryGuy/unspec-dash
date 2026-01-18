@@ -44,7 +44,7 @@ export default function TicketsPage() {
         // Bikin export URL dengan filter yang aktif
         const params = new URLSearchParams()
         if (filters.status && filters.status !== "ALL") params.append("status", filters.status)
-        if filters.sto && filters.sto !== "ALL") params.append("sto", filters.sto)
+        if (filters.sto && filters.sto !== "ALL") params.append("sto", filters.sto)
         if (filters.redamanStatus && filters.redamanStatus !== "ALL") params.append("redaman_status", filters.redamanStatus)
         if (filters.date && filters.date !== "ALL") params.append("date_filter", filters.date)
         if (filters.search) params.append("search", filters.search)
