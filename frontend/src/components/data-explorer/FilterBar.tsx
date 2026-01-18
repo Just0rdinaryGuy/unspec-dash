@@ -65,7 +65,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
     const [options, setOptions] = useState<FilterOptions>({
         sto_list: [],
         sector_list: [],
-        spec_status_list: [],
+        redaman_status_list: [],
         available_dates: []
     })
     const [loading, setLoading] = useState(false)
