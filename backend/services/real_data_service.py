@@ -860,7 +860,7 @@ class RealDataService:
         search: Optional[str] = None
     ):
         """Export service recovery tickets to Excel matching the table format"""
-        print(f"DEBUG EXPORT: Status={status}, STO={sto}, Date={date_filter}")
+        print(f"DEBUG EXPORT: Status={status}, STO={sto}, Date={date_filter}", flush=True)
         query = self.db.query(NetworkNodeDB)
         
         if date_filter:
@@ -902,7 +902,7 @@ class RealDataService:
             # Let's keep it as number for Excel calculation
             
             if len(data) < 5:
-                print(f"DEBUG EXPORT NODE: ID={node.id}, Teknisi={node.nama_teknisi}, NoTiket={node.no_tiket}, HVC={node.hvc_category}")
+                print(f"DEBUG EXPORT NODE: ID={node.id}, Teknisi={node.nama_teknisi}, NoTiket={node.no_tiket}, HVC={node.hvc_category}", flush=True)
 
             data.append({
                 "Tanggal": node.import_date.date() if node.import_date else date.today(),
