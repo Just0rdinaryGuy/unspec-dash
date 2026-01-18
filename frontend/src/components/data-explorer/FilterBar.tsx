@@ -38,7 +38,7 @@ interface FilterBarProps {
         status?: string
         sto: string
         sector: string
-        specStatus: string
+        redamanStatus: string
         search: string
         date?: string
     }
