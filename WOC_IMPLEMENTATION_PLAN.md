@@ -146,7 +146,7 @@ Rekapitulasi logistik dari input teknisi.
 Grafik garis untuk memantau volume tiket harian.
 *   **X-Axis**: Tanggal.
 *   **Y-Axis**: Jumlah Tiket.
-*   **Series**: Dibedakan per Kategori Tiket (HVC, Reguler, Unspec).
+*   **Series**: Dibedakan per Kategori Tiket (HVC, Reguler, Unspec, WA).
 
 ---
 

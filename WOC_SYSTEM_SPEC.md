@@ -180,7 +180,7 @@ Desain detail halaman web untuk manajemen.
 3.  **Grafik Tren (Bawah)**
     *   Jenis: Line Chart.
     *   Data: Volume Tiket per Jam (08:00 - 17:00).
-    *   Legend: HVC vs Reguler.
+    *   Legend: HVC, Reguler, Unspec, WA.
 
 ### Halaman 2: dashboard/material
 **Layout**: Tabel Rekapitulasi.
