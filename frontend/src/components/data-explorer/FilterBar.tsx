@@ -45,6 +45,7 @@ interface FilterBarProps {
     setFilters: (filters: any) => void
     onExport?: () => void
     showStatusFilter?: boolean
+    persistenceKey?: string // Key untuk localStorage bookmarks
 }
 
 interface FilterOptions {
@@ -60,7 +61,7 @@ interface SavedBookmark {
     value: string
 }
 
-export default function FilterBar({ filters, setFilters, onExport, showStatusFilter = true }: FilterBarProps) {
+export default function FilterBar({ filters, setFilters, onExport, showStatusFilter = true, persistenceKey = "filter_bookmarks_default" }: FilterBarProps) {
     const [searchInput, setSearchInput] = useState("")
     const [options, setOptions] = useState<FilterOptions>({
         sto_list: [],
@@ -76,7 +77,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
     const [newBookmarkName, setNewBookmarkName] = useState("")
 
     useEffect(() => {
-        const saved = localStorage.getItem("sto_filter_bookmarks")
+        const saved = localStorage.getItem(persistenceKey)
         if (saved) {
             try {
                 setBookmarks(JSON.parse(saved))
@@ -165,7 +166,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
 
         const updatedBookmarks = [...bookmarks, newBookmark]
         setBookmarks(updatedBookmarks)
-        localStorage.setItem("sto_filter_bookmarks", JSON.stringify(updatedBookmarks))
+        localStorage.setItem(persistenceKey, JSON.stringify(updatedBookmarks))
         setNewBookmarkName("")
         setIsSaveDialogOpen(false)
     }
@@ -175,7 +176,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
         e.stopPropagation()
         const updatedBookmarks = bookmarks.filter(b => b.id !== id)
         setBookmarks(updatedBookmarks)
-        localStorage.setItem("sto_filter_bookmarks", JSON.stringify(updatedBookmarks))
+        localStorage.setItem(persistenceKey, JSON.stringify(updatedBookmarks))
     }
 
     const applyBookmark = (stoValue: string) => {

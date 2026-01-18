@@ -71,6 +71,7 @@ export default function TicketsPage() {
                     filters={filters}
                     setFilters={setFilters}
                     onExport={handleCustomExport}
+                    persistenceKey="service_recovery_bookmarks"
                 />
 
                 {/* Service Recovery Table - Trigger Stats Refresh */}
