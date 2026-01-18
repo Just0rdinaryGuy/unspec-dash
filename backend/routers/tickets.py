@@ -23,7 +23,7 @@ def get_service_recovery_tickets(
     status: Optional[str] = Query(None, description="Filter by status: OPEN, PROGRESS, CLOSE, KENDALA"),
     sto: Optional[str] = Query(None, description="Filter by STO"),
     date_filter: Optional[date] = Query(None, description="Filter by Import Date"),
-    spec_status: Optional[str] = Query(None, description="Filter by SPEC/UNSPEC"),
+    redaman_status: Optional[str] = Query(None, description="Filter by SPEC/UNSPEC"),
     page: int = Query(1, ge=1, description="Page number"),
     limit: int = Query(10, ge=1, le=500, description="Items per page"),
     sort_by: Optional[str] = Query(None, description="Field to sort by"),
@@ -35,7 +35,7 @@ def get_service_recovery_tickets(
     Ambil list service recovery tickets from Real Data (Paginated)
     """
     service = RealDataService(db)
-    return service.get_service_recovery_tickets(status, sto, date_filter, spec_status, page, limit, sort_by, sort_order, search)
+    return service.get_service_recovery_tickets(status, sto, date_filter, redaman_status, page, limit, sort_by, sort_order, search)
 
 @router.get("/service-recovery/export")
 def export_service_recovery_tickets(

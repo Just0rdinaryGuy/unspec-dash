@@ -122,7 +122,7 @@ export default function FilterBar({ filters, setFilters, onExport, showStatusFil
             const params = new URLSearchParams()
             if (filters.sto) params.append("sto", filters.sto)
             if (filters.sector) params.append("sector", filters.sector)
-            if (filters.redamanStatus) params.append("spec_status", filters.redamanStatus)
+            if (filters.redamanStatus) params.append("redaman_status", filters.redamanStatus)
             if (filters.search) params.append("search", filters.search)
             if (filters.date && filters.date !== "ALL") params.append("date_filter", filters.date)
 

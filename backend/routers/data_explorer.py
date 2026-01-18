@@ -20,7 +20,7 @@ def get_network_nodes(
     sto: Optional[str] = Query(None, description="Filter by STO (pisahkan dengan koma untuk multiple)"),
     sector: Optional[str] = Query(None, description="Filter by Sektor"),
     search: Optional[str] = Query(None, description="Search by ND atau ODP"),
-    spec_status: Optional[str] = Query(None, description="Filter by SPEC/UNSPEC"),
+    redaman_status: Optional[str] = Query(None, description="Filter by SPEC/UNSPEC"),
     db: Session = Depends(get_db)
 ):
     """
@@ -45,7 +45,7 @@ def get_network_nodes(
         sto=sto,
         sector=sector,
         search=search,
-        spec_status=spec_status
+        spec_status=redaman_status
     )
     
     # Hitung total halaman
@@ -68,7 +68,7 @@ def export_network_nodes(
     sto: Optional[str] = None,
     sector: Optional[str] = None,
     search: Optional[str] = None,
-    spec_status: Optional[str] = None,
+    redaman_status: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     """
@@ -79,7 +79,7 @@ def export_network_nodes(
     nodes = service.export_all_nodes(
         sto=sto,
         sector=sector,
-        spec_status=spec_status
+        spec_status=redaman_status
     )
     
     return {
@@ -93,7 +93,7 @@ def export_excel_nodes(
     sto: Optional[str] = None,
     sector: Optional[str] = None,
     search: Optional[str] = None,
-    spec_status: Optional[str] = None,
+    redaman_status: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     """
@@ -107,7 +107,7 @@ def export_excel_nodes(
     nodes = service.export_all_nodes(
         sto=sto,
         sector=sector,
-        spec_status=spec_status,
+        spec_status=redaman_status,
         search=search
     )
     
@@ -127,7 +127,7 @@ def export_excel_nodes(
             "sector": "Sector",
             "odp": "ODP",
             "hvc_category": "HVC Category",
-            "spec_status": "Spec Status"
+            "redaman_status": "Redaman Status"
         }
         # Rename available columns
         df = df.rename(columns=column_mapping)
@@ -165,6 +165,6 @@ def get_available_filters(db: Session = Depends(get_db)):
     return {
         "sto_list": filter_options["sto"],
         "sector_list": filter_options["sector"],
-        "spec_status_list": filter_options["spec_status"],
+        "redaman_status_list": filter_options["spec_status"],
         "status_list": ["ONLINE", "OFFLINE", "KENDALA"]  # Status list static
     }
