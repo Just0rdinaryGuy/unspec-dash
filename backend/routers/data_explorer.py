@@ -127,7 +127,7 @@ def export_excel_nodes(
             "sector": "Sector",
             "odp": "ODP",
             "hvc_category": "HVC Category",
-            "redaman_status": "Redaman Status"
+            "spec_status": "Redaman Status"
         }
         # Rename available columns
         df = df.rename(columns=column_mapping)
