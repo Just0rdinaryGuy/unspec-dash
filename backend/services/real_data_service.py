@@ -892,6 +892,9 @@ class RealDataService:
                 (NetworkNodeDB.odp.like(search_pattern))
             )
              
+        # Sort by ID desc (newest first) to match table default
+        query = query.order_by(desc(NetworkNodeDB.id))
+
         nodes = query.all()
         
         # Convert to list of dicts for DataFrame
@@ -901,7 +904,10 @@ class RealDataService:
             # Format redaman to string "X dB" or just float
             # Let's keep it as number for Excel calculation
             
-            if len(data) < 5:
+            # Debug: Log only if teknisi is present to confirm we see edits
+            if node.nama_teknisi or node.no_tiket:
+                print(f"DEBUG EXPORT FOUND EDIT: ID={node.id}, Teknisi={node.nama_teknisi}, NoTiket={node.no_tiket}", flush=True)
+            elif len(data) < 3: # Keep a few standard logs
                 print(f"DEBUG EXPORT NODE: ID={node.id}, Teknisi={node.nama_teknisi}, NoTiket={node.no_tiket}, HVC={node.hvc_category}", flush=True)
 
             data.append({
