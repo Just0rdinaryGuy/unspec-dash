@@ -50,7 +50,7 @@ interface FilterBarProps {
 interface FilterOptions {
     sto_list: string[]
     sector_list: string[]
-    spec_status_list: string[]
+    redaman_status_list: string[]
     available_dates?: string[]
 }
 
