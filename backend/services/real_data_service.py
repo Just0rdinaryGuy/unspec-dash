@@ -855,11 +855,10 @@ class RealDataService:
     def export_service_recovery_tickets(
         self,
         status: Optional[str] = None, 
-        sto: Optional[str] = None, 
-        date_filter: Optional[date] = None,
         search: Optional[str] = None
     ):
         """Export service recovery tickets to Excel matching the table format"""
+        print(f"DEBUG EXPORT: Status={status}, STO={sto}, Date={date_filter}")
         query = self.db.query(NetworkNodeDB)
         
         if date_filter:
@@ -900,6 +899,9 @@ class RealDataService:
             # Format redaman to string "X dB" or just float
             # Let's keep it as number for Excel calculation
             
+            if len(data) < 5:
+                print(f"DEBUG EXPORT NODE: ID={node.id}, Teknisi={node.nama_teknisi}, NoTiket={node.no_tiket}, HVC={node.hvc_category}")
+
             data.append({
                 "Tanggal": node.import_date.date() if node.import_date else date.today(),
                 "STO": node.sto,
