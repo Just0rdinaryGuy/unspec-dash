@@ -317,7 +317,7 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                             <TableBody>
                                 {loading ? (
                                     <TableRow>
-                                        <TableCell colSpan={10} className="h-32 text-center">
+                                        <TableCell colSpan={12} className="h-32 text-center">
                                             Loading tickets...
                                         </TableCell>
                                     </TableRow>
