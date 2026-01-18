@@ -120,18 +120,36 @@ Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 >
 > **User**: "0"
 
-#### Step 4: Upload Foto (9 Slot)
-> **Bot**: "📸 **(1/9) FOTO RUMAH** (Depan)"
-> **Tombol**: `[⏭ SKIP]`
->
-> **User**: *(Kirim Foto)*
->
-> **Bot**: "📸 **(2/9) FOTO ODP** (Label/Port)"
-> **Tombol**: `[⏭ SKIP]`
->
-> ... *(Looping sampai foto ke-9)* ...
->
-> **Bot**: "📸 **(9/9) FOTO MATERIAL BEKAS**"
+#### Step 4: Upload Foto Bukti (9 Tahap)
+Bot meminta 9 jenis foto satu per satu untuk validasi lengkap.
+
+1.  **📸 FOTO RUMAH (Tampak Depan)**
+    *   *Desc*: Untuk memastikan teknisi di alamat yang benar.
+    *   *Opsi*: `[⏭ SKIP]` (Jika rumah tidak ketemu/kendala akses).
+2.  **📸 FOTO ODP (Label & Port)**
+    *   *Desc*: Kondisi ODP sebelum/sesudah pengerjaan.
+    *   *Opsi*: `[⏭ SKIP]`
+3.  **📸 FOTO JALUR DC (Dropcore)**
+    *   *Desc*: Rute bentangan kabel dari tiang ke rumah.
+    *   *Opsi*: `[⏭ SKIP]`
+4.  **📸 FOTO PENYEBAB (Kerusakan)**
+    *   *Desc*: Bukti fisik kerusakan (ex: Kabel putus, Modul mati).
+    *   *Status*: **WAJIB**
+5.  **📸 FOTO PROGRES (Pengerjaan)**
+    *   *Desc*: Foto teknisi saat sedang menyambung/memperbaiki.
+    *   *Status*: **WAJIB**
+6.  **📸 FOTO SETELAH PROGRES (Perapihan)**
+    *   *Desc*: Hasil akhir yang sudah rapi (ex: Roset terpasang).
+    *   *Status*: **WAJIB**
+7.  **📸 FOTO REDAMAN (Layar OPM)**
+    *   *Desc*: Bukti nilai sinyal (dBm) di sisi pelanggan.
+    *   *Status*: **WAJIB**
+8.  **📸 FOTO SN ONT (Stiker Modem)**
+    *   *Desc*: Validasi perangkat yang terpasang di lokasi.
+    *   *Status*: **WAJIB**
+9.  **📸 FOTO MATERIAL (Sisa/Bekas)**
+    *   *Desc*: Foto potongan kabel atau konektor bekas ganti.
+    *   *Opsi*: `[⏭ SKIP]`
 
 #### Step 5: Lokasi & Closing
 > **Bot**: "📍 Terakhir, **SHARE LIVE LOCATION** posisi Anda sekarang."
