@@ -14,6 +14,7 @@ class ServiceTicket(BaseModel):
     redaman_akhir: Optional[float] = Field(None, description="Redaman setelah perbaikan (dB)")
     status_rfo: str = Field(..., description="Status RFO: OPEN, PROGRESS, KENDALA etc")
     ticket_status: str = Field(default="OPEN", description="Status Tiket: OPEN, CLOSED")
+    hvc_category: Optional[str] = Field(None, description="HVC Category: HVC_DIAMOND, HVC_GOLD, HVC_PLATINUM, Regular")
     
     # Field tambahan buat tracking
     nd: Optional[str] = Field(None, description="Subscriber ID yang kena masalah")

@@ -770,6 +770,7 @@ class RealDataService:
                 redaman_akhir=node.rx_power_after, # Always show value if exists
                 status_rfo=node.status_rfo or "", # Empty by default
                 ticket_status=node.ticket_status or "OPEN",
+                hvc_category=node.hvc_category or "Regular",
                 nd=node.nd,
                 keterangan=f"Port: {node.port}"
             ))

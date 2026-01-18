@@ -30,6 +30,7 @@ interface ServiceTicket {
     redaman_akhir: number | null
     status_rfo: string
     ticket_status: string
+    hvc_category: string | null
     nd: string | null
     keterangan: string | null
 }
@@ -298,6 +299,9 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                     <TableHead onClick={() => handleSort("redaman_akhir")} className="w-[100px] font-semibold cursor-pointer text-center hover:bg-muted">
                                         <div className="flex items-center justify-center">Redaman After <SortIcon field="redaman_akhir" /></div>
                                     </TableHead>
+                                    <TableHead className="w-[100px] font-semibold text-center">
+                                        <div className="flex items-center justify-center">HVC</div>
+                                    </TableHead>
                                     <TableHead onClick={() => handleSort("status_rfo")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">RFO / Perbaikan <SortIcon field="status_rfo" /></div>
                                     </TableHead>
@@ -379,74 +383,83 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                     )}
                                                 </TableCell>
 
-                                                {/* Status RFO Editable */}
-                                                <TableCell className="select-none">
-                                                    <input
-                                                        className="bg-transparent border-none w-full text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 placeholder:text-muted-foreground/30"
-                                                        defaultValue={ticket.status_rfo}
-                                                        placeholder="RFO / Perbaikan"
-                                                        onBlur={(e) => {
-                                                            if (e.target.value !== ticket.status_rfo) {
-                                                                handleSave(ticket.id, 'status_rfo', e.target.value)
-                                                            }
-                                                        }}
-                                                    />
-                                                </TableCell>
+                                            </TableCell>
 
-                                                {/* Status Tiket Select */}
-                                                <TableCell className="select-none">
-                                                    <select
-                                                        className={cn(
-                                                            "text-xs font-bold rounded px-2 py-1 border-none focus:outline-none cursor-pointer",
-                                                            ticket.ticket_status === 'CLOSED' ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
-                                                                ticket.ticket_status === 'PROGRESS' ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" :
-                                                                    ticket.ticket_status === 'KENDALA' ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" :
-                                                                        "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                                        )}
-                                                        value={ticket.ticket_status}
-                                                        onChange={(e) => handleSave(ticket.id, 'ticket_status', e.target.value)}
-                                                    >
-                                                        <option value="PROGRESS">PROGRESS</option>
-                                                        <option value="KENDALA">KENDALA</option>
-                                                        <option value="CLOSED">CLOSED</option>
-                                                    </select>
-                                                </TableCell>
+                                                {/* HVC Category */ }
+                                        <TableCell className="text-center text-xs select-none">
+                                            <Badge variant={ticket.hvc_category?.includes("DIAMOND") ? "default" : ticket.hvc_category?.includes("GOLD") ? "default" : ticket.hvc_category?.includes("PLATINUM") ? "default" : "secondary"} className="text-xs">
+                                                {ticket.hvc_category?.replace("HVC_", "") || "Regular"}
+                                            </Badge>
+                                        </TableCell>
+
+                                        {/* Status RFO Editable */ }
+                                        <TableCell className="select-none">
+                                            <input
+                                                className="bg-transparent border-none w-full text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary rounded px-1 placeholder:text-muted-foreground/30"
+                                                defaultValue={ticket.status_rfo}
+                                                placeholder="RFO / Perbaikan"
+                                                onBlur={(e) => {
+                                                    if (e.target.value !== ticket.status_rfo) {
+                                                        handleSave(ticket.id, 'status_rfo', e.target.value)
+                                                    }
+                                                }}
+                                            />
+                                        </TableCell>
+
+                                        {/* Status Tiket Select */ }
+                                        <TableCell className="select-none">
+                                            <select
+                                                className={cn(
+                                                    "text-xs font-bold rounded px-2 py-1 border-none focus:outline-none cursor-pointer",
+                                                    ticket.ticket_status === 'CLOSED' ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
+                                                        ticket.ticket_status === 'PROGRESS' ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" :
+                                                            ticket.ticket_status === 'KENDALA' ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" :
+                                                                "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                                )}
+                                                value={ticket.ticket_status}
+                                                onChange={(e) => handleSave(ticket.id, 'ticket_status', e.target.value)}
+                                            >
+                                                <option value="PROGRESS">PROGRESS</option>
+                                                <option value="KENDALA">KENDALA</option>
+                                                <option value="CLOSED">CLOSED</option>
+                                            </select>
+                                        </TableCell>
                                             </TableRow>
-                                        )
+                            )
                                     })
                                 )}
-                            </TableBody>
-                        </Table>
-                    </div>
+                        </TableBody>
+                    </Table>
+                </div>
 
-                    {/* Pagination Controls */}
-                    <div className="flex items-center justify-between p-4 border-t">
-                        <div className="text-sm text-muted-foreground">
-                            Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, total)} of {total} entries
-                        </div>
-                        <div className="flex gap-2">
-                            <button
-                                className="px-3 py-1 text-sm border rounded hover:bg-muted disabled:opacity-50"
-                                onClick={() => setPage(p => Math.max(1, p - 1))}
-                                disabled={page === 1}
-                            >
-                                Previous
-                            </button>
-                            <div className="flex items-center gap-1 px-2">
-                                {/* Simple Page Indicator */}
-                                <span className="text-sm font-medium">Page {page}</span>
-                            </div>
-                            <button
-                                className="px-3 py-1 text-sm border rounded hover:bg-muted disabled:opacity-50"
-                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                disabled={page === totalPages || totalPages === 0}
-                            >
-                                Next
-                            </button>
-                        </div>
+                {/* Pagination Controls */}
+                <div className="flex items-center justify-between p-4 border-t">
+                    <div className="text-sm text-muted-foreground">
+                        Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, total)} of {total} entries
                     </div>
-                </CardContent>
-            </Card>
+                    <div className="flex gap-2">
+                        <button
+                            className="px-3 py-1 text-sm border rounded hover:bg-muted disabled:opacity-50"
+                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                            disabled={page === 1}
+                        >
+                            Previous
+                        </button>
+                        <div className="flex items-center gap-1 px-2">
+                            {/* Simple Page Indicator */}
+                            <span className="text-sm font-medium">Page {page}</span>
+                        </div>
+                        <button
+                            className="px-3 py-1 text-sm border rounded hover:bg-muted disabled:opacity-50"
+                            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                            disabled={page === totalPages || totalPages === 0}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </CardContent>
+        </Card >
         </>
     )
 }
