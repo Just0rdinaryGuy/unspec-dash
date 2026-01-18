@@ -18,6 +18,7 @@ class ServiceTicket(BaseModel):
     
     # Field tambahan buat tracking
     nd: Optional[str] = Field(None, description="Subscriber ID yang kena masalah")
+    node_id: Optional[str] = Field(None, description="Node ID OLT")
     keterangan: Optional[str] = Field(None, description="Catatan tambahan")
     created_at: Optional[datetime] = None
     closed_at: Optional[datetime] = None

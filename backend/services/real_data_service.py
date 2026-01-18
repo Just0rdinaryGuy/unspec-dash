@@ -734,6 +734,7 @@ class RealDataService:
                 "tgl": NetworkNodeDB.import_date,
                 "sto": NetworkNodeDB.sto,
                 "nd": NetworkNodeDB.nd,
+                "node_id": NetworkNodeDB.node_id,
                 "odp": NetworkNodeDB.odp,
                 "nama_teknisi": NetworkNodeDB.nama_teknisi,
                 "no_tiket": NetworkNodeDB.no_tiket,
@@ -773,6 +774,7 @@ class RealDataService:
                 ticket_status=node.ticket_status or "OPEN",
                 hvc_category=node.hvc_category or "Regular",
                 nd=node.nd,
+                node_id=node.node_id,
                 keterangan=f"Port: {node.port}"
             ))
             

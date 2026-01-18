@@ -32,6 +32,7 @@ interface ServiceTicket {
     ticket_status: string
     hvc_category: string | null
     nd: string | null
+    node_id: string | null
     keterangan: string | null
 }
 
@@ -284,6 +285,9 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                     <TableHead onClick={() => handleSort("nd")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">ND<SortIcon field="nd" /></div>
                                     </TableHead>
+                                    <TableHead onClick={() => handleSort("node_id")} className="w-[150px] font-semibold cursor-pointer hover:bg-muted">
+                                        <div className="flex items-center">Node ID<SortIcon field="node_id" /></div>
+                                    </TableHead>
                                     <TableHead onClick={() => handleSort("odp")} className="w-[200px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">ODP <SortIcon field="odp" /></div>
                                     </TableHead>
@@ -339,6 +343,9 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                                     />
                                                 </TableCell>
                                                 <TableCell className="font-mono text-xs text-muted-foreground bg-muted/20 select-text">{ticket.nd || '-'}</TableCell>
+
+                                                {/* Node ID Cell */}
+                                                <TableCell className="font-mono text-xs select-text">{ticket.node_id || '-'}</TableCell>
 
                                                 {/* ODP Editable */}
                                                 <TableCell>
