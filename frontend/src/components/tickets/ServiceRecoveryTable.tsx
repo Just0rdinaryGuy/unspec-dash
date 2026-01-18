@@ -285,16 +285,16 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                     <TableHead onClick={() => handleSort("nd")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">ND<SortIcon field="nd" /></div>
                                     </TableHead>
-                                    <TableHead onClick={() => handleSort("node_id")} className="w-[150px] font-semibold cursor-pointer hover:bg-muted">
+                                    <TableHead onClick={() => handleSort("node_id")} className="w-[130px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">Node ID<SortIcon field="node_id" /></div>
                                     </TableHead>
-                                    <TableHead onClick={() => handleSort("odp")} className="w-[200px] font-semibold cursor-pointer hover:bg-muted">
+                                    <TableHead onClick={() => handleSort("odp")} className="w-[180px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">ODP <SortIcon field="odp" /></div>
                                     </TableHead>
-                                    <TableHead onClick={() => handleSort("nama_teknisi")} className="w-[140px] font-semibold cursor-pointer hover:bg-muted">
+                                    <TableHead onClick={() => handleSort("nama_teknisi")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">Teknisi <SortIcon field="nama_teknisi" /></div>
                                     </TableHead>
-                                    <TableHead onClick={() => handleSort("no_tiket")} className="w-[140px] font-semibold cursor-pointer hover:bg-muted">
+                                    <TableHead onClick={() => handleSort("no_tiket")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">No. Tiket <SortIcon field="no_tiket" /></div>
                                     </TableHead>
                                     <TableHead onClick={() => handleSort("redaman_awal")} className="w-[100px] font-semibold cursor-pointer text-center hover:bg-muted">
@@ -306,10 +306,10 @@ export default function ServiceRecoveryTable({ filters, onDataChange }: ServiceR
                                     <TableHead onClick={() => handleSort("hvc_category")} className="w-[100px] font-semibold cursor-pointer text-center hover:bg-muted">
                                         <div className="flex items-center justify-center">HVC <SortIcon field="hvc_category" /></div>
                                     </TableHead>
-                                    <TableHead onClick={() => handleSort("status_rfo")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
+                                    <TableHead onClick={() => handleSort("status_rfo")} className="w-[110px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">RFO / Perbaikan <SortIcon field="status_rfo" /></div>
                                     </TableHead>
-                                    <TableHead onClick={() => handleSort("ticket_status")} className="w-[120px] font-semibold cursor-pointer hover:bg-muted">
+                                    <TableHead onClick={() => handleSort("ticket_status")} className="w-[110px] font-semibold cursor-pointer hover:bg-muted">
                                         <div className="flex items-center">Status Tiket <SortIcon field="ticket_status" /></div>
                                     </TableHead>
                                 </TableRow>

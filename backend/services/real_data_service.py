@@ -904,11 +904,13 @@ class RealDataService:
                 "Tanggal": node.import_date.date() if node.import_date else date.today(),
                 "STO": node.sto,
                 "ND": node.nd,
+                "Node ID": node.node_id or "",
                 "ODP": node.odp,
                 "Teknisi": node.nama_teknisi or "",
                 "No. Tiket": node.no_tiket or "",
                 "Redaman Before (dB)": redaman_awal,
                 "Redaman After (dB)": node.rx_power_after,
+                "HVC Category": node.hvc_category or "Regular",
                 "Status RFO": node.status_rfo or "",
                 "Status Tiket": node.ticket_status or "OPEN",
                 "Spec Status": node.spec_status # Extra useful col
