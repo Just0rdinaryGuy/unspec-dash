@@ -857,10 +857,11 @@ class RealDataService:
         status: Optional[str] = None, 
         sto: Optional[str] = None,
         date_filter: Optional[date] = None,
+        spec_status: Optional[str] = None,
         search: Optional[str] = None
     ):
         """Export service recovery tickets to Excel matching the table format"""
-        print(f"DEBUG EXPORT: Status={status}, STO={sto}, Date={date_filter}", flush=True)
+        print(f"DEBUG EXPORT: Status={status}, STO={sto}, Date={date_filter}, Spec={spec_status}", flush=True)
         query = self.db.query(NetworkNodeDB)
         
         if date_filter:
@@ -868,7 +869,10 @@ class RealDataService:
         else:
             # Default to latest date if not specified
             latest = self._get_latest_date()
-            target_date = latest.date() if latest else None
+            if not latest:
+                # Fallback if no data
+                return pd.DataFrame()
+            target_date = latest.date()
             
         if target_date:
             query = query.filter(func.date(NetworkNodeDB.import_date) == target_date)
@@ -883,6 +887,9 @@ class RealDataService:
                 
         if status and status.upper() != "ALL":
              query = query.filter(NetworkNodeDB.ticket_status == status)
+
+        if spec_status and spec_status.upper() != "ALL":
+            query = query.filter(NetworkNodeDB.spec_status == spec_status)
              
         # Search (ND or ODP)
         if search:

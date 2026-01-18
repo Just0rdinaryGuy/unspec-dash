@@ -42,12 +42,16 @@ def export_service_recovery_tickets(
     status: Optional[str] = Query(None),
     sto: Optional[str] = Query(None),
     date_filter: Optional[date] = Query(None),
+    redaman_status: Optional[str] = Query(None, alias="redaman_status"),
     search: Optional[str] = Query(None),
     db: Session = Depends(get_db)
 ):
     """Export Service Recovery Tickets jadi Excel"""
     service = RealDataService(db)
-    df = service.export_service_recovery_tickets(status, sto, date_filter, search)
+    # Map redaman_status to spec_status internally if needed, or pass nicely
+    # Note: Service uses spec_status usually. Let's pass it as spec_status argument if we want to be consistent? 
+    # Or just pass as argument. Let's look at service signature update next.
+    df = service.export_service_recovery_tickets(status, sto, date_filter, redaman_status, search)
     
     # Generate Excel
     output = BytesIO()
