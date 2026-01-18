@@ -6,6 +6,48 @@
 
 ---
 
+---
+
+## 🗺️ Alur Kerja Sistem (Workflow Diagram)
+
+```mermaid
+graph TD
+    %% Styling
+    classDef dash fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef bot fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef server fill:#fff3e0,stroke:#ff6f00,stroke-width:2px;
+
+    subgraph Phase1 ["Phase 1: Creation & Distribution"]
+    A["Tiket Masuk<br/>(Import/Manual)"] -->|Status: OPEN| B("Dashboard Helpdesk")
+    B -->|Assign Tim| C{"Distribusi Otomatis"}
+    C -.->|Notifikasi Blast| D["Grup Telegram Team"]
+    C -.->|Japri| E["Chat Pribadi Teknisi"]
+    end
+    class A,B,C dash;
+    class D,E bot;
+
+    subgraph Phase2 ["Phase 2: Execution (Lapangan)"]
+    E --> F["Pengerjaan Fisik"]
+    F --> G["Update via Bot"]
+    G --> H1["Input Status & RFO"]
+    G --> H2["Input Material (Angka)"]
+    G --> H3["Upload 9 Foto Bukti"]
+    G --> H4["Share Live Location"]
+    end
+    class F,G,H1,H2,H3,H4 bot;
+
+    subgraph Phase3 ["Phase 3: Validation & Closing"]
+    H4 -->|Submit| I["Server WOC"]
+    I -->|Validasi Data| I
+    I -->|Auto Report| D
+    I -->|Sync Realtime| J("Dashboard Monitoring")
+    end
+    class I server;
+    class J dash;
+```
+
+---
+
 ## 1. Modul Manajemen Tiket (Ticket Creation)
 
 Modul ini menangani bagaimana data pekerjaan masuk ke sistem **sebelum** dikerjakan tim.
