@@ -49,14 +49,14 @@ graph TD
     S1 -->|Status: OPEN| D_MAIN("🖥️ Main Dashboard")
     S3 -->|Status: REQ| D_WA("🖥️ Dashboard WA")
     D_WA -->|Approve & Assign| D_MAIN
-    D_MAIN -->|Dispatch/Assign| BOT_API(("🤖 Bot API"))
-    D_MAIN -->|Redispatch| BOT_API
+    D_MAIN -->|Assign| BOT_API(("🤖 Bot API"))
+    D_MAIN -->|Reassign | BOT_API
     end
 
     subgraph UnspecDash ["3. Unspec Ops (Manual)"]
     S2 -->|Status: UNSPEC| D_UNSPEC("🖥️ Dashboard Unspec")
-    D_UNSPEC -->|Dispatch/Assign| BOT_API
-    D_UNSPEC -->|Redispatch| BOT_API
+    D_UNSPEC -->|Assign| BOT_API
+    D_UNSPEC -->|Reassign| BOT_API
     end
     class D_MAIN,D_WA,D_UNSPEC dash;
 
@@ -118,15 +118,15 @@ graph TD
         *   **Simple Captcha**: Mencegah bot spamming otomatis.
     *   **Destination**: Masuk ke Dashboard WA (Status: REQ).
 
-*   **C. Dashboard WA (Dispatch Queue)**:
+*   **C. Dashboard WA (Assign Queue)**:
     *   Halaman khusus menampung tiket dari Bot/Web Link.
     *   Status Awal: `WA-2026...` (Draft).
     *   **Action Helpdesk**:
-        1.  **Manual Dispatch**: Helpdesk memilih Tim Teknisi secara manual (Tiket otomatis jadi `WA` setelah diapprove/dispatch).
+        1.  **Manual Assign**: Helpdesk memilih Tim Teknisi secara manual (Tiket otomatis jadi `WA` setelah diassign).
         2.  **Reject**: Jika spam/duplikat.
 
 *   **D. Dashboard Unspec**:
-    *   Tetap fokus untuk tiket Unspec yang sudah ada di sistem (Import/Manual), flow dispatch standar.
+    *   Tetap fokus untuk tiket Unspec yang sudah ada di sistem (Import/Manual), flow assign standar.
 
 ### B. Modul Distribusi & Notifikasi
 Saat Helpdesk menunjuk Tim di Dashboard, Bot mengirim notifikasi:
@@ -149,7 +149,7 @@ Pelanggan lapor internet mati total. LOS merah.
 📅 Reported: 2026-01-20 09:00:00
 💣 Deadline: 2026-01-20 12:00:00 (Target 3 Jam)
 📉 Sisa TTR: 🔴 LEWAT -21 Jam 30 Menit
-👮 Dispatcher: Arya Dharma (12345678)
+👮 Assigned By: Arya Dharma (12345678)
 ➖➖➖➖➖➖➖➖➖➖➖➖
 👉 /update_INC12345678 (Klik untuk lapor)
 ```
@@ -288,21 +288,21 @@ Tim: **Raffy-Joy**
     *   **Baterai**: Estimasi boros 10-20% (Disarankan Powerbank).
     *   **Libur**: Tidak absen = Tidak dilacak.
 
-### F. Modul Redispatch (Operan Tiket / Lanjutan)
+### F. Modul Reassign (Operan Tiket / Lanjutan)
 Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang, **APAPUN STATUSNYA** (Open, In Progress, Kendala). 
 *Kasus: Teknisi sakit mendadak, mobil mogok, atau pendingan kemarin.*
 
 1.  **Dashboard Flow**:
     *   Helpdesk pilih tiket (Status bebas, kecuali Closed).
-    *   Klik tombol **Redispatch**.
+    *   Klik tombol **Reassign**.
     *   **Pilih Tim Baru** (Bisa tim sama atau oper ke tim lain).
     *   **Pilih Tanggal Pengerjaan** (Hari ini / Besok).
 2.  **System Action**:
-    *   Update data: `redispatch_by` (User Helpdesk) & `redispatch_at` (Waktu klik).
-    *   Mengirim Notifikasi Baru ke Grup Tim (Format berbeda: **♻️ REDISPATCH**).
-3.  **Bot Notification (Redispatch)**:
+    *   Update data: `reassign_by` (User Helpdesk) & `reassign_at` (Waktu klik).
+    *   Mengirim Notifikasi Baru ke Grup Tim (Format berbeda: **♻️ REASSIGN**).
+3.  **Bot Notification (Reassign)**:
     ```text
-    **TIKET REDISPATCH**
+    **TIKET REASSIGN**
     Tim: **Raffy-Joy**
     ➖➖➖➖➖➖➖➖➖➖➖➖
     Ticket: `INC12345678`
@@ -312,7 +312,7 @@ Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang, **APAPUN STAT
     📍 **Alamat:**
     Jl. Mulawarman No 45...
     
-    **Redispatch By:** Arya Dharma (21:02 WITA)
+    **Reassign By:** Arya Dharma (21:02 WITA)
     ➖➖➖➖➖➖➖➖➖➖➖➖
     👉 /update_INC12345678
     ```
