@@ -104,7 +104,7 @@ interface Heading {
 }
 
 export default function DocsPage() {
-    const [activeDoc, setActiveDoc] = useState<"Draft WOC" | "Unspec Docs">("Draft WOC");
+    const [activeDoc, setActiveDoc] = useState<"master" | "readme">("master");
     const [content, setContent] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -203,17 +203,20 @@ export default function DocsPage() {
                     </div>
 
                     <nav className="flex gap-2">
-                        {["Draft WOC", "Unspec Docs"].map((doc) => (
+                        {[
+                            { id: "master", label: "Draft WOC" },
+                            { id: "readme", label: "Unspec Docs" }
+                        ].map((doc) => (
                             <button
-                                key={doc}
-                                onClick={() => setActiveDoc(doc as any)}
+                                key={doc.id}
+                                onClick={() => setActiveDoc(doc.id as any)}
                                 className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-2 border
-                                ${activeDoc === doc
+                                ${activeDoc === doc.id
                                         ? "bg-white dark:bg-[#21262d] text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 shadow-sm"
                                         : "bg-transparent text-gray-600 dark:text-gray-400 border-transparent hover:bg-gray-200 dark:hover:bg-gray-800"}`}
                             >
                                 <FileText size={14} />
-                                <span className="capitalize">{doc === "Draft WOC" ? "Draft WOC" : "Unspec Docs"}</span>
+                                <span className="capitalize">{doc.label}</span>
                             </button>
                         ))}
                     </nav>
