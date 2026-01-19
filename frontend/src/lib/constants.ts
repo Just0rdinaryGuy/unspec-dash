@@ -86,9 +86,9 @@ export const NAV_ITEMS = [
         icon: "BarChart3"
     },
     {
-        id: "docs",
-        title: "System Docs",
-        href: "/system-docs",
+        id: "draft-web",
+        title: "Draft Web",
+        href: "/draft-web",
         icon: "Book"
     }
 ] as const

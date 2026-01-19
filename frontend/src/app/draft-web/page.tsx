@@ -17,19 +17,22 @@ const CodeBlock = ({ inline, className, children, ...props }: any) => {
     }
 
     return (
-        <div className="relative group my-4">
-            <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="relative group my-4 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+            <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                 <button
                     onClick={() => navigator.clipboard.writeText(code)}
-                    className="p-1 rounded bg-gray-700 dark:bg-gray-600 text-white hover:bg-gray-600 dark:hover:bg-gray-500"
+                    className="p-1.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                     title="Copy code"
                 >
                     <Copy size={14} />
                 </button>
             </div>
-            <code className={`${className} block bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-md overflow-x-auto text-sm font-mono leading-relaxed`} {...props}>
-                {children}
-            </code>
+            {/* Softer background for code blocks, not pitch black */}
+            <div className="bg-gray-50 dark:bg-gray-800/50 p-4 overflow-x-auto">
+                <code className={`${className} block text-sm font-mono leading-relaxed text-gray-800 dark:text-gray-200`} {...props}>
+                    {children}
+                </code>
+            </div>
         </div>
     );
 };
@@ -71,7 +74,7 @@ export default function DocsPage() {
         }
     }, [content]);
 
-    // Scroll spy for active heading
+    // Scroll spy
     useEffect(() => {
         const handleScroll = () => {
             const headingElements = headings.map(h => document.getElementById(h.id)).filter(Boolean);
@@ -123,7 +126,7 @@ export default function DocsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors duration-200">
+        <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col transition-colors duration-200">
             <header className="bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm sticky top-0 z-20 transition-colors duration-200">
                 <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -136,7 +139,7 @@ export default function DocsPage() {
                         </button>
                         <div className="flex items-center gap-2 font-bold text-xl text-blue-900 dark:text-blue-400">
                             <Book className="w-6 h-6" />
-                            <span className="hidden sm:inline">WOC System Docs</span>
+                            <span>WOC Draft Web</span>
                         </div>
                     </div>
 
@@ -171,26 +174,26 @@ export default function DocsPage() {
                     <aside className={`
                         ${tocOpen ? 'translate-x-0' : '-translate-x-full'}
                         lg:translate-x-0 lg:static
-                        fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white dark:bg-gray-900 border-r dark:border-gray-800 
-                        transition-transform duration-300 z-10 overflow-y-auto p-4
+                        fixed top-16 left-0 h-[calc(100vh-4rem)] w-72 bg-gray-50 dark:bg-gray-900/50 border-r dark:border-gray-800 
+                        transition-transform duration-300 z-10 overflow-y-auto p-6
                     `}>
-                        <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+                        <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2 uppercase tracking-wider">
                             <Menu size={16} />
-                            Table of Contents
+                            Daftar Isi
                         </h3>
-                        <nav className="space-y-1">
+                        <nav className="space-y-0.5 border-l border-gray-200 dark:border-gray-800 ml-2">
                             {headings.map((heading) => (
                                 <button
                                     key={heading.id}
                                     onClick={() => scrollToHeading(heading.id)}
                                     className={`
-                                        block w-full text-left px-3 py-2 rounded text-sm transition-colors
-                                        ${heading.level === 1 ? 'font-semibold' : ''}
+                                        block w-full text-left px-4 py-2 text-sm transition-colors border-l-2 -ml-[2px]
+                                        ${heading.level === 1 ? 'font-semibold mt-4 mb-1' : ''}
                                         ${heading.level === 2 ? 'pl-6 text-sm' : ''}
-                                        ${heading.level === 3 ? 'pl-9 text-xs' : ''}
+                                        ${heading.level === 3 ? 'pl-8 text-xs text-gray-500' : ''}
                                         ${activeHeading === heading.id
-                                            ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-l-2 border-blue-600'
-                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 border-l-2 border-transparent'
+                                            ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/10'
+                                            : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-gray-300'
                                         }
                                     `}
                                 >
@@ -201,7 +204,7 @@ export default function DocsPage() {
                     </aside>
                 )}
 
-                <main className="flex-1 px-4 py-8 overflow-x-hidden">
+                <main className="flex-1 px-4 lg:px-12 py-10 overflow-x-hidden bg-white dark:bg-gray-950">
                     {loading ? (
                         <div className="flex items-center justify-center h-64">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -212,21 +215,30 @@ export default function DocsPage() {
                             <p className="text-sm mt-1">{error}</p>
                         </div>
                     ) : (
-                        <div ref={contentRef} className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 sm:p-8 md:p-12 transition-colors duration-200">
+                        <div ref={contentRef} className="max-w-4xl mx-auto">
                             <article className="prose prose-slate prose-lg dark:prose-invert max-w-none 
-              prose-headings:text-blue-900 dark:prose-headings:text-blue-400 prose-headings:font-bold prose-headings:scroll-mt-20
-              prose-h1:text-3xl sm:prose-h1:text-4xl prose-h1:border-b prose-h1:pb-4 prose-h1:mb-8 dark:prose-h1:border-gray-700
-              prose-h2:text-xl sm:prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:border-l-4 prose-h2:border-blue-500 prose-h2:pl-4
-              prose-h3:text-lg sm:prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-              prose-p:leading-relaxed prose-p:my-4 prose-p:text-gray-700 dark:prose-p:text-gray-300
-              prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-strong:font-bold
-              prose-ul:my-6 prose-ul:space-y-2 prose-li:text-gray-700 dark:prose-li:text-gray-300
-              prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:py-3 prose-blockquote:px-4 prose-blockquote:not-italic prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300 prose-blockquote:my-6
-              prose-code:text-blue-600 dark:prose-code:text-blue-300 prose-code:bg-blue-50 dark:prose-code:bg-blue-900/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-[''] prose-code:after:content-['']
-              prose-pre:bg-gray-900 dark:prose-pre:bg-gray-950 prose-pre:my-6
-              prose-img:rounded-lg prose-img:shadow-md
-              [&_.mermaid]:bg-gray-50 dark:[&_.mermaid]:bg-gray-800 [&_.mermaid]:p-6 [&_.mermaid]:rounded-lg [&_.mermaid]:flex [&_.mermaid]:justify-center [&_.mermaid]:my-8
+              prose-headings:scroll-mt-24
+              prose-h1:text-4xl prose-h1:font-extrabold prose-h1:tracking-tight prose-h1:text-gray-900 dark:prose-h1:text-white prose-h1:mb-8
+              prose-h2:text-2xl prose-h2:font-bold prose-h2:text-gray-800 dark:prose-h2:text-gray-100 prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-2 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-gray-800
+              prose-h3:text-xl prose-h3:font-semibold prose-h3:text-gray-800 dark:prose-h3:text-gray-200 prose-h3:mt-8
+              prose-p:leading-7 prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-p:my-5
+              prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
+              prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-bold
+              prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6 prose-li:my-2 prose-li:text-gray-600 dark:prose-li:text-gray-300
+              prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:my-8 prose-blockquote:not-italic
+              prose-hr:my-10 prose-hr:border-gray-200 dark:prose-hr:border-gray-800
+              
+              /* Table styling */
+              prose-table:w-full prose-table:my-8 prose-table:border-collapse
+              prose-th:bg-gray-100 dark:prose-th:bg-gray-900 prose-th:p-4 prose-th:text-left prose-th:font-semibold prose-th:text-gray-900 dark:prose-th:text-gray-100 prose-th:border prose-th:border-gray-200 dark:prose-th:border-gray-700
+              prose-td:p-4 prose-td:border prose-td:border-gray-200 dark:prose-td:border-gray-700 prose-td:text-gray-600 dark:prose-td:text-gray-300
+              prose-tr:even:bg-gray-50 dark:prose-tr:even:bg-gray-900/50
+
+              /* Image styling */
+              prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8 prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-800
+
+              /* Mermaid container */
+              [&_.mermaid]:bg-gray-50 dark:[&_.mermaid]:bg-gray-900 [&_.mermaid]:p-6 [&_.mermaid]:rounded-xl [&_.mermaid]:border [&_.mermaid]:border-gray-200 dark:[&_.mermaid]:border-gray-800 [&_.mermaid]:shadow-sm [&_.mermaid]:flex [&_.mermaid]:justify-center [&_.mermaid]:my-10
             ">
                                 <ReactMarkdown
                                     remarkPlugins={[remarkGfm]}
@@ -236,23 +248,25 @@ export default function DocsPage() {
                                         h1: (props) => <CustomHeading level={1} {...props} />,
                                         h2: (props) => <CustomHeading level={2} {...props} />,
                                         h3: (props) => <CustomHeading level={3} {...props} />,
-                                        // Custom Table for responsiveness
+                                        // Wrapper for native tables to ensure they scroll
                                         table: ({ children, ...props }: any) => (
-                                            <div className="overflow-x-auto my-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700" {...props}>
+                                            <div className="overflow-x-auto my-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-900/50">
+                                                <table className="min-w-full" {...props}>
                                                     {children}
                                                 </table>
                                             </div>
                                         ),
-                                        // Custom Image for better presentation
+                                        // Enhanced Image component
                                         img: ({ node, ...props }: any) => (
-                                            <div className="flex flex-col items-center my-8">
-                                                <img
-                                                    className="rounded-lg shadow-md border border-gray-100 dark:border-gray-800 max-h-[600px] object-contain"
-                                                    {...props}
-                                                />
+                                            <div className="flex flex-col items-center my-10 group">
+                                                <div className="relative rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                                                    <img
+                                                        className="max-h-[600px] object-contain m-0"
+                                                        {...props}
+                                                    />
+                                                </div>
                                                 {props.alt && (
-                                                    <span className="mt-3 text-sm text-gray-500 dark:text-gray-400 italic">
+                                                    <span className="mt-3 text-sm text-gray-500 dark:text-gray-400 font-medium border-b-2 border-transparent group-hover:border-gray-300 transition-colors">
                                                         {props.alt}
                                                     </span>
                                                 )}
@@ -268,9 +282,11 @@ export default function DocsPage() {
                 </main>
             </div>
 
-            <footer className="bg-white dark:bg-gray-900 border-t dark:border-gray-800 py-8 mt-auto transition-colors duration-200">
-                <div className="max-w-7xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
-                    &copy; 2026 WOC System. All docs are auto-generated from source.
+            <footer className="bg-white dark:bg-gray-950 border-t dark:border-gray-900 py-10 mt-auto">
+                <div className="max-w-4xl mx-auto px-4 text-center">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
+                        &copy; 2026 WOC System. All docs are auto-generated from source.
+                    </p>
                 </div>
             </footer>
         </div>
