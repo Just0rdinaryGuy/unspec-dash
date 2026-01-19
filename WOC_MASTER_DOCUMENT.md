@@ -43,9 +43,9 @@
 ```mermaid
 graph TD
     %% Styling
-    classDef dash fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef bot fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    classDef actor fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef dash fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000000;
+    classDef bot fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000000;
+    classDef actor fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000000;
 
     subgraph Sources ["1. Ticket Sources"]
     S1[("Import Excel<br/>(Pusat)")]
@@ -371,7 +371,7 @@ Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang, **APAPUN STAT
     👉 /update_INC12345678
     ```
 
-### G. Modul Analytics & Fraud Detection (Phase 3 Spec) 🧠
+### G. Modul Analytics & Fraud Detection (Phase 3) 🧠
 *(Fitur Cerdas untuk analisa pola data & pencegahan kecurangan)*
 
 **1. Material Anomaly Detector (Anti-Markup)**
