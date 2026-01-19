@@ -83,8 +83,17 @@ graph TD
 | `Sektor` | `sector` | Text | `BATU AMPAR` |
 | `Checklist` | `checklist` | Text | `HVC_GOLD` |
 
-**2. Input Manual:**
-Form di dashboard untuk tiket dadakan/urgent yang tidak ada di rekap harian.
+**2. Input Manual (Handling Unspec & WA):**
+Form di dashboard untuk tiket dadakan (Unspec/WA) yang belum memiliki nomor INC resmi dari pusat.
+
+*   **Temporary ID Strategy**:
+    *   Sistem akan men-generate ID sementara dengan format: `REQ-[YYYYMMDD]-[SEQ]`.
+    *   Contoh: `REQ-20260120-001`.
+    *   **Flow**:
+        1.  Helpdesk input laporan (Sumber: WA/Lisan). ID = `REQ-...`.
+        2.  Sistem mengirim notifikasi ke teknisi (tetap bisa dikerjakan).
+        3.  Setelah nomor tiket resmi (INC) keluar dari pusat, Helpdesk melakukan **Edit Ticket** di Dashboard untuk mengubah `REQ-...` menjadi `INC...`.
+    *   **Checklist Default**: `UNSPEC` atau `WA`.
 
 ### B. Modul Distribusi & Notifikasi
 Saat Helpdesk menunjuk Tim di Dashboard, Bot mengirim notifikasi:
@@ -93,8 +102,8 @@ Saat Helpdesk menunjuk Tim di Dashboard, Bot mengirim notifikasi:
 🚀 NEW JOB ASSIGNMENT
 Tim: Raffy-Joy (SEKTOR KS TUBUN)
 ➖➖➖➖➖➖➖➖➖➖➖➖
-🆔 Ticket: INC4448****
-👤 Service: 16210********
+🆔 Ticket: INC12345678
+👤 Service: 1621012345678
 ⚠️ Checklist: HVC_GOLD
 
 📍 LOKASI:
@@ -105,16 +114,16 @@ Pelanggan lapor internet mati total. LOS merah.
 
 ⏰ SLA Target: 2026-01-20 15:00
 ➖➖➖➖➖➖➖➖➖➖➖➖
-👉 /update_INC4448**** (Klik untuk lapor)
+👉 /update_INC12345678 (Klik untuk lapor)
 ```
 
 ### C. Modul Interaksi Bot (Wizard)
 Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 
-**Command**: `/update_INC4448****`
+**Command**: `/update_INC12345678`
 
 #### Step 1: Status & Penyebab
-> **Bot**: "👋 Halo **Raffy**, update status tiket `INC4448****`?"
+> **Bot**: "👋 Halo **Raffy**, update status tiket `INC12345678`?"
 > **Tombol**: `[✅ CLOSED]` `[🚧 KENDALA]` `[⏳ PENDING]`
 >
 > *(User klik CLOSED)*
