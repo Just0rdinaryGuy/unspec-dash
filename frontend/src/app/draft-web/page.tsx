@@ -263,84 +263,95 @@ export default function DocsPage() {
                     </aside>
                 )}
 
-                <main className="flex-1 min-w-0 w-full px-4 sm:px-8 lg:px-12 py-10 bg-white dark:bg-[#0d1117]">
+                <main className="flex-1 min-w-0 w-full px-4 sm:px-6 lg:px-8 py-8 bg-[#ffffff] dark:bg-[#0d1117]">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center h-64 space-y-4">
                             <div className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent border-gray-400 dark:border-gray-600"></div>
                             <span className="text-sm text-gray-500">Loading documentation...</span>
                         </div>
                     ) : error ? (
-                        <div className="max-w-2xl mx-auto mt-10 p-4 border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/10 rounded-lg text-red-600 dark:text-red-400 text-center">
-                            <AlertTriangle className="mx-auto h-8 w-8 mb-2" />
-                            <h3 className="font-semibold">Unable to load document</h3>
+                        <div className="max-w-3xl mx-auto mt-10 p-6 border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/10 rounded-lg text-red-600 dark:text-red-400 text-center shadow-sm">
+                            <AlertTriangle className="mx-auto h-10 w-10 mb-3" />
+                            <h3 className="font-semibold text-lg">Unable to load document</h3>
                             <p className="text-sm mt-1 opacity-80">{error}</p>
                         </div>
                     ) : (
-                        <div ref={contentRef} className="max-w-4xl mx-auto">
-                            {/* Professional Typography - Matching GitHub's 'markdown-body' */}
-                            <article className="prose prose-slate prose-lg dark:prose-invert max-w-none
-                                text-gray-800 dark:text-[#e6edf3] font-sans
-                                
-                                prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-gray-900 dark:prose-headings:text-gray-100
-                                prose-h1:text-4xl prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800 prose-h1:mb-8
-                                prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-gray-800
-                                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-2
-                                
-                                prose-p:leading-7 prose-p:mb-4 text-[16px]
-                                prose-a:text-[#0969da] dark:prose-a:text-[#4493f8] prose-a:no-underline hover:prose-a:underline
-                                
-                                prose-strong:font-semibold prose-strong:text-gray-900 dark:prose-strong:text-gray-100
-                                prose-ul:my-4 prose-ul:list-disc prose-ul:pl-8
-                                prose-ol:my-4 prose-ol:list-decimal prose-ol:pl-8
-                                prose-li:my-1.5
-                                
-                                prose-hr:my-8 prose-hr:border-gray-200 dark:prose-hr:border-gray-800
-                                
-                                /* Table Styling - GitHub Style */
-                                prose-table:w-full prose-table:border-collapse prose-table:my-6 prose-table:block prose-table:overflow-x-auto
-                                prose-th:px-3 prose-th:py-2.5 prose-th:bg-gray-100 dark:prose-th:bg-[#161b22] prose-th:font-semibold prose-th:text-gray-900 dark:prose-th:text-gray-100 prose-th:text-left prose-th:border prose-th:border-gray-300 dark:prose-th:border-gray-700
-                                prose-td:px-3 prose-td:py-2.5 prose-td:border prose-td:border-gray-300 dark:prose-td:border-gray-700 prose-td:bg-white dark:prose-td:bg-[#0d1117]
-                                prose-tr:even:bg-gray-50 dark:prose-tr:even:bg-[#161b22]
+                        <div ref={contentRef} className="max-w-5xl mx-auto">
+                            {/* Paper UI - Document Container */}
+                            <div className="bg-white dark:bg-[#0d1117] md:border md:border-gray-200 md:dark:border-gray-800 md:rounded-lg md:shadow-sm md:p-12 p-4 min-h-[500px]">
+                                <article className="prose prose-slate prose-lg dark:prose-invert max-w-none
+                                    text-gray-700 dark:text-[#e6edf3] font-sans leading-relaxed
+                                    
+                                    /* Headings */
+                                    prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-gray-900 dark:prose-headings:text-gray-100
+                                    prose-h1:text-4xl prose-h1:font-bold prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800 prose-h1:mb-10
+                                    prose-h2:text-2xl prose-h2:font-semibold prose-h2:mt-16 prose-h2:mb-6 prose-h2:pb-2 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-gray-800
+                                    prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-3
+                                    
+                                    /* Paragraphs & Lists */
+                                    prose-p:leading-7 prose-p:mb-5 text-[16px]
+                                    prose-li:my-1.5 prose-li:leading-7
+                                    prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6 marker:text-gray-400 dark:marker:text-gray-500
+                                    prose-ol:my-6 prose-ol:list-decimal prose-ol:pl-6
+                                    
+                                    /* Links */
+                                    prose-a:text-[#0969da] dark:prose-a:text-[#4493f8] prose-a:no-underline hover:prose-a:underline
+                                    
+                                    /* Code & Pre */
+                                    prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:bg-gray-100 dark:prose-code:bg-[rgba(110,118,129,0.4)] prose-code:text-sm prose-code:font-mono prose-code:text-gray-800 dark:prose-code:text-gray-200 before:prose-code:content-none after:prose-code:content-none
+                                    prose-pre:bg-gray-50 dark:prose-pre:bg-[#161b22] prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-pre:rounded-lg
+                                    
+                                    /* HR */
+                                    prose-hr:my-12 prose-hr:border-gray-200 dark:prose-hr:border-gray-800
+                                    
+                                    /* Table */
+                                    prose-table:w-full prose-table:border-collapse prose-table:my-8 prose-table:block prose-table:overflow-x-auto
+                                    prose-th:px-4 prose-th:py-3 prose-th:bg-gray-50 dark:prose-th:bg-[#161b22] prose-th:font-semibold prose-th:text-gray-900 dark:prose-th:text-gray-100 prose-th:text-left prose-th:border prose-th:border-gray-300 dark:prose-th:border-gray-700
+                                    prose-td:px-4 prose-td:py-3 prose-td:border prose-td:border-gray-300 dark:prose-td:border-gray-700 prose-td:bg-white dark:prose-td:bg-[#0d1117]
+                                    prose-tr:hover:bg-gray-50 dark:prose-tr:hover:bg-[#161b22/50]
 
-                                /* Mermaid & Image Styling */
-                                [&_.mermaid]:bg-white dark:[&_.mermaid]:bg-[#0d1117] [&_.mermaid]:border [&_.mermaid]:border-gray-200 dark:[&_.mermaid]:border-gray-800 [&_.mermaid]:rounded-md [&_.mermaid]:p-4 [&_.mermaid]:flex [&_.mermaid]:justify-center [&_.mermaid]:my-8
-                                prose-img:rounded-md prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-800 prose-img:shadow-sm prose-img:bg-white dark:prose-img:bg-transparent
-                            ">
-                                <ReactMarkdown
-                                    remarkPlugins={[remarkGfm]}
-                                    rehypePlugins={[rehypeRaw]}
-                                    components={{
-                                        code: CodeBlock as any,
-                                        blockquote: CustomBlockquote,
-                                        h1: (props) => <CustomHeading level={1} {...props} />,
-                                        h2: (props) => <CustomHeading level={2} {...props} />,
-                                        h3: (props) => <CustomHeading level={3} {...props} />,
-                                        h4: (props) => <CustomHeading level={4} {...props} />,
-                                        table: ({ children, ...props }: any) => (
-                                            <div className="overflow-x-auto my-6 rounded-md border border-gray-300 dark:border-gray-700">
-                                                <table className="min-w-full text-sm" {...props}>
-                                                    {children}
-                                                </table>
-                                            </div>
-                                        ),
-                                        img: ({ node, ...props }: any) => (
-                                            <div className="flex flex-col items-center my-8">
-                                                <img
-                                                    className="max-h-[600px] object-contain rounded-md"
-                                                    {...props}
-                                                />
-                                                {props.alt && (
-                                                    <span className="mt-2 text-xs text-gray-500 dark:text-gray-400 font-medium">
-                                                        {props.alt}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )
-                                    }}
-                                >
-                                    {content}
-                                </ReactMarkdown>
-                            </article>
+                                    /* Multimedia */
+                                    [&_.mermaid]:bg-gray-50 dark:[&_.mermaid]:bg-[#0d1117] [&_.mermaid]:border [&_.mermaid]:border-gray-200 dark:[&_.mermaid]:border-gray-800 [&_.mermaid]:rounded-lg [&_.mermaid]:p-6 [&_.mermaid]:flex [&_.mermaid]:justify-center [&_.mermaid]:my-10
+                                    prose-img:rounded-lg prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-800 prose-img:shadow-sm prose-img:bg-white dark:prose-img:bg-transparent prose-img:mx-auto
+                                ">
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        rehypePlugins={[rehypeRaw]}
+                                        components={{
+                                            code: CodeBlock as any,
+                                            blockquote: CustomBlockquote,
+                                            h1: (props) => <CustomHeading level={1} {...props} />,
+                                            h2: (props) => <CustomHeading level={2} {...props} />,
+                                            h3: (props) => <CustomHeading level={3} {...props} />,
+                                            h4: (props) => <CustomHeading level={4} {...props} />,
+                                            table: ({ children, ...props }: any) => (
+                                                <div className="overflow-x-auto my-8 rounded-lg border border-gray-300 dark:border-gray-700 shadow-sm">
+                                                    <table className="min-w-full text-sm divide-y divide-gray-200 dark:divide-gray-700" {...props}>
+                                                        {children}
+                                                    </table>
+                                                </div>
+                                            ),
+                                            img: ({ node, ...props }: any) => (
+                                                <div className="flex flex-col items-center my-10 group">
+                                                    <div className="relative overflow-hidden rounded-lg shadow-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0d1117] transition-transform hover:scale-[1.01]">
+                                                        <img
+                                                            className="max-h-[700px] object-contain block m-0"
+                                                            {...props}
+                                                        />
+                                                    </div>
+                                                    {props.alt && (
+                                                        <span className="mt-3 text-sm text-gray-500 dark:text-gray-400 font-medium italic">
+                                                            {props.alt}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )
+                                        }}
+                                    >
+                                        {content}
+                                    </ReactMarkdown>
+                                </article>
+                            </div>
                         </div>
                     )}
                 </main>
