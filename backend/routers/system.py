@@ -46,7 +46,10 @@ async def get_documentation(doc_id: str):
         if not os.path.exists(file_path):
              file_path = os.path.abspath(filename) # Try current dir
              if not os.path.exists(file_path):
-                raise HTTPException(status_code=404, detail=f"File {filename} not found on server at {file_path}")
+                 # Last resort: Try system root (Docker mount point)
+                 file_path = os.path.abspath(os.path.join("/", filename))
+                 if not os.path.exists(file_path):
+                    raise HTTPException(status_code=404, detail=f"File {filename} not found on server at {file_path}")
 
     try:
         with open(file_path, "r", encoding="utf-8") as f:
