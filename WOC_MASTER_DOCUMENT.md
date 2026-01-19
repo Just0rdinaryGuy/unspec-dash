@@ -159,6 +159,9 @@ Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 
 **Command**: `/update_INC12345678`
 
+#### Scenario A: Status CLOSED / COMPLETE ✅
+*(Flow Utama: Pekerjaan Selesai Tuntas)*
+
 #### Step 1: Status & Penyebab
 > **Bot**: "👋 Halo **Raffy**, update status tiket `INC12345678`?"
 > **Tombol**: `[✅ CLOSED]` `[🚧 KENDALA]` `[⏳ PENDING]`
