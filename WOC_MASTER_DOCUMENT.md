@@ -182,7 +182,7 @@ Bot meminta 9 jenis foto satu per satu.
 Pesan otomatis yang dikirim Bot ke Grup Tim setelah wizard selesai.
 
 > **ℹ️ Catatan Logic:**
-> Nama Teknisi (`Agus` / `Raffy`) diambil dari database tabel `users` kolom `full_name` berdasarkan `chat_id` pengirim. Bukan dari Display Name Telegram (agar nama tetap formal & standar).
+> Nama Teknisi (`Raffy` / `Joy`) diambil dari database tabel `users` kolom `full_name` berdasarkan `chat_id` pengirim. Bukan dari Display Name Telegram (agar nama tetap formal & standar).
 
 **A. Sukses (CLOSED) ✅**
 ```text
@@ -249,6 +249,31 @@ Tim: **Raffy-Joy**
     *   **12 Jam Kerja**: Di jam ke-8, Bot minta renew location untuk cover sisa waktu (Total 12 Jam).
     *   **Baterai**: Estimasi boros 10-20% (Disarankan Powerbank).
     *   **Libur**: Tidak absen = Tidak dilacak.
+
+### F. Modul Redispatch (Follow-up Kendala)
+Fitur untuk menjadwalkan ulang tiket yang statusnya **PENDING / KENDALA** (belum Closed hari ini).
+
+1.  **Dashboard Flow**:
+    *   Helpdesk filter tiket status `KENDALA`.
+    *   Klik tombol **Redispatch** -> Pilih Tim (bisa Tim sama/beda) -> Pilih Tanggal Pengerjaan.
+2.  **System Action**:
+    *   Update data: `redispatch_by` (User Helpdesk) & `redispatch_at` (Waktu klik).
+    *   Mengirim Notifikasi Baru ke Grup Tim (Format berbeda: **♻️ REDISPATCH**).
+3.  **Bot Notification (Redispatch)**:
+    ```text
+    ♻️ **TIKET REDISPATCH (LANJUTAN)**
+    Tim: **SURYA-JAURDAN**
+    ➖➖➖➖➖➖➖➖➖➖➖➖
+    🆔 Ticket: `INC12345678`
+    ⚠️ Prev. Kendala: **Rumah Tutup**
+    
+    📍 **LOKASI:**
+    Jl. Mulawarman No 45...
+    
+    👮 **Redispatch By:** ABDUL ROHMAN (21:02 WITA)
+    ➖➖➖➖➖➖➖➖➖➖➖➖
+    👉 /update_INC12345678
+    ```
 
 ---
 
