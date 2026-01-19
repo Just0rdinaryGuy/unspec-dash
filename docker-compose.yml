@@ -44,8 +44,6 @@ services:
       - DATABASE_URL=postgresql://gpon_user:gpon_secure_pass_2026@postgres:5432/gpon_network
     volumes:
       - ./backend:/app
-      - ./WOC_MASTER_DOCUMENT.md:/WOC_MASTER_DOCUMENT.md
-      - ./README.md:/README.md
     depends_on:
       postgres:
         condition: service_healthy
