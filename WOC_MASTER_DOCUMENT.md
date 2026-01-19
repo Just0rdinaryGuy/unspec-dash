@@ -1,6 +1,6 @@
 # 📘 WOC (Warga Online Ceria) - Master Documentation
 
-> **Project Status:** 🚀 READY FOR DEVELOPMENT  
+> **Project Status:** need to verify by user  
 > **Version:** 3.0 (Consolidated)
 
 ---
