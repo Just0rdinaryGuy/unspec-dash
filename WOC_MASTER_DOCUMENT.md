@@ -125,7 +125,7 @@ Pelanggan lapor internet mati total. LOS merah.
 📅 Reported: 2026-01-20 09:00:00
 💣 Deadline: 2026-01-20 12:00:00 (Target 3 Jam)
 📉 Sisa TTR: 🔴 LEWAT -21 Jam 30 Menit
-👮 Dispatcher: ABDUL ROHMAN (20971122)
+👮 Dispatcher: Arya Dharma (12345678)
 ➖➖➖➖➖➖➖➖➖➖➖➖
 👉 /update_INC12345678 (Klik untuk lapor)
 ```
