@@ -178,6 +178,55 @@ Bot meminta 9 jenis foto satu per satu.
 >
 > **Bot**: "✅ **TIKET CLOSED!** Data tersimpan. Laporan telah diteruskan ke Grup."
 
+#### Output: Laporan Selesai (Broadcast ke Grup)
+Pesan otomatis yang dikirim Bot ke Grup Tim setelah wizard selesai.
+
+**A. Sukses (CLOSED) ✅**
+```text
+✅ **JOB COMPLETED (CLOSED)**
+Tim: **SURYA-JAURDAN**
+➖➖➖➖➖➖➖➖➖➖➖➖
+🆔 Ticket: `INC12345678`
+🛠️ Teknisi: **Agus**
+
+📊 **HASIL PEKERJAAN:**
+• Penyebab: Putus Kabel
+• RFO: `Sambung kabel DC 150m dan ganti SOC`
+
+📦 **MATERIAL:**
+• Dropcore: 150 m
+• SOC: 2 pcs
+
+📸 **EVIDENCE (9 Foto):**
+(Media Album terkirim otomatis di bawah pesan ini)
+
+📍 **LOKASI CLOSING:**
+(Map Location Attachment)
+
+⏱️ **DURASI:** 1 Jam 30 Menit
+➖➖➖➖➖➖➖➖➖➖➖➖
+```
+
+**B. Pending (KENDALA) 🚧**
+```text
+🚧 **JOB PENDING (KENDALA)**
+Tim: **SURYA-JAURDAN**
+➖➖➖➖➖➖➖➖➖➖➖➖
+🆔 Ticket: `INC12345678`
+🛠️ Teknisi: **Agus**
+
+⚠️ **DETAIL KENDALA:**
+• Kategori: Pelanggan (Rumah Tutup / Tidak Respon)
+• Ket: `Sudah gedor pagar 3x, telpon tidak diangkat`
+
+📸 **BUKTI KUNJUNGAN (1-2 Foto):**
+(Foto Rumah / Pagar / Call Log)
+
+📍 **LOKASI TERAKHIR:**
+(Map Location Attachment)
+➖➖➖➖➖➖➖➖➖➖➖➖
+```
+
 ### D. Visualisasi Dashboard Web
 1.  **Productivity Monitor**:
     *   Tabel per Sektor.
