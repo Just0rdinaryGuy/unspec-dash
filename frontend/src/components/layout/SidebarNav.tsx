@@ -11,7 +11,8 @@ import {
     Wrench,
     Users,
     Settings,
-    BarChart3
+    BarChart3,
+    Book
 } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 
@@ -20,7 +21,8 @@ const iconMap = {
     Database,
     Activity,
     Wrench,
-    BarChart3
+    BarChart3,
+    Book
 }
 
 interface SidebarNavProps {
