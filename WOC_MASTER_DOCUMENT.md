@@ -83,17 +83,26 @@ graph TD
 | `Sektor` | `sector` | Text | `BATU AMPAR` |
 | `Checklist` | `checklist` | Text | `HVC_GOLD` |
 
-**2. Input Manual (Handling Unspec & WA):**
-Form di dashboard untuk tiket dadakan (Unspec/WA) yang belum memiliki nomor INC resmi dari pusat.
+**2. Input Manual / External Sources (Handling Unspec & WA):**
 
-*   **Temporary ID Strategy**:
-    *   Sistem akan men-generate ID sementara dengan format: `REQ-[YYYYMMDD]-[SEQ]`.
-    *   Contoh: `REQ-20260120-001`.
-    *   **Flow**:
-        1.  Helpdesk input laporan (Sumber: WA/Lisan). ID = `REQ-...`.
-        2.  Sistem mengirim notifikasi ke teknisi (tetap bisa dikerjakan).
-        3.  Setelah nomor tiket resmi (INC) keluar dari pusat, Helpdesk melakukan **Edit Ticket** di Dashboard untuk mengubah `REQ-...` menjadi `INC...`.
-    *   **Checklist Default**: `UNSPEC` atau `WA`.
+*   **A. Internal Employee (Via Bot)**:
+    *   Pegawai lain bisa lapor tiket via Bot.
+    *   **Security**: Hanya bisa dilakukan di **Grup Telegram Internal Tertentu** (Whitelist Group ID).
+    *   **Command**: `/lapor [No/ID] [Keluhan]` -> Masuk ke Dashboard WA.
+
+*   **B. Customer (Via Web Link)**:
+    *   Formulir publik sederhana: `wargaonlineceria.my.id/lapor`.
+    *   Input: Nama, No HP, Alamat, Keluhan. -> Masuk ke Dashboard WA.
+
+*   **C. Dashboard WA (Dispatch Queue)**:
+    *   Halaman khusus menampung tiket dari Bot/Web Link.
+    *   Status Awal: `REQ-2026...` (Draft).
+    *   **Action Helpdesk**:
+        1.  **Approve & Assign**: Langsung dispatch ke teknisi (ID tetap `REQ`, nanti diedit jadi `INC`).
+        2.  **Reject**: Jika spam/duplikat.
+
+*   **D. Dashboard Unspec**:
+    *   Tetap fokus untuk tiket Unspec yang sudah ada di sistem (Import/Manual), flow dispatch standar.
 
 ### B. Modul Distribusi & Notifikasi
 Saat Helpdesk menunjuk Tim di Dashboard, Bot mengirim notifikasi:
