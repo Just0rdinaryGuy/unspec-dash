@@ -245,9 +245,9 @@ Fitur pemantauan posisi teknisi di lapangan menggunakan fitur **Telegram Live Lo
 4.  **Sync**: Telegram akan mengirim update koordinat ke server setiap teknisi bergerak, tanpa perlu interaksi manual lagi.
 
 ### C. Skenario Operasional
-1.  **Lembur (Overtime)**:
-    *   Telegram membatasi Live Location maks 8 jam.
-    *   Jika teknisi lembur, Bot akan mengirim reminder: *"Waktu tracking habis. Jika masih bekerja, silakan Share Live Location lagi."*
+1.  **Durasi Kerja (12 Jam)**:
+    *   Kewajiban penyelesaian tiket memiliki window waktu **maksimal 12 Jam**.
+    *   Karena teknis Telegram membatasi Live Location 8 jam, maka di **Jam ke-8** Bot akan meminta perpanjangan otomatis: *"Durasi sesi 1 habis. Masih ada tiket belum selesai? Silakan Share Live Location lagi untuk lanjut."*
 2.  **Libur / Sakit**:
     *   Teknisi yang tidak melakukan `/absen` di pagi hari **TIDAK AKAN DILACAK**.
     *   Data lokasi hanya akan diupdate jika ada sesi aktif.
