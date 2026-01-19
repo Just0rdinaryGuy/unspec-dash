@@ -305,10 +305,11 @@ export default function DocsPage() {
                                     prose-hr:my-12 prose-hr:border-gray-200 dark:prose-hr:border-gray-800
                                     
                                     /* Table */
+                                    /* Table - Simple Grid Style (User Request) */
                                     prose-table:w-full prose-table:border-collapse prose-table:my-8 prose-table:block prose-table:overflow-x-auto
-                                    prose-th:px-4 prose-th:py-3 prose-th:bg-gray-50 dark:prose-th:bg-[#161b22] prose-th:font-semibold prose-th:text-gray-900 dark:prose-th:text-gray-100 prose-th:text-left prose-th:border prose-th:border-gray-300 dark:prose-th:border-gray-700
-                                    prose-td:px-4 prose-td:py-3 prose-td:border prose-td:border-gray-300 dark:prose-td:border-gray-700 prose-td:bg-white dark:prose-td:bg-[#0d1117]
-                                    prose-tr:hover:bg-gray-50 dark:prose-tr:hover:bg-[#161b22/50]
+                                    prose-th:border prose-th:border-gray-500 dark:prose-th:border-gray-600 prose-th:px-4 prose-th:py-3 prose-th:bg-transparent prose-th:text-gray-900 dark:prose-th:text-gray-100 prose-th:font-bold prose-th:bg-gray-100/50 dark:prose-th:bg-gray-800/30
+                                    prose-td:border prose-td:border-gray-500 dark:prose-td:border-gray-600 prose-td:px-4 prose-td:py-3 prose-td:bg-transparent
+                                    prose-tr:bg-transparent
 
                                     /* Multimedia */
                                     [&_.mermaid]:bg-gray-50 dark:[&_.mermaid]:bg-[#0d1117] [&_.mermaid]:border [&_.mermaid]:border-gray-200 dark:[&_.mermaid]:border-gray-800 [&_.mermaid]:rounded-lg [&_.mermaid]:p-6 [&_.mermaid]:flex [&_.mermaid]:justify-center [&_.mermaid]:my-10
@@ -325,11 +326,21 @@ export default function DocsPage() {
                                             h3: (props) => <CustomHeading level={3} {...props} />,
                                             h4: (props) => <CustomHeading level={4} {...props} />,
                                             table: ({ children, ...props }: any) => (
-                                                <div className="overflow-x-auto my-8 rounded-lg border border-gray-300 dark:border-gray-700 shadow-sm">
-                                                    <table className="min-w-full text-sm divide-y divide-gray-200 dark:divide-gray-700" {...props}>
+                                                <div className="overflow-x-auto my-8">
+                                                    <table className="min-w-full text-sm border-collapse border border-gray-500 dark:border-gray-600" {...props}>
                                                         {children}
                                                     </table>
                                                 </div>
+                                            ),
+                                            th: ({ children, ...props }: any) => (
+                                                <th className="border border-gray-500 dark:border-gray-600 px-4 py-3 text-left font-bold text-gray-900 dark:text-gray-100 bg-gray-100/50 dark:bg-gray-800/30" {...props}>
+                                                    {children}
+                                                </th>
+                                            ),
+                                            td: ({ children, ...props }: any) => (
+                                                <td className="border border-gray-500 dark:border-gray-600 px-4 py-3 text-gray-700 dark:text-gray-300" {...props}>
+                                                    {children}
+                                                </td>
                                             ),
                                             img: ({ node, ...props }: any) => (
                                                 <div className="flex flex-col items-center my-10 group">
