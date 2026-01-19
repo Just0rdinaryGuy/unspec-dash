@@ -214,6 +214,48 @@ Bot meminta 9 jenis foto satu per satu.
 >
 > **Bot**: "✅ **TIKET CLOSED!** Data tersimpan. Laporan telah diteruskan ke Grup."
 
+---
+
+#### Scenario B: Status KENDALA 🚧
+*(Jika teknisi tidak bisa menyelesaikan pekerjaan karena halangan)*
+
+**Step 1: Kategori Kendala**
+> **Bot**: "Kenapa Terkendala?"
+> **Tombol**: `[Tiang Penuh]` `[Rumah Tutup]` `[Hujan Deras]` `[Ijin Warga]` `[Lainnya]`
+
+**Step 2: Deskripsi Detail**
+> **Bot**: "Ceritakan kondisinya (cth: Pagar digembok, tidak ada orang):"
+> **User**: "Rumah kosong, ditelpon ga ngangkat"
+
+**Step 3: Foto Bukti (Wajib 1)**
+> **Bot**: "📸 Foto Bukti Kendala (Wajib):"
+> **User**: *(Upload Foto Pagar Tutup)*
+
+**Step 4: Share Location**
+> **Bot**: "📍 Posisi Terakhir Anda:"
+> **User**: *(Share Live Loc)*
+
+> **Bot**: "🚧 **TIKET KENDALA!** Laporan tersimpan."
+
+---
+
+#### Scenario C: Status PENDING ⏳
+*(Jika pekerjaan ditunda/reschedule)*
+
+**Step 1: Alasan Pending**
+> **Bot**: "Alasan Pending?"
+> **Tombol**: `[Minta Reschedule]` `[Besok Dilanjut]` `[Tunggu Material]`
+
+**Step 2: Janji Tuntas**
+> **Bot**: "Kapan akan dikerjakan/dilanjut? (Format: Besok Pagi / Tgl XX Jam XX)"
+> **User**: "Besok jam 10 pagi"
+
+**Step 3: Share Location**
+> **Bot**: "📍 Posisi Terakhir Anda:"
+> **User**: *(Share Live Loc)*
+
+> **Bot**: "⏳ **TIKET PENDING!** Reminder dipasang untuk Besok."
+
 #### Output: Laporan Selesai (Broadcast ke Grup)
 Pesan otomatis yang dikirim Bot ke Grup Tim setelah wizard selesai.
 
