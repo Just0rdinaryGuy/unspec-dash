@@ -166,14 +166,15 @@ Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 > *(User klik CLOSED)*
 >
 > **Bot**: "Oke CLOSED. Apa penyebab utamanya?"
-> **Tombol**: `[Putus Kabel]` `[Modul Rusak]` `[Konektor]` `[Power Mati]` `[Lainnya]`
+> **Tombol**: `[Putus Kabel]` `[Modul Rusak]` `[Konektor]` `[Inet Mati]` `[Power Mati]` `[Lainnya]`
 
 #### Step 2: Detail RFO (Text)
 > **Bot**: "Tuliskan detail perbaikan yang dilakukan (Singkat & Jelas):"
 > **User**: "Sambung kabel DC 150m dan ganti SOC"
 
 > **ℹ️ Logic Smart Skip:**
-> Jika RFO = `[Power/Inet Mati]` atau `[Reset]`, Bot **OTOMATIS SKIP** Step 3 (Material/Alat) dan langsung ke Step 4 (Foto).
+> *   Jika RFO = `[Inet Mati]`, `[Power Mati]` atau `[Reset]`: Bot **SKIP** Step 3 (Langsung Foto).
+> *   Jika RFO = `[Lainnya]`: Bot **TETAP MUNCUL** Step 3 (Standard Flow), karena mungkin ada pemakaian material tak terduga (User bisa input `0` jika tidak pakai).
 
 #### Step 3a: Input Material (Habis Pakai)
 > **Bot**: "🛠 **LAPORAN MATERIAL** (Masukan angka 0 jika tidak pakai)"
