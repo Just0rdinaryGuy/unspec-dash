@@ -96,9 +96,9 @@ graph TD
 
 *   **C. Dashboard WA (Dispatch Queue)**:
     *   Halaman khusus menampung tiket dari Bot/Web Link.
-    *   Status Awal: `REQ-2026...` (Draft).
+    *   Status Awal: `WA-2026...` (Draft).
     *   **Action Helpdesk**:
-        1.  **Approve & Assign**: Langsung dispatch ke teknisi (ID tetap `REQ`, nanti diedit jadi `INC`).
+        1.  **Approve & Assign**: Langsung dispatch ke teknisi (ID tetap `WA`, nanti diedit jadi `INC`).
         2.  **Reject**: Jika spam/duplikat.
 
 *   **D. Dashboard Unspec**:
@@ -111,9 +111,9 @@ Saat Helpdesk menunjuk Tim di Dashboard, Bot mengirim notifikasi:
 🚀 NEW JOB ASSIGNMENT
 Tim: Raffy-Joy (SEKTOR KS TUBUN)
 ➖➖➖➖➖➖➖➖➖➖➖➖
-🆔 Ticket: INC12345678
-👤 Service: 1621012345678
-⚠️ Checklist: HVC_GOLD
+🆔 Tiket ID: INC12345678
+👤 Service ID: 1621012345678
+⚠️ Pelanggan ID: HVC_GOLD
 
 📍 LOKASI:
 Jl. Mulawarman No 45, RT 02 (Depan Indomaret)
@@ -121,7 +121,11 @@ Jl. Mulawarman No 45, RT 02 (Depan Indomaret)
 📜 SUMMARY / KELUHAN:
 Pelanggan lapor internet mati total. LOS merah.
 
-⏰ SLA Target: 2026-01-20 15:00
+⏱️ SLA MONITORING:
+📅 Reported: 2026-01-20 09:00:00
+💣 Deadline: 2026-01-20 12:00:00 (Target 3 Jam)
+📉 Sisa TTR: 🔴 LEWAT -21 Jam 30 Menit
+👮 Dispatcher: ABDUL ROHMAN (20971122)
 ➖➖➖➖➖➖➖➖➖➖➖➖
 👉 /update_INC12345678 (Klik untuk lapor)
 ```
