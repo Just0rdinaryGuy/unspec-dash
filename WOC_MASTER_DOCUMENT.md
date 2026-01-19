@@ -172,6 +172,9 @@ Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 > **Bot**: "Tuliskan detail perbaikan yang dilakukan (Singkat & Jelas):"
 > **User**: "Sambung kabel DC 150m dan ganti SOC"
 
+> **ℹ️ Logic Smart Skip:**
+> Jika RFO = `[Power Mati]` atau `[Reset]`, Bot **OTOMATIS SKIP** Step 3 (Material/Alat) dan langsung ke Step 4 (Foto).
+
 #### Step 3a: Input Material (Habis Pakai)
 > **Bot**: "🛠 **LAPORAN MATERIAL** (Masukan angka 0 jika tidak pakai)"
 >
