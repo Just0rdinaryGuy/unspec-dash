@@ -67,10 +67,10 @@ export default function DocsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-            <header className="bg-white border-b shadow-sm sticky top-0 z-10">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors duration-200">
+            <header className="bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-sm sticky top-0 z-10 transition-colors duration-200">
                 <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-2 font-bold text-xl text-blue-900">
+                    <div className="flex items-center gap-2 font-bold text-xl text-blue-900 dark:text-blue-400">
                         <Book className="w-6 h-6" />
                         <span>WOC System Docs</span>
                     </div>
@@ -80,8 +80,8 @@ export default function DocsPage() {
                             onClick={() => setActiveDoc("master")}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2
                 ${activeDoc === "master"
-                                    ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                                    ? "bg-blue-600 text-white shadow-md shadow-blue-200 dark:shadow-none"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"}`}
                         >
                             <FileText size={16} />
                             Master Spec
@@ -90,8 +90,8 @@ export default function DocsPage() {
                             onClick={() => setActiveDoc("readme")}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2
                 ${activeDoc === "readme"
-                                    ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                                    ? "bg-blue-600 text-white shadow-md shadow-blue-200 dark:shadow-none"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"}`}
                         >
                             <FileText size={16} />
                             README
@@ -106,21 +106,21 @@ export default function DocsPage() {
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                     </div>
                 ) : error ? (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center text-red-600">
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center text-red-600 dark:text-red-400">
                         <p className="font-semibold">Error loading document</p>
                         <p className="text-sm mt-1">{error}</p>
                     </div>
                 ) : (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12">
-                        <article className="prose prose-slate prose-lg max-w-none 
-              prose-headings:text-blue-900 prose-headings:font-bold
-              prose-h1:text-4xl prose-h1:border-b prose-h1:pb-4 prose-h1:mb-8
+                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8 md:p-12 transition-colors duration-200">
+                        <article className="prose prose-slate prose-lg dark:prose-invert max-w-none
+              prose-headings:text-blue-900 dark:prose-headings:text-blue-400 prose-headings:font-bold
+              prose-h1:text-4xl prose-h1:border-b prose-h1:pb-4 prose-h1:mb-8 dark:prose-h1:border-gray-700
               prose-h2:text-2xl prose-h2:mt-12 prose-h2:border-l-4 prose-h2:border-blue-500 prose-h2:pl-4
-              prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:bg-blue-50 prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:not-italic
-              prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-['']
+              prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+              prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:not-italic prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300
+              prose-code:text-blue-600 dark:prose-code:text-blue-300 prose-code:bg-blue-50 dark:prose-code:bg-blue-900/30 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-['']
               prose-img:rounded-lg prose-img:shadow-md
-              [&_.mermaid]:bg-gray-50 [&_.mermaid]:p-4 [&_.mermaid]:rounded-lg [&_.mermaid]:flex [&_.mermaid]:justify-center
+              [&_.mermaid]:bg-gray-50 dark:[&_.mermaid]:bg-gray-800 [&_.mermaid]:p-4 [&_.mermaid]:rounded-lg [&_.mermaid]:flex [&_.mermaid]:justify-center
             ">
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
@@ -136,8 +136,8 @@ export default function DocsPage() {
                 )}
             </main>
 
-            <footer className="bg-white border-t py-8 mt-auto">
-                <div className="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
+            <footer className="bg-white dark:bg-gray-900 border-t dark:border-gray-800 py-8 mt-auto transition-colors duration-200">
+                <div className="max-w-7xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
                     &copy; 2026 WOC System. All docs are auto-generated from source.
                 </div>
             </footer>
