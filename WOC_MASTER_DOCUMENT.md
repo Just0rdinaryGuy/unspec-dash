@@ -173,7 +173,7 @@ Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 > **User**: "Sambung kabel DC 150m dan ganti SOC"
 
 > **ℹ️ Logic Smart Skip:**
-> Jika RFO = `[Power Mati]` atau `[Reset]`, Bot **OTOMATIS SKIP** Step 3 (Material/Alat) dan langsung ke Step 4 (Foto).
+> Jika RFO = `[Power/Inet Mati]` atau `[Reset]`, Bot **OTOMATIS SKIP** Step 3 (Material/Alat) dan langsung ke Step 4 (Foto).
 
 #### Step 3a: Input Material (Habis Pakai)
 > **Bot**: "🛠 **LAPORAN MATERIAL** (Masukan angka 0 jika tidak pakai)"
@@ -195,6 +195,8 @@ Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 
 #### Step 4: Upload Foto Bukti (9 Tahap)
 Bot meminta 9 jenis foto satu per satu.
+*   **Validasi**: Bot hanya menerima Input **GAMBAR/FOTO**. Jika user kirim text/file lain, Bot akan menolak (kecuali tombol Skip pda Foto Opsional).
+
 1.  **📸 FOTO RUMAH** (Opsi: `[⏭ SKIP]`)
 2.  **📸 FOTO ODP** (Opsi: `[⏭ SKIP]`)
 3.  **📸 FOTO JALUR DC** (Opsi: `[⏭ SKIP]`)
