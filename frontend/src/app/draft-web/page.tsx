@@ -104,7 +104,7 @@ interface Heading {
 }
 
 export default function DocsPage() {
-    const [activeDoc, setActiveDoc] = useState<"master" | "readme">("master");
+    const [activeDoc, setActiveDoc] = useState<"Draft WOC" | "Unspec Docs">("Draft WOC");
     const [content, setContent] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -156,7 +156,16 @@ export default function DocsPage() {
         setError(null);
         try {
             const res = await fetch(`${API_BASE}/api/system/docs/${docId}`);
-            if (!res.ok) throw new Error(`Failed to load document: ${res.statusText}`);
+            if (!res.ok) {
+                let errorMsg = res.statusText;
+                try {
+                    const errorJson = await res.json();
+                    if (errorJson.detail) errorMsg = errorJson.detail;
+                } catch (e) {
+                    // ignore json parse error
+                }
+                throw new Error(errorMsg);
+            }
             const data = await res.json();
             setContent(data.content);
         } catch (err: any) {
@@ -194,7 +203,7 @@ export default function DocsPage() {
                     </div>
 
                     <nav className="flex gap-2">
-                        {["master", "readme"].map((doc) => (
+                        {["Draft WOC", "Unspec Docs"].map((doc) => (
                             <button
                                 key={doc}
                                 onClick={() => setActiveDoc(doc as any)}
@@ -204,7 +213,7 @@ export default function DocsPage() {
                                         : "bg-transparent text-gray-600 dark:text-gray-400 border-transparent hover:bg-gray-200 dark:hover:bg-gray-800"}`}
                             >
                                 <FileText size={14} />
-                                <span className="capitalize">{doc === "master" ? "Master Specs" : "ReadMe"}</span>
+                                <span className="capitalize">{doc === "Draft WOC" ? "Draft WOC" : "Unspec Docs"}</span>
                             </button>
                         ))}
                     </nav>
@@ -336,7 +345,7 @@ export default function DocsPage() {
 
             <footer className="py-10 text-center border-t border-gray-200 dark:border-gray-800 bg-[#f6f8fa] dark:bg-[#0d1117] mt-auto">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                    WOC System Documentation &bull; Generated from <code className="bg-gray-200 dark:bg-gray-800 px-1 py-0.5 rounded">source</code>
+                    WOC System Documentation &bull; v3.0
                 </p>
             </footer>
         </div>
