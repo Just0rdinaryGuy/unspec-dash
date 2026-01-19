@@ -22,17 +22,19 @@
 
 **WOC** adalah sistem manajemen pekerjaan lapangan yang mengintegrasikan Dashboard Web untuk monitoring dan Telegram Bot untuk eksekusi teknis ("Headless Technician").
 
-** Tujuan Utama:**
-1.  **Efisiensi**: Memangkas birokrasi pelaporan manual >80%.
-2.  **Validasi**: Geotagging & Bukti Foto Wajib untuk mencegah fraud.
-3.  **Transparansi**: Tracking material dan lokasi teknisi secara real-time.
+**🎯 Tujuan Utama & Keunggulan Project:**
 
-**🔥 Key Value Propositions (Keunggulan vs Sistem Lama):**
-1.  **Smart Logic & Anti-Frustasi**: Fitur *Smart Skip* membuat Bot "mengerti" konteks (misal: Power Mati = Skip Material), sehingga teknisi tidak stress mengisi form yang tidak relevan.
-2.  **Data Integrity First**: Validasi ketat (Wajib Foto, Format ID yang benar, SLA Warning) meminimalisir sampah data hingga 90%.
-3.  **Real-Time Ops Control**: Notifikasi assignment instan ke Grup Telegram saat Helpdesk klik tombol. Tidak ada jeda birokrasi.
-4.  **Human-Centric UX**: Bot dirancang sebagai "Partner" (Context Aware), bukan sekedar formulir kaku. Menyapa nama & memandu step-by-step.
-5.  **Future-Proof Architecture**: Dibangun dengan struktur modular (FastAPI + Modern DB), mudah dikembangkan (Scale Up) tanpa merombak sistem dari nol.
+1.  **Efisiensi & Speed (Anti-Frustasi)**:
+    *   Memangkas birokrasi pelaporan manual >80% dengan konsep *Headless Technician*.
+    *   Fitur **Smart Skip Logic** membuat Bot "pintar" (Skip input material jika RFO non-fisik), sehingga teknisi tidak terbebani form yang tidak relevan.
+
+2.  **Validasi & Data Integrity (Anti-Fraud)**:
+    *   Mencegah manipulasi data dengan **Strict Validation** (Wajib 9 Foto Evidence, Format ID Valid, & Geotagging Real-time).
+    *   Menutup celah "asal input" yang sering terjadi di sistem lama.
+
+3.  **Transparansi & Control (Real-Time Ops)**:
+    *   Monitoring material, posisi teknisi, dan status tiket secara **Real-Time** (detik itu juga).
+    *   Memberikan kendali penuh kepada Helpdesk/Manager untuk melihat bottleneck tanpa perlu bertanya manual.
 
 ---
 
