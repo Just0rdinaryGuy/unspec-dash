@@ -122,7 +122,7 @@ graph TD
     *   Halaman khusus menampung tiket dari Bot/Web Link.
     *   Status Awal: `WA-2026...` (Draft).
     *   **Action Helpdesk**:
-        1.  **Approve & Assign**: Langsung dispatch ke teknisi (ID tetap `WA`, nanti diedit jadi `INC`).
+        1.  **Manual Dispatch**: Helpdesk memilih Tim & Teknisi secara manual (Tiket otomatis jadi `INC` / `OPEN` setelah diapprove/dispatch).
         2.  **Reject**: Jika spam/duplikat.
 
 *   **D. Dashboard Unspec**:
