@@ -27,6 +27,13 @@
 2.  **Validasi**: Geotagging & Bukti Foto Wajib untuk mencegah fraud.
 3.  **Transparansi**: Tracking material dan lokasi teknisi secara real-time.
 
+**🔥 Key Value Propositions (Keunggulan vs Sistem Lama):**
+1.  **Smart Logic & Anti-Frustasi**: Fitur *Smart Skip* membuat Bot "mengerti" konteks (misal: Power Mati = Skip Material), sehingga teknisi tidak stress mengisi form yang tidak relevan.
+2.  **Data Integrity First**: Validasi ketat (Wajib Foto, Format ID yang benar, SLA Warning) meminimalisir sampah data hingga 90%.
+3.  **Real-Time Ops Control**: Notifikasi assignment instan ke Grup Telegram saat Helpdesk klik tombol. Tidak ada jeda birokrasi.
+4.  **Human-Centric UX**: Bot dirancang sebagai "Partner" (Context Aware), bukan sekedar formulir kaku. Menyapa nama & memandu step-by-step.
+5.  **Future-Proof Architecture**: Dibangun dengan struktur modular (FastAPI + Modern DB), mudah dikembangkan (Scale Up) tanpa merombak sistem dari nol.
+
 ---
 
 ## 2. Alur Kerja (Workflow)
