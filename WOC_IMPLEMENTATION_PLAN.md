@@ -157,6 +157,7 @@ Grafik garis untuk memantau volume tiket harian.
 Fitur monitoring posisi teknisi secara real-time.
 1.  **Bot Logic**:
     *   Teknisi melakukan Check-in: `/absen_masuk`.
+    *   Bot meminta **Foto Selfie** (Validasi kehadiran).
     *   Bot meminta **Share Live Location** (Durasi 8 Jam).
     *   Backend menerima event `edited_message` dari Telegram setiap kali posisi berubah.
 2.  **Database**:

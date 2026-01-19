@@ -240,9 +240,10 @@ Fitur pemantauan posisi teknisi di lapangan menggunakan fitur **Telegram Live Lo
 
 ### A. Alur Aktivasi (Sisi Teknisi)
 1.  **Check-In**: Teknisi ketik `/absen` di pagi hari.
-2.  **Request**: Bot membalas "Silakan **Share Live Location** untuk 8 Jam".
-3.  **Action**: Teknisi klik *Attach -> Location -> Share My Live Location for 8 Hours*.
-4.  **Sync**: Telegram akan mengirim update koordinat ke server setiap teknisi bergerak, tanpa perlu interaksi manual lagi.
+2.  **Selfie**: Bot meminta **Foto Selfie** (Validasi Wajah & Seragam).
+3.  **Request**: Setelah foto diterima, Bot membalas "Foto OK. Silakan **Share Live Location** untuk 8 Jam".
+4.  **Action**: Teknisi klik *Attach -> Location -> Share My Live Location for 8 Hours*.
+5.  **Sync**: Telegram akan mengirim update koordinat ke server setiap teknisi bergerak.
 
 ### C. Skenario Operasional
 1.  **Durasi Kerja (12 Jam)**:
