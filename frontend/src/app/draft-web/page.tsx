@@ -152,7 +152,7 @@ export default function DocsPage() {
                                     : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"}`}
                         >
                             <FileText size={16} />
-                            <span className="hidden sm:inline">Master Spec</span>
+                            <span className="hidden sm:inline">Master Docs WOC</span>
                         </button>
                         <button
                             onClick={() => setActiveDoc("readme")}
@@ -162,7 +162,7 @@ export default function DocsPage() {
                                     : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"}`}
                         >
                             <FileText size={16} />
-                            <span className="hidden sm:inline">README</span>
+                            <span className="hidden sm:inline">Docs Unspec</span>
                         </button>
                     </nav>
                 </div>
