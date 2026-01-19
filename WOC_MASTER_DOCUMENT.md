@@ -1,51 +1,57 @@
 # 📘 WOC (Warga Online Ceria) - Master Documentation
-**Project Status:** READY FOR DEVELOPMENT 🚀
-**Version:** 3.0 (Consolidated)
+
+> **Project Status:** need to verify from user
+> **Version:** 3.0 (Consolidated)
 
 ---
 
 ## 📋 Daftar Isi
-1.  [Ringkasan Eksekutif](#1-ringkasan-eksekutif)
-2.  [Alur Kerja (Workflow)](#2-alur-kerja-workflow)
-3.  [Spesifikasi Fungsional](#3-spesifikasi-fungsional)
-    *   3.1 [Manajemen Tiket](#a-modul-manajemen-tiket)
-    *   3.2 [Distribusi & Notifikasi](#b-modul-distribusi--notifikasi)
-    *   3.3 [Interaksi Bot (Wizard)](#c-modul-interaksi-bot-wizard)
-    *   3.4 [Visualisasi Dashboard](#d-visualisasi-dashboard-web)
-    *   3.5 [Realtime Tracking](#e-modul-realtime-tracking)
-4.  [Arsitektur Teknis (Database)](#4-arsitektur-teknis-database)
-5.  [Rencana Eksekusi](#5-rencana-eksekusi)
+
+1. [Ringkasan Eksekutif](#1-ringkasan-eksekutif-)
+2. [Alur Kerja (Workflow)](#2-alur-kerja-workflow-)
+3. [Spesifikasi Fungsional](#3-spesifikasi-fungsional-)
+    - [3.1 Manajemen Tiket](#31-manajemen-tiket-)
+    - [3.2 Distribusi & Notifikasi](#32-distribusi--notifikasi-)
+    - [3.3 Interaksi Bot (Wizard)](#33-interaksi-bot-wizard-)
+    - [3.4 Visualisasi Dashboard](#34-visualisasi-dashboard-web-)
+    - [3.5 Realtime Tracking](#35-realtime-tracking-)
+    - [3.6 Modul Reassign](#36-modul-reassign-operan-tiket--lanjutan-)
+    - [3.7 Modul Analytics (Phase 3)](#37-modul-analytics--fraud-detection-phase-3-)
+4. [Arsitektur Teknis (Database)](#4-arsitektur-teknis-database-)
+5. [Rencana Eksekusi](#5-rencana-eksekusi-)
 
 ---
 
-## 1. Ringkasan Eksekutif
+## 1. Ringkasan Eksekutif 📘
 
-**WOC** adalah sistem manajemen pekerjaan lapangan yang mengintegrasikan Dashboard Web untuk monitoring dan Telegram Bot untuk eksekusi teknis ("Headless Technician").
+**WOC** adalah sistem manajemen pekerjaan lapangan yang mengintegrasikan **Dashboard Web** untuk monitoring dan **Telegram Bot** untuk eksekusi teknis (*"Headless Technician"*).
 
-**🎯 Tujuan Utama & Keunggulan Project:**
+### 🎯 Tujuan Utama & Keunggulan Project
 
-1.  **Efisiensi & Speed (Anti-Frustasi)**:
-    *   Memangkas birokrasi pelaporan manual >80% dengan konsep *Headless Technician*.
-    *   Fitur **Smart Skip Logic** membuat Bot "pintar" (Skip input material jika RFO non-fisik), sehingga teknisi tidak terbebani form yang tidak relevan.
+**1. Efisiensi & Speed (Anti-Frustasi)**
+*   Memangkas birokrasi pelaporan manual **>80%** dengan konsep *Headless Technician*.
+*   Fitur **Smart Skip Logic** membuat Bot "pintar" (Skip input material jika RFO non-fisik), sehingga teknisi tidak terbebani form yang tidak relevan.
 
-2.  **Validasi & Data Integrity (Anti-Fraud)**:
-    *   Mencegah manipulasi data dengan **Strict Validation** (Wajib 9 Foto Evidence, Format ID Valid, & Geotagging Real-time).
-    *   Menutup celah "asal input" yang sering terjadi di sistem lama.
+**2. Validasi & Data Integrity (Anti-Fraud)**
+*   Mencegah manipulasi data dengan **Strict Validation** (Wajib 9 Foto Evidence, Format ID Valid, & Geotagging Real-time).
+*   Menutup celah "asal input" yang sering terjadi di sistem lama.
 
-3.  **Transparansi & Control (Real-Time Ops)**:
-    *   Monitoring material, posisi teknisi, dan status tiket secara **Real-Time** (detik itu juga).
-    *   Memberikan kendali penuh kepada Helpdesk/Manager untuk melihat bottleneck tanpa perlu bertanya manual.
+**3. Transparansi & Control (Real-Time Ops)**
+*   Monitoring material, posisi teknisi, dan status tiket secara **Real-Time** (detik itu juga).
+*   Memberikan kendali penuh kepada Helpdesk/Manager untuk melihat bottleneck tanpa perlu bertanya manual.
 
 ---
 
-## 2. Alur Kerja (Workflow)
+## 2. Alur Kerja (Workflow) 📊
+
+Diagram di bawah ini menggambarkan aliran data dari sumber tiket hingga penyelesaian oleh teknisi.
 
 ```mermaid
 graph TD
     %% Styling
-    classDef dash fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef bot fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    classDef actor fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef dash fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000000;
+    classDef bot fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000000;
+    classDef actor fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000000;
 
     subgraph Sources ["1. Ticket Sources"]
     S1[("Import Excel<br/>(Pusat)")]
@@ -61,13 +67,14 @@ graph TD
     D_MAIN -->|Assign| BOT_API(("🤖 Bot API"))
     D_MAIN -->|Reassign | BOT_API
     end
+    class D_MAIN,D_WA dash;
 
     subgraph UnspecDash ["3. Unspec Ops (Manual)"]
     S2 -->|Status: UNSPEC| D_UNSPEC("🖥️ Dashboard Unspec")
     D_UNSPEC -->|Assign| BOT_API
     D_UNSPEC -->|Reassign| BOT_API
     end
-    class D_MAIN,D_WA,D_UNSPEC dash;
+    class D_UNSPEC dash;
 
     subgraph Bot ["4. Bot Interactions"]
     BOT_API -->|Broadcast Job| TG_GROUP["📱 Group Telegram"]
@@ -94,51 +101,45 @@ graph TD
 
 ---
 
-## 3. Spesifikasi Fungsional
+## 3. Spesifikasi Fungsional ⚙️
 
-### A. Modul Manajemen Tiket
-**(Sumber: Import Excel & Input Manual)**
+### 3.1 Manajemen Tiket 🎫
+*(Sumber: Import Excel & Input Manual)*
 
-**1. Format Import Excel (.xlsx):**
-| Header Kolom | Mapping DB | Tipe | Contoh |
+#### 1. Format Import Excel (.xlsx)
+
+Tabel berikut menjelaskan mapping data dari Excel Pusat ke Database WOC.
+
+| Header Kolom | Mapping DB | Tipe | Contoh Value |
 | :--- | :--- | :--- | :--- |
-| `Incident No` | `incident_no` | Unique | `INC12345` |
+| `Incident No` | `incident_no` | **Unique** | `INC12345` |
 | `Service No` | `service_no` | Text | `122333` |
 | `Customer Name` | `customer_name` | Text | `Bapak Budi` |
 | `Sektor` | `sector` | Text | `BATU AMPAR` |
 | `Checklist` | `checklist` | Text | `HVC_GOLD` |
 
-**2. Input Manual / External Sources (Handling Unspec & WA):**
+#### 2. Input Manual / External Sources (Handling Unspec & WA)
 
-*   **A. Internal Employee (Via Bot)**:
-    *   Pegawai lain bisa lapor tiket via Bot.
-    *   **Security**: Hanya bisa dilakukan di **Grup Telegram Internal Tertentu** (Whitelist Group ID).
-    *   **Command**: `/lapor [Service ID] [Keluhan]` -> Masuk ke Dashboard WA.
-    *   **Logic (Smart Lookup)**:
-        *   **Found**: Otomatis tarik Nama/Alamat (Fast Path).
-        *   **Not Found / New DB**: Jika ID belum ada (Database Kosongan), Bot reply: *"Data belum ada. Mohon input via Web Link untuk registrasi awal."* -> User isi form di Web (ini sekalian populate database).
+**A. Internal Employee (Via Bot)**
+*   **Akses**: Pegawai internal dapat melapor via Bot di Grup Telegram (Whitelist Group ID).
+*   **Command**: `/lapor [Service ID] [Keluhan]`
+*   **Logic (Smart Lookup)**:
+    *   *Found*: Otomatis tarik Nama/Alamat dari DB (Fast Path).
+    *   *Not Found*: Bot reply *"Data belum ada. Mohon input via Web Link."*
 
-*   **B. Customer (Via Web Link)**:
-    *   Formulir publik sederhana: `wargaonlineceria.my.id/lapor`.
-    *   Input: `No Layanan / Service ID`, Nama, No HP, Alamat, Keluhan.
-    *   **Anti-Spam / Security**:
-        *   **Format Check**: Field Service ID Wajib Angka (12-13 Digit).
-        *   **Rate Limit**: Batasi Max 3 laporan per IP / No HP dalam 1 jam.
-        *   **Simple Captcha**: Mencegah bot spamming otomatis.
-    *   **Destination**: Masuk ke Dashboard WA (Status: REQ).
+**B. Customer (Via Web Link)**
+*   **URL**: `wargaonlineceria.my.id/lapor`
+*   **Form**: No Layanan, Nama, No HP, Alamat, Keluhan.
+*   **Security**:
+    *   Format Check Service ID (12-13 Digit Angka).
+    *   Rate Limit (Max 3 laporan/jam per IP).
+    *   Simple Captcha.
 
-*   **C. Dashboard WA (Assign Queue)**:
-    *   Halaman khusus menampung tiket dari Bot/Web Link.
-    *   Status Awal: `WA-2026...` (Draft).
-    *   **Action Helpdesk**:
-        1.  **Manual Assign**: Helpdesk memilih Tim Teknisi secara manual (Tiket otomatis jadi `WA` setelah diassign).
-        2.  **Reject**: Jika spam/duplikat.
+---
 
-*   **D. Dashboard Unspec**:
-    *   Tetap fokus untuk tiket Unspec yang sudah ada di sistem (Import/Manual), flow assign standar.
+### 3.2 Distribusi & Notifikasi 📡
 
-### B. Modul Distribusi & Notifikasi
-Saat Helpdesk menunjuk Tim di Dashboard, Bot mengirim notifikasi:
+Saat Helpdesk melakukan assign tiket di Dashboard, Bot mengirim notifikasi dengan format berikut:
 
 ```text
 🚀 NEW JOB ASSIGNMENT
@@ -163,282 +164,143 @@ Pelanggan lapor internet mati total. LOS merah.
 👉 /update_INC12345678 (Klik untuk lapor)
 ```
 
-### C. Modul Interaksi Bot (Wizard)
-Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
+---
 
-**Command**: `/update_INC12345678`
+### 3.3 Interaksi Bot (Wizard) 🤖
+
+Skrip detail percakapan Bot saat teknisi melakukan update menggunakan **Logic State Machine**.
+
+**Command Awal**: `/update_INC12345678`
 
 #### Scenario A: Status CLOSED / COMPLETE ✅
-*(Flow Utama: Pekerjaan Selesai Tuntas)*
 
-#### Step 1: Status & Penyebab
-> **Bot**: "👋 Halo **Raffy**, update status tiket `INC12345678`?"
-> **Tombol**: `[✅ CLOSED]` `[🚧 KENDALA]` `[⏳ PENDING]`
->
-> *(User klik CLOSED)*
->
-> **Bot**: "Oke CLOSED. Apa penyebab utamanya?"
-> **Tombol**: `[Putus Kabel]` `[Modul Rusak]` `[Konektor]` `[Inet Mati]` `[Power Mati]` `[Lainnya]`
+1.  **Status & Penyebab**
+    *   **Bot**: "👋 Halo **Raffy**, update status tiket `INC12345678`?"
+    *   **Pilihan**: `[✅ CLOSED]` `[🚧 KENDALA]` `[⏳ PENDING]`
+    *   *(User klik CLOSED)* -> **Bot**: "Apa penyebab utamanya?"
+    *   **Pilihan**: `[Putus Kabel]` `[Modul Rusak]` `[Konektor]` `[Inet Mati]` `[Power Mati]` `[Lainnya]`
 
-#### Step 2: Detail RFO (Text)
-> **Bot**: "Tuliskan detail perbaikan yang dilakukan (Singkat & Jelas):"
-> **User**: "Sambung kabel DC 150m dan ganti SOC"
+2.  **Detail RFO (Text)**
+    *   **Bot**: "Tuliskan detail perbaikan (Singkat & Jelas):"
+    *   **User**: "Sambung kabel DC 150m dan ganti SOC"
+    
+    > **ℹ️ Logic Smart Skip:**
+    > *   Jika RFO = `[Inet Mati]`, `[Power Mati]` atau `[Reset]`: **SKIP** Step 3.
+    > *   Jika RFO = `[Lainnya]`: **Tetap Muncul** Step 3.
 
-> **ℹ️ Logic Smart Skip:**
-> *   Jika RFO = `[Inet Mati]`, `[Power Mati]` atau `[Reset]`: Bot **SKIP** Step 3 (Langsung Foto).
-> *   Jika RFO = `[Lainnya]`: Bot **TETAP MUNCUL** Step 3 (Standard Flow), karena mungkin ada pemakaian material tak terduga (User bisa input `0` jika tidak pakai).
+3.  **Laporan Material & Perangkat**
+    *   **Input**: Meter Kabel Dropcore, Pcs Konektor/SOC.
+    *   *(Jika Ganti Alat)* **Input**: SN ONT Lama & SN ONT Baru.
 
-#### Step 3a: Input Material (Habis Pakai)
-> **Bot**: "🛠 **LAPORAN MATERIAL** (Masukan angka 0 jika tidak pakai)"
->
-> **Bot**: "1. Berapa meter Kabel Dropcore?"
-> **User**: "150"
->
-> **Bot**: "2. Berapa pcs Konektor/SOC?"
-> **User**: "2"
+4.  **Upload Foto Bukti (9 Tahap)**
+    *   Bot meminta 9 jenis foto satu per satu. Validasi input harus berupa **GAMBAR**.
+    *   List Foto: Rumah, ODP, Jalur DC, Penyebab (Wajib), Progres (Wajib), Hasil (Wajib), Redaman (Wajib), SN ONT (Wajib), Material.
 
-#### Step 3b: Ganti Perangkat (ONT/STB)
-*(Hanya muncul jika RFO = Ganti Alat / Modul Rusak)*
-> **Bot**: "🔄 **PENGGANTIAN ALAT**"
-> **Bot**: "Scan/Ketik SN ONT LAMA (yang dicabut):"
-> **User**: "4857544312345678"
->
-> **Bot**: "Scan/Ketik SN ONT BARU (yang dipasang):"
-> **User**: "4857544387654321"
-
-#### Step 4: Upload Foto Bukti (9 Tahap)
-Bot meminta 9 jenis foto satu per satu.
-*   **Validasi**: Bot hanya menerima Input **GAMBAR/FOTO**. Jika user kirim text/file lain, Bot akan menolak (kecuali tombol Skip pda Foto Opsional).
-
-1.  **📸 FOTO RUMAH** (Opsi: `[⏭ SKIP]`)
-2.  **📸 FOTO ODP** (Opsi: `[⏭ SKIP]`)
-3.  **📸 FOTO JALUR DC** (Opsi: `[⏭ SKIP]`)
-4.  **📸 FOTO PENYEBAB** (WAJIB)
-5.  **📸 FOTO PROGRES** (WAJIB)
-6.  **📸 FOTO SETELAH PROGRES** (WAJIB)
-7.  **📸 FOTO REDAMAN** (WAJIB)
-8.  **📸 FOTO SN ONT** (WAJIB)
-9.  **📸 FOTO MATERIAL** (Opsi: `[⏭ SKIP]`)
-
-#### Step 5: Lokasi & Closing
-> **Bot**: "📍 Terakhir, **SHARE LIVE LOCATION** posisi Anda sekarang."
-> **User**: *(Mengirim Attachment Location)*
->
-> **Bot**: "✅ **TIKET CLOSED!** Data tersimpan. Laporan telah diteruskan ke Grup."
-
----
+5.  **Lokasi & Closing**
+    *   **Bot**: "📍 Share **LIVE LOCATION** posisi Anda."
+    *   **Output**: "✅ **TIKET CLOSED!** Data tersimpan."
 
 #### Scenario B: Status KENDALA 🚧
-*(Jika teknisi tidak bisa menyelesaikan pekerjaan karena halangan)*
 
-**Step 1: Kategori Kendala**
-> **Bot**: "Kenapa Terkendala?"
-> **Tombol**: `[Tiang Penuh]` `[Rumah Tutup]` `[Hujan Deras]` `[Ijin Warga]` `[Lainnya]`
-
-**Step 2: Deskripsi Detail**
-> **Bot**: "Ceritakan kondisinya (cth: Pagar digembok, tidak ada orang):"
-> **User**: "Rumah kosong, ditelpon ga ngangkat"
-
-**Step 3: Foto Bukti (Wajib 1)**
-> **Bot**: "📸 Foto Bukti Kendala (Wajib):"
-> **User**: *(Upload Foto Pagar Tutup)*
-
-**Step 4: Share Location**
-> **Bot**: "📍 Posisi Terakhir Anda:"
-> **User**: *(Share Live Loc)*
-
-> **Bot**: "🚧 **TIKET KENDALA!** Laporan tersimpan."
+1.  **Kategori**: `[Tiang Penuh]` `[Rumah Tutup]` `[Hujan Deras]` `[Ijin Warga]`
+2.  **Deskripsi**: Penjelasan detail kendala.
+3.  **Foto**: Bukti kendala (Wajib 1 foto).
+4.  **Lokasi**: Share Live Location.
 
 ---
 
-#### Scenario C: Status PENDING ⏳
-*(Jika pekerjaan ditunda/reschedule)*
+### 3.4 Visualisasi Dashboard Web 🖥️
 
-**Step 1: Alasan Pending**
-> **Bot**: "Alasan Pending?"
-> **Tombol**: `[Minta Reschedule]` `[Besok Dilanjut]` `[Tunggu Material]`
-
-**Step 2: Janji Tuntas**
-> **Bot**: "Kapan akan dikerjakan/dilanjut? (Format: Besok Pagi / Tgl XX Jam XX)"
-> **User**: "Besok jam 10 pagi"
-
-**Step 3: Share Location**
-> **Bot**: "📍 Posisi Terakhir Anda:"
-> **User**: *(Share Live Loc)*
-
-> **Bot**: "⏳ **TIKET PENDING!** Reminder dipasang untuk Besok."
-
-#### Output: Laporan Selesai (Broadcast ke Grup)
-Pesan otomatis yang dikirim Bot ke Grup Tim setelah wizard selesai.
-
-> **ℹ️ Catatan Logic:**
-> Nama Teknisi (`Raffy` / `Joy`) diambil dari database tabel `users` kolom `full_name` berdasarkan `chat_id` pengirim. Bukan dari Display Name Telegram (agar nama tetap formal & standar).
-
-**A. Sukses (CLOSED) ✅**
-```text
-✅ **JOB COMPLETED (CLOSED)**
-Tim: **Raffy-Joy**
-➖➖➖➖➖➖➖➖➖➖➖➖
-🆔 Ticket: `INC12345678`
-👤 Service: `1621012345678`
-🛠️ Teknisi: **Raffy**
-
-📊 **HASIL PEKERJAAN:**
-• Penyebab: Putus Kabel
-• RFO: `Sambung kabel DC 150m dan ganti SOC`
-
-📦 **MATERIAL:**
-• Dropcore: 150 m
-• SOC: 2 pcs
-
-📸 **EVIDENCE (9 Foto):**
-(Media Album terkirim otomatis di bawah pesan ini)
-
-📍 **LOKASI CLOSING:**
-(Map Location Attachment)
-
-⏱️ **DURASI:** 1 Jam 30 Menit
-➖➖➖➖➖➖➖➖➖➖➖➖
-```
-
-**B. Pending (KENDALA) 🚧**
-```text
-🚧 **JOB PENDING (KENDALA)**
-Tim: **Raffy-Joy**
-➖➖➖➖➖➖➖➖➖➖➖➖
-🆔 Ticket: `INC12345678`
-👤 Service: `1621012345678`
-🛠️ Teknisi: **Raffy**
-
-⚠️ **DETAIL KENDALA:**
-• Kategori: Pelanggan (Rumah Tutup / Tidak Respon)
-• Ket: `Sudah gedor pagar 3x, telpon tidak diangkat`
-
-📸 **BUKTI KUNJUNGAN (1-2 Foto):**
-(Foto Rumah / Pagar / Call Log)
-
-📍 **LOKASI TERAKHIR:**
-(Map Location Attachment)
-➖➖➖➖➖➖➖➖➖➖➖➖
-```
-
-### D. Visualisasi Dashboard Web
-1.  **Productivity Monitor**:
-    *   Tabel per Sektor.
-    *   Kolom: `Progress`, `Kendala Pelanggan`, `Kendala Teknis`, `Closed`, `Total`.
-2.  **Material Report**:
-    *   Rekap total pemakaian (Sum JSON) per Sektor.
-3.  **Trend Chart**:
-    *   Grafik Line volumen tiket harian. 
-    *   Series: **HVC** (VVIP, Diamond, Platinum, Gold, Silver), **Reguler**, **Unspec**, **WA**, **SQM**.
-
-### E. Modul Realtime Tracking
-1.  **Aktivasi**:
-    *   Teknisi ketik `/absen`.
-    *   Wajib kirim **Selfie** (Validasi Kehadiran).
-    *   Wajib klik **"Share Live Location"** (8 Jam).
-2.  **Operasional**:
-    *   **12 Jam Kerja**: Di jam ke-8, Bot minta renew location untuk cover sisa waktu (Total 12 Jam).
-    *   **Baterai**: Estimasi boros 10-20% (Disarankan Powerbank).
-    *   **Libur**: Tidak absen = Tidak dilacak.
-
-### F. Modul Reassign (Operan Tiket / Lanjutan)
-Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang, **APAPUN STATUSNYA** (Open, In Progress, Kendala). 
-*Kasus: Teknisi sakit mendadak, mobil mogok, atau pendingan kemarin.*
-
-1.  **Dashboard Flow**:
-    *   Helpdesk pilih tiket (Status bebas, kecuali Closed).
-    *   Klik tombol **Reassign**.
-    *   **Pilih Tim Baru** (Bisa tim sama atau oper ke tim lain).
-    *   **Pilih Tanggal Pengerjaan** (Hari ini / Besok).
-2.  **System Action**:
-    *   Update data: `reassign_by` (User Helpdesk) & `reassign_at` (Waktu klik).
-    *   Mengirim Notifikasi Baru ke Grup Tim (Format berbeda: **♻️ REASSIGN**).
-3.  **Bot Notification (Reassign)**:
-    ```text
-    **TIKET REASSIGN**
-    Tim: **Raffy-Joy**
-    ➖➖➖➖➖➖➖➖➖➖➖➖
-    Ticket: `INC12345678`
-    Service: `1621012345678`
-    ⚠️ Kendala Sebelumnya: **Rumah Tutup**
-    
-    📍 **Alamat:**
-    Jl. Mulawarman No 45...
-    
-    **Reassign By:** Arya Dharma (21:02 WITA)
-    ➖➖➖➖➖➖➖➖➖➖➖➖
-    👉 /update_INC12345678
-    ```
-
-### G. Modul Analytics & Fraud Detection (Phase 3 Spec) 🧠
-*(Fitur Cerdas untuk analisa pola data & pencegahan kecurangan)*
-
-**1. Material Anomaly Detector (Anti-Markup)**
-*   **Logic**: Sistem membandingkan `Input Material` vs `Threshold Wajar`.
-*   **Formula**: Jika `Input` > `Rata-rata Harian + 50%`, maka Flag `⚠️ ANOMALY`.
-*   **Contoh Kasus**:
-    *   *Standard dropcore*: 150m - 200m.
-    *   *Teknisi Input*: 450m.
-    *   **Action**: Bot terima report, tapi notif ke Admin ada label `[⚠️ CHECK: MATERIAL OVERLIMIT]`. Admin wajib cek foto bukti/validasi manual.
-
-**2. RFO Hotspot Analysis (Recurring Issue)**
-    *(Bukan monitoring redaman realtime, tapi Analisa Tiket Berulang)*
-*   **Logic**: Menghitung jumlah tiket tipe `Fisik` di area yang sama dalam 7 hari terakhir.
-*   **Skenario**:
-    *   Sektor "Batu Ampar" ada 5 tiket "Putus Kabel" dalam 3 hari.
-    *   **Insight**: *"⚠️ Kemungkinan ada gangguan masal / Sabotase / Proyek Galian di area Batu Ampar."*
-*   **Action**: Dashboard menampilkan "Red Zone" di peta agar Manajer bisa kirim tim Maintenance (bukan tim perbaikan biasa).
+1.  **Productivity Monitor**
+    *   Tabel per Sektor dengan kolom: `Progress`, `Kendala Pelanggan`, `Kendala Teknis`, `Closed`, `Total`.
+2.  **Material Report**
+    *   Rekap total pemakaian material (Sum JSON) per Sektor.
+3.  **Trend Chart**
+    *   Grafik Line volumen tiket harian.
+    *   Series: **HVC** vs **Reguler** vs **Unspec**.
 
 ---
 
-## 4. Arsitektur Teknis (Database)
+### 3.5 Realtime Tracking 🛰️
+
+1.  **Aktivasi (Absensi)**
+    *   Teknisi ketik `/absen` di pagi hari.
+    *   Wajib kirim **Selfie** & **Share Live Location** (Durasi 8 Jam).
+2.  **Operasional**
+    *   Bot memantau lokasi teknisi setiap perubahan koordinat.
+    *   Di jam ke-8, Bot meminta renew location untuk cover lembur (Total 12 Jam).
+
+---
+
+### 3.6 Modul Reassign (Operan Tiket / Lanjutan) ♻️
+
+Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang.
+
+1.  **Flow**: Helpdesk pilih tiket -> Klik **Reassign** -> Pilih Tim Baru -> Pilih Tanggal.
+2.  **Notifikasi**: Bot mengirim notifikasi khusus **♻️ REASSIGN** ke grup dengan highlight kendala sebelumnya.
+
+---
+
+### 3.7 Modul Analytics & Fraud Detection (Phase 3) 🧠
+
+**(Fitur Cerdas Pencegahan Kecurangan)**
+
+1.  **Material Anomaly Detector (Anti-Markup)**
+    *   **Formula**: Jika `Input Material` > `Rata-rata Harian + 50%`, maka Flag `⚠️ ANOMALY`.
+    *   **Action**: Notifikasi khusus ke Admin untuk cek manual.
+
+2.  **RFO Hotspot Analysis**
+    *   **Logic**: Mendeteksi jika ada >5 tiket tipe "Fisik" di area/sektor yang sama dalam 3 hari.
+    *   **Insight**: Potensi gangguan masal atau sabotase.
+
+---
+
+## 4. Arsitektur Teknis (Database) 💾
 
 **Tech Stack**: Python FastAPI (Backend), PostgreSQL (DB), Next.js 14 (Frontend).
 
 ### A. Tabel `teams`
-| Kolom | Tipe | Desc |
+| Kolom | Tipe | Deskripsi |
 | :--- | :--- | :--- |
-| `id` | SERIAL | PK |
+| `id` | SERIAL | Primary Key |
 | `team_name` | VARCHAR | Nama Tim |
-| `telegram_group_id` | BIGINT | ID untuk Notifikasi Blast |
+| `telegram_group_id` | BIGINT | ID Group Telegram |
 | `sector` | VARCHAR | Grouping Wilayah |
 
 ### B. Tabel `users`
-| Kolom | Tipe | Desc |
+| Kolom | Tipe | Deskripsi |
 | :--- | :--- | :--- |
-| `id` | SERIAL | PK |
+| `id` | SERIAL | Primary Key |
 | `full_name` | VARCHAR | Nama Personel |
-| `telegram_chat_id` | BIGINT | ID Telegram (Unique) |
+| `telegram_chat_id` | BIGINT | ID Personal Telegram (Unique) |
 | `role` | ENUM | ADMIN, HELPDESK, TECHNICIAN |
 | `last_lat` | FLOAT | Posisi Terakhir |
 | `last_long` | FLOAT | Posisi Terakhir |
-| `last_seen` | TIMESTAMP | Waktu Update Terakhir |
 
 ### C. Tabel `woc_tickets`
-| Kolom | Tipe | Desc |
+| Kolom | Tipe | Deskripsi |
 | :--- | :--- | :--- |
-| `id` | SERIAL | PK |
+| `id` | SERIAL | Primary Key |
 | `incident_no` | VARCHAR | Unique ID (INC...) |
-| `status` | VARCHAR | OPEN, ASSIGNED, CLOSED... |
-| `checklist` | VARCHAR | Kategori (HVC, dll) |
-| `summary` | TEXT | Keluhan |
+| `status` | VARCHAR | Status Tiket (OPEN, CLOSED, dll) |
+| `checklist` | VARCHAR | Kategori (HVC, Reguler) |
+| `summary` | TEXT | Isi Keluhan |
 | `assigned_team_id` | INT | FK ke Teams |
 
-### D. Tabel `ticket_updates`
-| Kolom | Tipe | Desc |
+### D. Tabel `ticket_updates` (Log Pekerjaan)
+| Kolom | Tipe | Deskripsi |
 | :--- | :--- | :--- |
-| `id` | SERIAL | PK |
+| `id` | SERIAL | Primary Key |
 | `ticket_id` | INT | FK ke Ticket |
 | `technician_id` | INT | FK ke User |
 | `description` | TEXT | RFO teknisi |
-| `material_usage` | JSONB | `{"dc": 100, "soc": 2}` |
+| `material_usage` | JSONB | Data material `{"dc": 100}` |
 | `file_ids` | JSONB | ID Foto di Telegram Cloud |
 
 ---
 
-## 5. Rencana Eksekusi
+## 5. Rencana Eksekusi 📅
 
-1.  **Database Migration**: Implementasi skema tabel di atas.
+1.  **Database Migration**: Implementasi skema tabel PostgreSQL.
 2.  **Backend Bot**: Setup Webhook, State Machine (Wizard), & Location Listener.
 3.  **Frontend**: Dashboard Monitoring & Realtime Map (Leaflet).

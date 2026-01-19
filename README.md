@@ -660,6 +660,7 @@ docker run -d \
 
 ```mermaid
 graph TD
+    classDef default fill:#fff,stroke:#333,stroke-width:1px,color:#000000;
     A[Tim Telkom Akses Export Data dari Sistem] --> B[Data dalam format Excel]
     B --> C[Upload ke Web via 'Update Data']
     C --> D{Auto-process}
@@ -682,6 +683,7 @@ graph TD
 
 ```mermaid
 graph TD
+    classDef default fill:#fff,stroke:#333,stroke-width:1px,color:#000000;
     A[Identifikasi Node UNSPEC] --> B[Filter by STO/Area]
     B --> C[Create Ticket]
     C --> D[Assign ke Teknisi]
@@ -703,6 +705,7 @@ graph TD
 
 ```mermaid
 graph TD
+    classDef default fill:#fff,stroke:#333,stroke-width:1px,color:#000000;
     A[Akhir Bulan] --> B[Supervisor Login]
     B --> C[Go to Report Page]
     C --> D[Select Month & Year]

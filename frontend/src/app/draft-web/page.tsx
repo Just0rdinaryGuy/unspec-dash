@@ -7,15 +7,26 @@ import rehypeRaw from "rehype-raw";
 import Mermaid from "@/components/Mermaid";
 import { Copy, FileText, Book, Menu, X, Info, AlertTriangle, CheckCircle, Zap } from "lucide-react";
 
-// Helper for code blocks to render Mermaid
+// Helper for code blocks to render Mermaid or standard code
 const CodeBlock = ({ inline, className, children, ...props }: any) => {
     const match = /language-(\w+)/.exec(className || "");
     const code = String(children).replace(/\n$/, "");
 
+    // 1. Handle Mermaid Diagrams
     if (!inline && match && match[1] === "mermaid") {
         return <Mermaid chart={code} />;
     }
 
+    // 2. Handle Inline Code (Single backticks)
+    if (inline) {
+        return (
+            <code className="px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-sm font-mono text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700" {...props}>
+                {children}
+            </code>
+        );
+    }
+
+    // 3. Handle Block Code (Triple backticks)
     return (
         <div className="relative group my-6 overflow-hidden rounded-md border border-gray-200 dark:border-gray-800">
             <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -27,7 +38,7 @@ const CodeBlock = ({ inline, className, children, ...props }: any) => {
                     <Copy size={14} />
                 </button>
             </div>
-            {/* GitHub-like Code Block: Darker background in dark mode, subtle in light */}
+            {/* GitHub-like Code Block */}
             <div className="bg-gray-50 dark:bg-[#0d1117] p-4 overflow-x-auto text-[13px] leading-[1.6]">
                 <code className={`${className} block font-mono text-gray-800 dark:text-gray-300`} {...props}>
                     {children}
