@@ -371,6 +371,25 @@ Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang, **APAPUN STAT
     👉 /update_INC12345678
     ```
 
+### G. Modul Analytics & Fraud Detection (Phase 3 Spec) 🧠
+*(Fitur Cerdas untuk analisa pola data & pencegahan kecurangan)*
+
+**1. Material Anomaly Detector (Anti-Markup)**
+*   **Logic**: Sistem membandingkan `Input Material` vs `Threshold Wajar`.
+*   **Formula**: Jika `Input` > `Rata-rata Harian + 50%`, maka Flag `⚠️ ANOMALY`.
+*   **Contoh Kasus**:
+    *   *Standard dropcore*: 150m - 200m.
+    *   *Teknisi Input*: 450m.
+    *   **Action**: Bot terima report, tapi notif ke Admin ada label `[⚠️ CHECK: MATERIAL OVERLIMIT]`. Admin wajib cek foto bukti/validasi manual.
+
+**2. RFO Hotspot Analysis (Recurring Issue)**
+    *(Bukan monitoring redaman realtime, tapi Analisa Tiket Berulang)*
+*   **Logic**: Menghitung jumlah tiket tipe `Fisik` di area yang sama dalam 7 hari terakhir.
+*   **Skenario**:
+    *   Sektor "Batu Ampar" ada 5 tiket "Putus Kabel" dalam 3 hari.
+    *   **Insight**: *"⚠️ Kemungkinan ada gangguan masal / Sabotase / Proyek Galian di area Batu Ampar."*
+*   **Action**: Dashboard menampilkan "Red Zone" di peta agar Manajer bisa kirim tim Maintenance (bukan tim perbaikan biasa).
+
 ---
 
 ## 4. Arsitektur Teknis (Database)
