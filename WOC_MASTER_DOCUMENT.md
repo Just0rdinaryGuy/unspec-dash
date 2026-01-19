@@ -135,7 +135,7 @@ Teknisi melakukan update dengan menjawab pertanyaan Bot langkah-demi-langkah.
     *   Rekap total pemakaian (Sum JSON) per Sektor.
 3.  **Trend Chart**:
     *   Grafik Line volumen tiket harian. 
-    *   Series: **HVC** (VVIP, Platinum, Titanium, Gold, Silver), **Reguler**, **Unspec**, **WA**.
+    *   Series: **HVC** (VVIP, Diamond, Platinum, Gold, Silver), **Reguler**, **Unspec**, **WA**.
 
 ### E. Modul Realtime Tracking
 1.  **Aktivasi**:
