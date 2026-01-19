@@ -36,35 +36,46 @@ graph TD
     %% Styling
     classDef dash fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
     classDef bot fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    classDef server fill:#fff3e0,stroke:#ff6f00,stroke-width:2px;
+    classDef actor fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
 
-    subgraph Phase1 ["Phase 1: Creation & Distribution"]
-    A["Tiket Masuk<br/>(Import/Manual)"] -->|Status: OPEN| B("Dashboard Helpdesk")
-    B -->|Assign Tim| C{"Distribusi Otomatis"}
-    C -.->|Notifikasi Blast| D["Grup Telegram Team"]
-    C -.->|Japri| E["Chat Pribadi Teknisi"]
+    subgraph Sources ["1. Ticket Sources"]
+    S1[("Import Excel<br/>(Pusat)")]
+    S2["Manual Input<br/>(Unspec/Urgent)"]
+    S3["Bot/Web Lapor<br/>(Employee/Cust)"]
     end
-    class A,B,C dash;
-    class D,E bot;
+    class S1,S2,S3 dash;
 
-    subgraph Phase2 ["Phase 2: Execution (Lapangan)"]
-    E --> F["Pengerjaan Fisik"]
-    F --> G["Check-in / Absen"]
-    G --> H["Selfie & Share Live Loc"]
-    H --> I["Update Tiket via Bot"]
-    I --> J1["Input Status & RFO"]
-    I --> J2["Input Material (Angka)"]
-    I --> J3["Upload 9 Foto Bukti"]
+    subgraph Dash ["2. Dashboard Operations"]
+    S1 & S2 -->|Status: OPEN| D_MAIN("🖥️ Main Dashboard")
+    S3 -->|Status: REQ| D_WA("🖥️ Dashboard WA")
+    
+    D_WA -->|Approve & Assign| D_MAIN
+    D_MAIN -->|Dispatch/Assign| BOT_API(("🤖 Bot API"))
+    D_MAIN -->|Redispatch| BOT_API
     end
-    class F,G,H,I,J1,J2,J3 bot;
+    class D_MAIN,D_WA dash;
 
-    subgraph Phase3 ["Phase 3: Validation & Closing"]
-    J3 -->|Submit| K["Server WOC"]
-    K -->|Sync Realtime| L("Dashboard Monitoring")
-    K -->|Auto Report| D
+    subgraph Bot ["3. Bot Interactions"]
+    BOT_API -->|Broadcast Job| TG_GROUP["📱 Group Telegram"]
+    
+    TG_GROUP -->|1. Notif Masuk| TECH("👷 Teknisi")
+    TECH -->|2. Click /update| WIZARD{"🤖 Interaction Wizard"}
+    
+    WIZARD -->|Step 1| W_STAT["Status (Closed/Kendala)"]
+    W_STAT -->|Step 2| W_RFO["Input RFO"]
+    W_RFO -->|Step 3| W_MAT["Input Material"]
+    W_MAT -->|Step 4| W_FOTO["Upload 9 Foto"]
+    W_FOTO -->|Step 5| W_LOC["Share Live Loc"]
     end
-    class K server;
-    class L dash;
+    class BOT_API,TG_GROUP,WIZARD,W_STAT,W_RFO,W_MAT,W_FOTO,W_LOC bot;
+    class TECH actor;
+
+    subgraph Output ["4. Output & Reporting"]
+    W_LOC -->|Submit| SERVER[("☁️ Server WOC")]
+    SERVER -->|Update| D_MAIN
+    SERVER -->|Broadcast Result| TG_GROUP
+    end
+    class SERVER dash;
 ```
 
 ---
