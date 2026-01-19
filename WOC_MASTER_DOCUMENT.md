@@ -240,7 +240,7 @@ Tim: **Raffy-Joy**
     *   Rekap total pemakaian (Sum JSON) per Sektor.
 3.  **Trend Chart**:
     *   Grafik Line volumen tiket harian. 
-    *   Series: **HVC** (VVIP, Diamond, Platinum, Gold, Silver), **Reguler**, **Unspec**, **WA**.
+    *   Series: **HVC** (VVIP, Diamond, Platinum, Gold, Silver), **Reguler**, **Unspec**, **WA**, **SQM**.
 
 ### E. Modul Realtime Tracking
 1.  **Aktivasi**:
