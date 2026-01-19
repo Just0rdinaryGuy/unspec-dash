@@ -88,7 +88,7 @@ export const NAV_ITEMS = [
     {
         id: "docs",
         title: "System Docs",
-        href: "/docs",
+        href: "/system-docs",
         icon: "Book"
     }
 ] as const
