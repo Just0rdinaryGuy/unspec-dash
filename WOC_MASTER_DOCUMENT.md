@@ -53,6 +53,13 @@ graph TD
     classDef bot fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000000;
     classDef actor fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000000;
 
+    %% Remove Subgraph Backgrounds
+    style Sources fill:none,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    style Dash fill:none,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    style UnspecDash fill:none,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    style Bot fill:none,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    style Output fill:none,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+
     subgraph Sources ["1. Ticket Sources"]
     S1[("Import Excel<br/>(Pusat)")]
     S2["Manual Input<br/>(Unspec/Urgent)"]
