@@ -45,18 +45,22 @@ graph TD
     end
     class S1,S2,S3 dash;
 
-    subgraph Dash ["2. Dashboard Operations"]
+    subgraph Dash ["2. Main Dashboard Ops"]
     S1 -->|Status: OPEN| D_MAIN("🖥️ Main Dashboard")
-    S2 -->|Status: UNSPEC| D_UNSPEC("🖥️ Dashboard Unspec")
     S3 -->|Status: REQ| D_WA("🖥️ Dashboard WA")
-    
     D_WA -->|Approve & Assign| D_MAIN
-    D_MAIN & D_UNSPEC -->|Dispatch/Assign| BOT_API(("🤖 Bot API"))
-    D_MAIN & D_UNSPEC -->|Redispatch| BOT_API
+    D_MAIN -->|Dispatch/Assign| BOT_API(("🤖 Bot API"))
+    D_MAIN -->|Redispatch| BOT_API
+    end
+
+    subgraph UnspecDash ["3. Unspec Ops (Manual)"]
+    S2 -->|Status: UNSPEC| D_UNSPEC("🖥️ Dashboard Unspec")
+    D_UNSPEC -->|Dispatch/Assign| BOT_API
+    D_UNSPEC -->|Redispatch| BOT_API
     end
     class D_MAIN,D_WA,D_UNSPEC dash;
 
-    subgraph Bot ["3. Bot Interactions"]
+    subgraph Bot ["4. Bot Interactions"]
     BOT_API -->|Broadcast Job| TG_GROUP["📱 Group Telegram"]
     
     TG_GROUP -->|1. Notif Masuk| TECH("👷 Teknisi")
