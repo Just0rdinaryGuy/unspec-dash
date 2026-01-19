@@ -2,6 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Copy file konfigurasi dulu
+COPY pyproject.toml ./
+
 # Install dependencies pake PIP standar (Fallback karena UV timeout di VPS)
 # RUN uv pip install --system -r pyproject.toml
 RUN pip install --no-cache-dir .
