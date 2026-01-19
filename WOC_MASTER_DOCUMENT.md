@@ -145,7 +145,7 @@ Jl. Mulawarman No 45, RT 02 (Depan Indomaret)
 📜 SUMMARY / KELUHAN:
 Pelanggan lapor internet mati total. LOS merah.
 
-⏱️ SLA MONITORING:
+⏱️ TTR MONITORING:
 📅 Reported: 2026-01-20 09:00:00
 💣 Deadline: 2026-01-20 12:00:00 (Target 3 Jam)
 📉 Sisa TTR: 🔴 LEWAT -21 Jam 30 Menit
@@ -172,17 +172,23 @@ Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 > **Bot**: "Tuliskan detail perbaikan yang dilakukan (Singkat & Jelas):"
 > **User**: "Sambung kabel DC 150m dan ganti SOC"
 
-#### Step 3: Input Material (Validasi Angka)
-> **Bot**: "🛠 **LAPORAN MATERIAL** (Masukkan angka 0 jika tidak pakai)"
+#### Step 3a: Input Material (Habis Pakai)
+> **Bot**: "🛠 **LAPORAN MATERIAL** (Masukan angka 0 jika tidak pakai)"
 >
 > **Bot**: "1. Berapa meter Kabel Dropcore?"
 > **User**: "150"
 >
 > **Bot**: "2. Berapa pcs Konektor/SOC?"
 > **User**: "2"
+
+#### Step 3b: Ganti Perangkat (ONT/STB)
+*(Hanya muncul jika RFO = Ganti Alat / Modul Rusak)*
+> **Bot**: "🔄 **PENGGANTIAN ALAT**"
+> **Bot**: "Scan/Ketik SN ONT LAMA (yang dicabut):"
+> **User**: "4857544312345678"
 >
-> **Bot**: "3. Berapa pcs Prekso?"
-> **User**: "0"
+> **Bot**: "Scan/Ketik SN ONT BARU (yang dipasang):"
+> **User**: "4857544387654321"
 
 #### Step 4: Upload Foto Bukti (9 Tahap)
 Bot meminta 9 jenis foto satu per satu.
