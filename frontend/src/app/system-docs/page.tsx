@@ -118,13 +118,8 @@ export default function DocsPage() {
     const CustomHeading = ({ level, children, ...props }: any) => {
         const text = children?.toString() || '';
         const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
 
-        return (
-            <HeadingTag id={id} {...props}>
-                {children}
-            </HeadingTag>
-        );
+        return React.createElement(`h${level}`, { id, ...props }, children);
     };
 
     return (
