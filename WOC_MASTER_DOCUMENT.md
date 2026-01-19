@@ -181,13 +181,16 @@ Bot meminta 9 jenis foto satu per satu.
 #### Output: Laporan Selesai (Broadcast ke Grup)
 Pesan otomatis yang dikirim Bot ke Grup Tim setelah wizard selesai.
 
+> **ℹ️ Catatan Logic:**
+> Nama Teknisi (`Agus` / `Raffy`) diambil dari database tabel `users` kolom `full_name` berdasarkan `chat_id` pengirim. Bukan dari Display Name Telegram (agar nama tetap formal & standar).
+
 **A. Sukses (CLOSED) ✅**
 ```text
 ✅ **JOB COMPLETED (CLOSED)**
-Tim: **SURYA-JAURDAN**
+Tim: **Raffy-Joy**
 ➖➖➖➖➖➖➖➖➖➖➖➖
 🆔 Ticket: `INC12345678`
-🛠️ Teknisi: **Agus**
+🛠️ Teknisi: **Raffy**
 
 📊 **HASIL PEKERJAAN:**
 • Penyebab: Putus Kabel
@@ -210,10 +213,10 @@ Tim: **SURYA-JAURDAN**
 **B. Pending (KENDALA) 🚧**
 ```text
 🚧 **JOB PENDING (KENDALA)**
-Tim: **SURYA-JAURDAN**
+Tim: **Raffy-Joy**
 ➖➖➖➖➖➖➖➖➖➖➖➖
 🆔 Ticket: `INC12345678`
-🛠️ Teknisi: **Agus**
+🛠️ Teknisi: **Raffy**
 
 ⚠️ **DETAIL KENDALA:**
 • Kategori: Pelanggan (Rumah Tutup / Tidak Respon)
