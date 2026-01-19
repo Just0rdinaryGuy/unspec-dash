@@ -104,11 +104,11 @@ graph TD
 *   **A. Internal Employee (Via Bot)**:
     *   Pegawai lain bisa lapor tiket via Bot.
     *   **Security**: Hanya bisa dilakukan di **Grup Telegram Internal Tertentu** (Whitelist Group ID).
-    *   **Command**: `/lapor [No/ID] [Keluhan]` -> Masuk ke Dashboard WA.
+    *   **Command**: `/lapor [Service ID] [Keluhan]` -> Masuk ke Dashboard WA.
 
 *   **B. Customer (Via Web Link)**:
     *   Formulir publik sederhana: `wargaonlineceria.my.id/lapor`.
-    *   Input: Nama, No HP, Alamat, Keluhan. -> Masuk ke Dashboard WA.
+    *   Input: `No Layanan / Service ID`, Nama, No HP, Alamat, Keluhan. -> Masuk ke Dashboard WA.
 
 *   **C. Dashboard WA (Dispatch Queue)**:
     *   Halaman khusus menampung tiket dari Bot/Web Link.
