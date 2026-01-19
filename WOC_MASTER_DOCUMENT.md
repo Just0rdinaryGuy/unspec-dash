@@ -122,7 +122,7 @@ graph TD
     *   Halaman khusus menampung tiket dari Bot/Web Link.
     *   Status Awal: `WA-2026...` (Draft).
     *   **Action Helpdesk**:
-        1.  **Manual Dispatch**: Helpdesk memilih Tim & Teknisi secara manual (Tiket otomatis jadi `INC` / `OPEN` setelah diapprove/dispatch).
+        1.  **Manual Dispatch**: Helpdesk memilih Tim Teknisi secara manual (Tiket otomatis jadi `WA` setelah diapprove/dispatch).
         2.  **Reject**: Jika spam/duplikat.
 
 *   **D. Dashboard Unspec**:
@@ -137,7 +137,7 @@ Tim: Raffy-Joy (SEKTOR KS TUBUN)
 ➖➖➖➖➖➖➖➖➖➖➖➖
 🆔 Tiket ID: INC12345678
 👤 Service ID: 1621012345678
-⚠️ Pelanggan ID: HVC_GOLD
+⚠️ Customer Type ID: HVC_GOLD
 
 📍 LOKASI:
 Jl. Mulawarman No 45, RT 02 (Depan Indomaret)
