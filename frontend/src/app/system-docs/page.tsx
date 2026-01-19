@@ -126,7 +126,29 @@ export default function DocsPage() {
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}
                                 components={{
-                                    code: CodeBlock as any
+                                    code: CodeBlock as any,
+                                    // Custom Table for responsiveness
+                                    table: ({ children, ...props }: any) => (
+                                        <div className="overflow-x-auto my-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+                                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700" {...props}>
+                                                {children}
+                                            </table>
+                                        </div>
+                                    ),
+                                    // Custom Image for better presentation
+                                    img: ({ node, ...props }: any) => (
+                                        <div className="flex flex-col items-center my-8">
+                                            <img
+                                                className="rounded-lg shadow-md border border-gray-100 dark:border-gray-800 max-h-[600px] object-contain"
+                                                {...props}
+                                            />
+                                            {props.alt && (
+                                                <span className="mt-2 text-sm text-gray-500 dark:text-gray-400 italic">
+                                                    {props.alt}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )
                                 }}
                             >
                                 {content}
