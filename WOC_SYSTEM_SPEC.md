@@ -244,12 +244,16 @@ Fitur pemantauan posisi teknisi di lapangan menggunakan fitur **Telegram Live Lo
 3.  **Action**: Teknisi klik *Attach -> Location -> Share My Live Location for 8 Hours*.
 4.  **Sync**: Telegram akan mengirim update koordinat ke server setiap teknisi bergerak, tanpa perlu interaksi manual lagi.
 
-### B. Tampilan Peta (Sisi Dashboard)
-Seperti referensi gambar:
-*   **Map View**: Menampilkan peta wilayah kerja.
-*   **Markers**: Icon helm teknisi di posisi terkini.
-*   **Popup**: Klik marker untuk lihat "Nama Teknisi", "Tim", "Update Terakhir".
-*   **Status**: Marker jadi abu-abu jika `last_seen` > 1 jam (Offline/GPS Mati).
+### C. Skenario Operasional
+1.  **Lembur (Overtime)**:
+    *   Telegram membatasi Live Location maks 8 jam.
+    *   Jika teknisi lembur, Bot akan mengirim reminder: *"Waktu tracking habis. Jika masih bekerja, silakan Share Live Location lagi."*
+2.  **Libur / Sakit**:
+    *   Teknisi yang tidak melakukan `/absen` di pagi hari **TIDAK AKAN DILACAK**.
+    *   Data lokasi hanya akan diupdate jika ada sesi aktif.
+3.  **Pulang Cepat**:
+    *   Teknisi cukup klik tombol **"Stop Sharing Location"** di chat Telegram.
+    *   Atau ketik command `/pulang` untuk checkout dari sistem.
 
 > **⚠️ Catatan Teknis (Telegram Limitation):**
 > *   Bot **TIDAK BISA** melacak lokasi secara diam-diam (background spy).
