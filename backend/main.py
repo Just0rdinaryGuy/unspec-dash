@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 
 # Import router yang udah kita bikin
-from routers import dashboard, data_explorer, tickets, data_import, auth, users, report
+from routers import dashboard, data_explorer, tickets, data_import, auth, users, report, system
 
 app = FastAPI(
     title="Network Monitoring",
@@ -34,6 +34,7 @@ app.include_router(data_explorer.router)
 app.include_router(tickets.router)
 app.include_router(data_import.router)
 app.include_router(report.router)
+app.include_router(system.router)
 
 @app.get("/")
 def root():

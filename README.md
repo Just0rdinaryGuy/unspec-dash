@@ -28,7 +28,7 @@ Platform web modern yang dirancang khusus untuk membantu tim HD WOC Balikpapan d
 
 ### Latar Belakang
 
-Dalam operasional jaringan GPON (Gigabit Passive Optical Network) PT Telkom Akses, salah satu parameter kritis yang harus dipantau adalah **redaman** (signal loss) pada setiap node pelanggan. Redaman yang tidak sesuai standar (UNSPEC) dapat menyebabkan degradasi kualitas layanan atau bahkan service down.
+Dalam operasional jaringan PT Telkom Akses, salah satu parameter kritis yang harus dipantau adalah **redaman** (signal loss) pada setiap node pelanggan. Redaman yang tidak sesuai standar (UNSPEC) dapat menyebabkan degradasi kualitas layanan atau bahkan service down.
 
 Sebelumnya, proses monitoring dan reporting dilakukan secara manual menggunakan Excel, yang memiliki beberapa kendala:
 - **Inefficient**: Update data memakan waktu lama
@@ -1465,7 +1465,7 @@ Project ini adalah software Proprietary/Private. Dilarang mendistribusikan ulang
 
 ---
 
-## 🎓 Untuk Keperluan Skripsi
+## 🎓 Untuk Keperluan Skripsi ini khusus Arya Dharma 
 
 ### Poin-Poin yang Bisa Dibahas
 
