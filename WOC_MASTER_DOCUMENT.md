@@ -190,8 +190,8 @@ Pesan otomatis yang dikirim Bot ke Grup Tim setelah wizard selesai.
 Tim: **Raffy-Joy**
 ➖➖➖➖➖➖➖➖➖➖➖➖
 🆔 Ticket: `INC12345678`
-� Service: `1621012345678`
-�🛠️ Teknisi: **Raffy**
+👤 Service: `1621012345678`
+🛠️ Teknisi: **Raffy**
 
 📊 **HASIL PEKERJAAN:**
 • Penyebab: Putus Kabel
