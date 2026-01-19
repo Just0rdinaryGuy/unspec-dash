@@ -234,7 +234,26 @@ Desain detail halaman web untuk manajemen.
 
 ---
 
-## 5. Ringkasan Teknis (Database)
+## 5. Modul Realtime Tracking (Live Map)
+
+Fitur pemantauan posisi teknisi di lapangan menggunakan fitur **Telegram Live Location**.
+
+### A. Alur Aktivasi (Sisi Teknisi)
+1.  **Check-In**: Teknisi ketik `/absen` di pagi hari.
+2.  **Request**: Bot membalas "Silakan **Share Live Location** untuk 8 Jam".
+3.  **Action**: Teknisi klik *Attach -> Location -> Share My Live Location for 8 Hours*.
+4.  **Sync**: Telegram akan mengirim update koordinat ke server setiap teknisi bergerak, tanpa perlu interaksi manual lagi.
+
+### B. Tampilan Peta (Sisi Dashboard)
+Seperti referensi gambar:
+*   **Map View**: Menampilkan peta wilayah kerja.
+*   **Markers**: Icon helm teknisi di posisi terkini.
+*   **Popup**: Klik marker untuk lihat "Nama Teknisi", "Tim", "Update Terakhir".
+*   **Status**: Marker jadi abu-abu jika `last_seen` > 1 jam (Offline/GPS Mati).
+
+---
+
+## 6. Ringkasan Teknis (Database)
 
 Struktur tabel inti yang mendukung seluruh fitur di atas.
 

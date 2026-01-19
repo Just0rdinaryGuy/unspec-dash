@@ -45,6 +45,9 @@ Dokumen ini adalah **Rencana Induk** yang menggabungkan seluruh kebutuhan arsite
 | `role` | ENUM | `ADMIN`, `HELPDESK`, `TECHNICIAN` |
 | `telegram_chat_id` | BIGINT | ID Akun Telegram (Wajib untuk notifikasi personal) |
 | `team_id` | INT (FK) | Relasi ke Tim (Member Tim) |
+| `last_lat` | FLOAT | **[NEW]** Latitude Terakhir |
+| `last_long` | FLOAT | **[NEW]** Longitude Terakhir |
+| `last_seen` | TIMESTAMP | **[NEW]** Waktu Update Terakhir |
 
 ### C. Tabel `woc_tickets` (Transaksi Utama)
 | Kolom | Tipe | Keterangan |
@@ -150,7 +153,24 @@ Grafik garis untuk memantau volume tiket harian.
 
 ---
 
+### E. Realtime Location Tracking (Live Map)
+Fitur monitoring posisi teknisi secara real-time.
+1.  **Bot Logic**:
+    *   Teknisi melakukan Check-in: `/absen_masuk`.
+    *   Bot meminta **Share Live Location** (Durasi 8 Jam).
+    *   Backend menerima event `edited_message` dari Telegram setiap kali posisi berubah.
+2.  **Database**:
+    *   Update tabel `users`: tambah kolom `last_lat`, `last_long`, `last_seen`.
+3.  **Frontend (Map Dashboard)**:
+    *   Halaman Peta (Leaflet/Mapbox).
+    *   Marker bergerak sesuai update terakhir teknisi.
+    *   Status indikator (Active/Inactive berdasarkan `last_seen`).
+
+---
+
 ## 5. Rencana Eksekusi (Phase 2)
-1.  **Database Migration**: Membuat tabel `teams`, `users` (update), `woc_tickets`, `ticket_updates`.
-2.  **Backend Logic**: Setup Webhook Telegram & Logic State Machine Bot.
-3.  **Frontend**: Page Management Team & Dashboard Monitoring baru.
+1.  **Database Migration**: Membuat tabel `teams`, `users`, `woc_tickets` , `ticket_updates`.
+2.  **Backend Logic**: 
+    *   Setup Webhook & State Machine.
+    *   Implementasi Listener `Live Location`.
+3.  **Frontend**: Dashboard Monitoring & Realtime Maps.
