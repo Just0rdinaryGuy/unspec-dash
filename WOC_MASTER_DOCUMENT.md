@@ -264,16 +264,17 @@ Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang, **APAPUN STAT
     *   Mengirim Notifikasi Baru ke Grup Tim (Format berbeda: **♻️ REDISPATCH**).
 3.  **Bot Notification (Redispatch)**:
     ```text
-    ♻️ **TIKET REDISPATCH (LANJUTAN)**
+    **TIKET REDISPATCH**
     Tim: **Raffy-Joy**
     ➖➖➖➖➖➖➖➖➖➖➖➖
-    🆔 Ticket: `INC12345678`
-    ⚠️ Prev. Kendala: **Rumah Tutup**
+    Ticket: `INC12345678`
+    Service: `1621012345678`
+    ⚠️ Kendala Sebelumnya: **Rumah Tutup**
     
-    📍 **LOKASI:**
+    📍 **Alamat:**
     Jl. Mulawarman No 45...
     
-    👮 **Redispatch By:** Arya Dharma (21:02 WITA)
+    **Redispatch By:** Arya Dharma (21:02 WITA)
     ➖➖➖➖➖➖➖➖➖➖➖➖
     👉 /update_INC12345678
     ```
