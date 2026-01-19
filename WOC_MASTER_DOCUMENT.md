@@ -105,6 +105,8 @@ graph TD
     *   Pegawai lain bisa lapor tiket via Bot.
     *   **Security**: Hanya bisa dilakukan di **Grup Telegram Internal Tertentu** (Whitelist Group ID).
     *   **Command**: `/lapor [Service ID] [Keluhan]` -> Masuk ke Dashboard WA.
+    *   **Logic**: Sistem otomatis tarik Nama/Alamat dari Database berdasarkan Service ID.
+    *   **Fallback**: Jika ID tidak dikenal, Bot ganti reply: *"ID tidak ditemukan. Silakan lapor via Web Link: [Link]"* (agar format data tetap rapi).
 
 *   **B. Customer (Via Web Link)**:
     *   Formulir publik sederhana: `wargaonlineceria.my.id/lapor`.
