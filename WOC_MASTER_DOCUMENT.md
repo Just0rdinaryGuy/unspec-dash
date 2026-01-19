@@ -109,23 +109,52 @@ Pelanggan lapor internet mati total. LOS merah.
 ```
 
 ### C. Modul Interaksi Bot (Wizard)
-Teknisi melakukan update dengan menjawab pertanyaan Bot langkah-demi-langkah.
+Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 
-1.  **Status**: `[✅ CLOSED]` / `[🚧 KENDALA]` / `[⏳ PENDING]`
-2.  **Penyebab**: `[Putus Kabel]` / `[Modul]` / dll.
-3.  **RFO**: Input teks detail pekerjaan.
-4.  **Material**: Input Angka (DC meter, SOC pcs, Prekso pcs).
-5.  **Bukti Foto (9 Tahap)**:
-    *   1. Rumah (Opsional)
-    *   2. ODP (Opsional)
-    *   3. Jalur DC (Opsional)
-    *   4. **Penyebab (WAJIB)**
-    *   5. **Progres (WAJIB)**
-    *   6. **After (WAJIB)**
-    *   7. **Redaman/OPM (WAJIB)**
-    *   8. **SN ONT (WAJIB)**
-    *   9. Material Bekas (Opsional)
-6.  **Closing**: Laporan terkirim ke Server & Grup Tim.
+**Command**: `/update_INC44486767`
+
+#### Step 1: Status & Penyebab
+> **Bot**: "👋 Halo **Agus**, update status tiket `INC44486767`?"
+> **Tombol**: `[✅ CLOSED]` `[🚧 KENDALA]` `[⏳ PENDING]`
+>
+> *(User klik CLOSED)*
+>
+> **Bot**: "Oke CLOSED. Apa penyebab utamanya?"
+> **Tombol**: `[Putus Kabel]` `[Modul Rusak]` `[Konektor]` `[Power Mati]` `[Lainnya]`
+
+#### Step 2: Detail RFO (Text)
+> **Bot**: "Tuliskan detail perbaikan yang dilakukan (Singkat & Jelas):"
+> **User**: "Sambung kabel DC 150m dan ganti SOC"
+
+#### Step 3: Input Material (Validasi Angka)
+> **Bot**: "🛠 **LAPORAN MATERIAL** (Masukkan angka 0 jika tidak pakai)"
+>
+> **Bot**: "1. Berapa meter Kabel Dropcore?"
+> **User**: "150"
+>
+> **Bot**: "2. Berapa pcs Konektor/SOC?"
+> **User**: "2"
+>
+> **Bot**: "3. Berapa pcs Prekso?"
+> **User**: "0"
+
+#### Step 4: Upload Foto Bukti (9 Tahap)
+Bot meminta 9 jenis foto satu per satu.
+1.  **📸 FOTO RUMAH** (Opsi: `[⏭ SKIP]`)
+2.  **📸 FOTO ODP** (Opsi: `[⏭ SKIP]`)
+3.  **📸 FOTO JALUR DC** (Opsi: `[⏭ SKIP]`)
+4.  **📸 FOTO PENYEBAB** (WAJIB)
+5.  **📸 FOTO PROGRES** (WAJIB)
+6.  **📸 FOTO SETELAH PROGRES** (WAJIB)
+7.  **📸 FOTO REDAMAN** (WAJIB)
+8.  **📸 FOTO SN ONT** (WAJIB)
+9.  **📸 FOTO MATERIAL** (Opsi: `[⏭ SKIP]`)
+
+#### Step 5: Lokasi & Closing
+> **Bot**: "📍 Terakhir, **SHARE LIVE LOCATION** posisi Anda sekarang."
+> **User**: *(Mengirim Attachment Location)*
+>
+> **Bot**: "✅ **TIKET CLOSED!** Data tersimpan. Laporan telah diteruskan ke Grup."
 
 ### D. Visualisasi Dashboard Web
 1.  **Productivity Monitor**:
