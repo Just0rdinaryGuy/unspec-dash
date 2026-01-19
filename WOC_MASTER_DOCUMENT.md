@@ -91,10 +91,10 @@ Saat Helpdesk menunjuk Tim di Dashboard, Bot mengirim notifikasi:
 
 ```text
 🚀 NEW JOB ASSIGNMENT
-Tim: SURYA-JAURDAN (SEKTOR BATU AMPAR)
+Tim: Raffy-Joy (SEKTOR KS TUBUN)
 ➖➖➖➖➖➖➖➖➖➖➖➖
-🆔 Ticket: INC44486767
-👤 Service: 162105102907
+🆔 Ticket: INC4448****
+👤 Service: 16210********
 ⚠️ Checklist: HVC_GOLD
 
 📍 LOKASI:
@@ -105,16 +105,16 @@ Pelanggan lapor internet mati total. LOS merah.
 
 ⏰ SLA Target: 2026-01-20 15:00
 ➖➖➖➖➖➖➖➖➖➖➖➖
-👉 /update_INC44486767 (Klik untuk lapor)
+👉 /update_INC4448**** (Klik untuk lapor)
 ```
 
 ### C. Modul Interaksi Bot (Wizard)
 Skrip detail percakapan Bot saat teknisi melakukan update (Logic State Machine).
 
-**Command**: `/update_INC44486767`
+**Command**: `/update_INC4448****`
 
 #### Step 1: Status & Penyebab
-> **Bot**: "👋 Halo **Agus**, update status tiket `INC44486767`?"
+> **Bot**: "👋 Halo **Raffy**, update status tiket `INC4448****`?"
 > **Tombol**: `[✅ CLOSED]` `[🚧 KENDALA]` `[⏳ PENDING]`
 >
 > *(User klik CLOSED)*
