@@ -255,6 +255,7 @@ Seperti referensi gambar:
 > *   Bot **TIDAK BISA** melacak lokasi secara diam-diam (background spy).
 > *   Teknisi **WAJIB** memulai dengan klik "Share Live Location".
 > *   **Background Mode**: Setelah diaktifkan, teknisi bisa menutup aplikasi Telegram atau mematikan layar, dan lokasi **TETAP TERKIRIM** selama durasi yang dipilih (8 Jam).
+> *   **🔋 Konsumsi Baterai**: Fitur ini menggunakan GPS intensif. Estimasi pengurasan baterai ekstra **~10-20%** per shift. **Sangat disarankan** teknisi menyediakan Powerbank atau charger di kendaraan.
 
 ---
 
