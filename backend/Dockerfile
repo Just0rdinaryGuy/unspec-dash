@@ -6,8 +6,8 @@ WORKDIR /app
 COPY pyproject.toml ./
 
 # Install dependencies pake PIP standar (Fallback karena UV timeout di VPS)
-# RUN uv pip install --system -r pyproject.toml
-RUN pip install --no-cache-dir .
+# Tambah timeout panjang (1000s) biar gak gagal pas koneksi lemot
+RUN pip install --default-timeout=1000 --no-cache-dir .
 
 # Copy semua code aplikasi
 COPY . .
