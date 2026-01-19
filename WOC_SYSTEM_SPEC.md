@@ -251,6 +251,11 @@ Seperti referensi gambar:
 *   **Popup**: Klik marker untuk lihat "Nama Teknisi", "Tim", "Update Terakhir".
 *   **Status**: Marker jadi abu-abu jika `last_seen` > 1 jam (Offline/GPS Mati).
 
+> **⚠️ Catatan Teknis (Telegram Limitation):**
+> *   Bot **TIDAK BISA** melacak lokasi secara diam-diam (background spy).
+> *   Teknisi **WAJIB** memulai dengan klik "Share Live Location".
+> *   **Background Mode**: Setelah diaktifkan, teknisi bisa menutup aplikasi Telegram atau mematikan layar, dan lokasi **TETAP TERKIRIM** selama durasi yang dipilih (8 Jam).
+
 ---
 
 ## 6. Ringkasan Teknis (Database)
