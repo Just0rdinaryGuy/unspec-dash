@@ -250,19 +250,22 @@ Tim: **Raffy-Joy**
     *   **Baterai**: Estimasi boros 10-20% (Disarankan Powerbank).
     *   **Libur**: Tidak absen = Tidak dilacak.
 
-### F. Modul Redispatch (Follow-up Kendala)
-Fitur untuk menjadwalkan ulang tiket yang statusnya **PENDING / KENDALA** (belum Closed hari ini).
+### F. Modul Redispatch (Operan Tiket / Lanjutan)
+Fitur untuk mengalihkan tugas ke Tim Lain atau menjadwalkan ulang, **APAPUN STATUSNYA** (Open, In Progress, Kendala). 
+*Kasus: Teknisi sakit mendadak, mobil mogok, atau pendingan kemarin.*
 
 1.  **Dashboard Flow**:
-    *   Helpdesk filter tiket status `KENDALA`.
-    *   Klik tombol **Redispatch** -> Pilih Tim (bisa Tim sama/beda) -> Pilih Tanggal Pengerjaan.
+    *   Helpdesk pilih tiket (Status bebas, kecuali Closed).
+    *   Klik tombol **Redispatch**.
+    *   **Pilih Tim Baru** (Bisa tim sama atau oper ke tim lain).
+    *   **Pilih Tanggal Pengerjaan** (Hari ini / Besok).
 2.  **System Action**:
     *   Update data: `redispatch_by` (User Helpdesk) & `redispatch_at` (Waktu klik).
     *   Mengirim Notifikasi Baru ke Grup Tim (Format berbeda: **♻️ REDISPATCH**).
 3.  **Bot Notification (Redispatch)**:
     ```text
     ♻️ **TIKET REDISPATCH (LANJUTAN)**
-    Tim: **SURYA-JAURDAN**
+    Tim: **Raffy-Joy**
     ➖➖➖➖➖➖➖➖➖➖➖➖
     🆔 Ticket: `INC12345678`
     ⚠️ Prev. Kendala: **Rumah Tutup**
@@ -270,7 +273,7 @@ Fitur untuk menjadwalkan ulang tiket yang statusnya **PENDING / KENDALA** (belum
     📍 **LOKASI:**
     Jl. Mulawarman No 45...
     
-    👮 **Redispatch By:** ABDUL ROHMAN (21:02 WITA)
+    👮 **Redispatch By:** Arya Dharma (21:02 WITA)
     ➖➖➖➖➖➖➖➖➖➖➖➖
     👉 /update_INC12345678
     ```
