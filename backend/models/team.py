@@ -16,4 +16,6 @@ class TeamDB(Base):
     created_at = Column(DateTime, default=wita_now)
 
     # Relationships
+    # Relationships
     leader = relationship("UserDB", foreign_keys=[leader_id])
+    members = relationship("UserDB", back_populates="team", foreign_keys="UserDB.team_id")
