@@ -15,6 +15,7 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 class BotService:
     def __init__(self):
         self.application = None
+        self._is_running = False
         if not TELEGRAM_TOKEN:
             logger.error("TELEGRAM_BOT_TOKEN not found in env")
             return
@@ -52,8 +53,13 @@ class BotService:
             logger.warning("Bot belum init karena token ga ada. Skip start.")
             return
 
+        if self._is_running:
+            logger.info("Bot is already running. Skipping init.")
+            return
+
         await self.application.initialize()
         await self.application.start()
+        self._is_running = True
 
     async def process_update(self, update_data: dict):
         """
