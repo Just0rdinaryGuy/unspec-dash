@@ -85,7 +85,8 @@ class UserDB(Base):
     is_active = Column(Boolean, default=True)
     chat_id = Column(BigInteger, unique=True, nullable=True)
     telegram_username = Column(String, nullable=True)
-    team_id = Column(Integer, ForeignKey("teams.id"), nullable=True)
+    team = relationship("TeamDB", back_populates="members")
+    attendances = relationship("AttendanceDB", back_populates="user")
     created_at = Column(DateTime, default=wita_now)
     updated_at = Column(DateTime, default=wita_now, onupdate=wita_now)
 
