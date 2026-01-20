@@ -94,14 +94,13 @@ export const NAV_GROUPS = [
             { id: "dashboard", title: "Dashboard", href: "/", icon: "LayoutDashboard" },
             { id: "data-explorer", title: "Data Unspec", href: "/data-explorer", icon: "Database" },
             { id: "update-data", title: "Update Data", href: "/update-data", icon: "Activity" },
+            { id: "tickets", title: "Status Tiket", href: "/tickets", icon: "Wrench" },
             { id: "report", title: "Laporan Harian", href: "/report", icon: "BarChart3" }
         ]
     },
     {
         title: "WOC",
-        items: [
-            { id: "tickets", title: "Status Tiket", href: "/tickets", icon: "Wrench" }
-        ]
+        items: []
     }
 ] as const
 
