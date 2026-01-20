@@ -23,6 +23,8 @@ app.add_middleware(
 )
 
 from database import engine, Base
+from models.team import TeamDB # Register TeamDB
+
 # Buat tabel kalau belum ada
 Base.metadata.create_all(bind=engine)
 
