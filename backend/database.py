@@ -4,7 +4,7 @@ PostgreSQL buat production (migrasi dari SQLite)
 """
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean, BigInteger, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime, timedelta
 import os
 
