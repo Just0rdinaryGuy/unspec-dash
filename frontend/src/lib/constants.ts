@@ -87,6 +87,24 @@ export const NAV_ITEMS = [
     }
 ] as const
 
+export const NAV_GROUPS = [
+    {
+        title: "Dashboard Unspec",
+        items: [
+            { id: "dashboard", title: "Dashboard", href: "/", icon: "LayoutDashboard" },
+            { id: "data-explorer", title: "Data Unspec", href: "/data-explorer", icon: "Database" },
+            { id: "update-data", title: "Update Data", href: "/update-data", icon: "Activity" },
+            { id: "report", title: "Laporan Harian", href: "/report", icon: "BarChart3" }
+        ]
+    },
+    {
+        title: "WOC",
+        items: [
+            { id: "tickets", title: "Status Tiket", href: "/tickets", icon: "Wrench" }
+        ]
+    }
+] as const
+
 export type STO = typeof STO_LIST[number]
 export type Sector = typeof SECTOR_LIST[number]
 export type HVCCategory = typeof HVC_CATEGORIES[number]

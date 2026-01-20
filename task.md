@@ -52,9 +52,9 @@ Deploy Dashboard Monitoring Unspec ke VPS dengan domain: `wargaonlineceria.my.id
 
 ### Testing & Verification
 - [x] Access https://wargaonlineceria.my.id
-- [x] Test login
-- [x] Test upload Excel
-- [x] Test all features
+- [/] Test login
+- [ ] Test upload Excel
+- [ ] Test all features
 - [x] Verify PostgreSQL persistence
 
 ### Documentation
@@ -62,6 +62,7 @@ Deploy Dashboard Monitoring Unspec ke VPS dengan domain: `wargaonlineceria.my.id
 - [x] Document environment setup
 
 ### Debugging & Features (New)
+- [x] Refactor Sidebar to Dropdown Groups (Unspec vs WOC) <!-- id: 7 -->
 - [ ] Check console errors (Application logs) <!-- id: 3 -->
 - [ ] Fix 500 Error (Login Redirect) <!-- id: 4 -->
 - [x] Debug Export Missing Edit Data <!-- id: 5 -->
@@ -71,7 +72,7 @@ Deploy Dashboard Monitoring Unspec ke VPS dengan domain: `wargaonlineceria.my.id
 
 ## 1. Database & Models
 - [x] **Finalize WOC Master Documentation (Spec & Plan)** <!-- id: new -->
-- [/] Create `Team`, `WOCTicket`, `TicketUpdate` models <!-- id: 10 -->
+- [ ] Create `Team`, `WOCTicket`, `TicketUpdate` models <!-- id: 10 -->
 - [/] Update `User` model with Telegram fields (`chat_id`, `role`) <!-- id: 11 -->
 - [/] Create migration/init script for new tables <!-- id: 12 -->
 
