@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, UserDB
 from datetime import datetime
 
-# Setup logging
+# Nyalain logging biar tau kalo ada error
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -24,17 +24,26 @@ class BotService:
         self.application.add_handler(CommandHandler("help", self.help_command))
 
     async def initialize(self):
-        """Initialize bot application (set webhook etc if needed explicitly, but usually handled by webhook router)"""
+        """
+        Inisialisasi aplikasi bot.
+        Biasanya webhook diset di router, tapi ini buat starting engine-nya.
+        """
         await self.application.initialize()
         await self.application.start()
 
     async def process_update(self, update_data: dict):
-        """Process incoming webhook update"""
+        """
+        Proses update yang masuk dari webhook Telegram.
+        Ini yang bikin bot bisa 'denger' chat.
+        """
         update = Update.de_json(update_data, self.application.bot)
         await self.application.process_update(update)
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /start command"""
+        """
+        Handle command /start.
+        Sapa user pas pertama kali nongol.
+        """
         user = update.effective_user
         await update.message.reply_text(
             f"Halo {user.first_name}! 👋\n\n"
@@ -44,7 +53,10 @@ class BotService:
         )
 
     async def link_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /link command"""
+        """
+        Handle command /link.
+        Buat nyambungin akun Telegram sama user Dashboard.
+        """
         if not context.args:
             await update.message.reply_text("⚠️ Format salah. Gunakan: `/link <username_dashboard>`")
             return
@@ -55,7 +67,7 @@ class BotService:
 
         db: Session = SessionLocal()
         try:
-            # Cari user di DB
+            # Coba cari user di DB berdasarkan username yang dikirim
             user = db.query(UserDB).filter(UserDB.username == username_input).first()
             if not user:
                 await update.message.reply_text(f"❌ User dashboard dengan username `{username_input}` tidak ditemukan.")
@@ -68,7 +80,7 @@ class BotService:
                      await update.message.reply_text("⚠️ User ini sudah terhubung dengan akun Telegram lain. Hubungi Admin.")
                 return
 
-            # Update chat_id
+            # Gas update chat_id sama username telegram-nya
             user.chat_id = chat_id
             user.telegram_username = telegram_user.username
             db.commit()
@@ -93,5 +105,5 @@ class BotService:
             "/status - Cek status (Coming Soon)"
         )
 
-# Singleton instance
+# Singleton instance - biar satau object aja yang idup
 bot_service = BotService()

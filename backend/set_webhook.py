@@ -3,18 +3,18 @@ from telegram import Bot
 import os
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-# VPS Domain from user context
+# Domain VPS bapak, jangan diganti-ganti kalo gak pindah server
 WEBHOOK_URL = "https://wargaonlineceria.my.id/api/bot/webhook"
 
 async def set_webhook():
     if not TELEGRAM_TOKEN:
-        print("Error: TELEGRAM_BOT_TOKEN not found.")
+        print("Waduh error: TELEGRAM_BOT_TOKEN gak ketemu Bos.")
         return
 
-    print(f"Setting webhook to: {WEBHOOK_URL}")
+    print(f"Gas setting webhook ke: {WEBHOOK_URL}")
     bot = Bot(TELEGRAM_TOKEN)
     await bot.set_webhook(url=WEBHOOK_URL)
-    print("✓ Webhook set successfully!")
+    print("✓ Webhook beres diseting!")
     
     info = await bot.get_webhook_info()
     print(f"Webhook Info: {info}")

@@ -7,12 +7,12 @@ logger = logging.getLogger(__name__)
 
 @router.on_event("startup")
 async def startup_event():
-    """Initialize bot on app startup"""
+    """Nyalain mesin bot pas app start"""
     await bot_service.initialize()
 
 @router.post("/webhook")
 async def telegram_webhook(request: Request):
-    """Receive webhook connection from Telegram"""
+    """Nangkep update dari Telegram lewat webhook"""
     try:
         data = await request.json()
         await bot_service.process_update(data)
