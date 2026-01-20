@@ -23,6 +23,8 @@ class BotService:
         self.application = Application.builder().token(TELEGRAM_TOKEN).build()
         self.application.add_handler(CommandHandler("start", self.start_command))
         self.application.add_handler(CommandHandler("link", self.link_command))
+        # Utility command buat cek Group ID
+        self.application.add_handler(CommandHandler("id", self.check_id_command))
         self.application.add_handler(CommandHandler("help", self.help_command))
         
         # Tiket Wizard States
@@ -64,7 +66,7 @@ class BotService:
         commands = [
             BotCommand("start", "Mulai Bot WOC"),
             BotCommand("link", "Hubungkan Akun Dashboard"),
-            BotCommand("update_ticket", "Update Status & Lapor"),
+            BotCommand("update_ticket", "Update Status & List Tiket"),
             BotCommand("help", "Bantuan Penggunaan")
         ]
         await self.application.bot.set_my_commands(commands)
@@ -83,13 +85,13 @@ class BotService:
         await update.message.reply_text(
             f"Halo {user.first_name}! 👋\n\n"
             "Saya adalah Bot WOC (Warga Online Ceria).\n"
-            "Gunakan /link <username_dashboard> untuk menghubungkan akun Telegram ini dengan Dashboard.\n\n"
-            "Contoh: `/link budi_teknisi`"
+            "Gunakan /link <Nama> untuk menghubungkan akun Telegram ini dengan Dashboard.\n\n"
+            "Contoh: `/link Budi`"
         )
 
     async def link_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not context.args:
-            await update.message.reply_text("⚠️ Format salah. Gunakan: `/link <username_dashboard>`")
+            await update.message.reply_text("⚠️ Format salah. Gunakan: `/link <Nama>`")   
             return
 
         username_input = context.args[0]
@@ -125,6 +127,12 @@ class BotService:
             await update.message.reply_text("❌ Terjadi kesalahan sistem.")
         finally:
             db.close()
+
+    async def check_id_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Cek Chat/Group ID"""
+        chat_id = update.effective_chat.id
+        chat_title = update.effective_chat.title or "Private Chat"
+        await update.message.reply_text(f"🆔 **ID Chat Ini:** `{chat_id}`\n({chat_title})")
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
