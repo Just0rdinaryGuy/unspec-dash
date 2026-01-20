@@ -26,7 +26,7 @@ class BotService:
         self.application.add_handler(CommandHandler("help", self.help_command))
         
         # Tiket Wizard States
-        self.SELECT_ACTION, self.CHOOSE_STATUS, self.INPUT_RFO, self.UPLOAD_EVIDENCE = range(4)
+        self.SELECT_ACTION, self.CHOOSE_STATUS, self.REQUEST_LOCATION, self.INPUT_RFO, self.UPLOAD_EVIDENCE = range(5)
 
         # Wizard Conversation Handler
         wizard_handler = ConversationHandler(
@@ -34,6 +34,10 @@ class BotService:
             states={
                 self.SELECT_ACTION: [CallbackQueryHandler(self.handle_ticket_selection)],
                 self.CHOOSE_STATUS: [CallbackQueryHandler(self.handle_status_selection)],
+                self.REQUEST_LOCATION: [
+                    MessageHandler(filters.LOCATION, self.handle_location_checkin),
+                    MessageHandler(filters.TEXT & ~filters.COMMAND, self.reject_fake_location)
+                ],
                 self.INPUT_RFO: [MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_rfo_input)],
                 self.UPLOAD_EVIDENCE: [
                     MessageHandler(filters.PHOTO, self.handle_evidence_upload),
@@ -45,10 +49,6 @@ class BotService:
         self.application.add_handler(wizard_handler)
 
     async def initialize(self):
-        """
-        Inisialisasi aplikasi bot.
-        Biasanya webhook diset di router, tapi ini buat starting engine-nya.
-        """
         if not self.application:
             logger.warning("Bot belum init karena token ga ada. Skip start.")
             return
@@ -62,21 +62,12 @@ class BotService:
         self._is_running = True
 
     async def process_update(self, update_data: dict):
-        """
-        Proses update yang masuk dari webhook Telegram.
-        Ini yang bikin bot bisa 'denger' chat.
-        """
         if not self.application:
             return
-
         update = Update.de_json(update_data, self.application.bot)
         await self.application.process_update(update)
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """
-        Handle command /start.
-        Sapa user pas pertama kali nongol.
-        """
         user = update.effective_user
         await update.message.reply_text(
             f"Halo {user.first_name}! 👋\n\n"
@@ -86,10 +77,6 @@ class BotService:
         )
 
     async def link_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """
-        Handle command /link.
-        Buat nyambungin akun Telegram sama user Dashboard.
-        """
         if not context.args:
             await update.message.reply_text("⚠️ Format salah. Gunakan: `/link <username_dashboard>`")
             return
@@ -100,7 +87,6 @@ class BotService:
 
         db: Session = SessionLocal()
         try:
-            # Coba cari user di DB berdasarkan username yang dikirim
             user = db.query(UserDB).filter(UserDB.username == username_input).first()
             if not user:
                 await update.message.reply_text(f"❌ User dashboard dengan username `{username_input}` tidak ditemukan.")
@@ -113,7 +99,6 @@ class BotService:
                      await update.message.reply_text("⚠️ User ini sudah terhubung dengan akun Telegram lain. Hubungi Admin.")
                 return
 
-            # Gas update chat_id sama username telegram-nya
             user.chat_id = chat_id
             user.telegram_username = telegram_user.username
             db.commit()
@@ -141,20 +126,16 @@ class BotService:
     # --- WIZARD HANDLERS ---
     
     async def start_wizard_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Mulai wizard update tiket"""
         user = update.effective_user
         db: Session = SessionLocal()
         try:
-            # 1. Cek User terdaftar & linked
             db_user = db.query(UserDB).filter(UserDB.chat_id == user.id).first()
             if not db_user:
                 await update.message.reply_text("⛔ Akun Telegram belum terhubung. Gunakan `/link <username>` dulu.")
                 return ConversationHandler.END
 
-            # 2. Ambil tiket yang assign ke dia (atau timnya)
-            # Sementara ambil tiket yang nama_teknisi match username atau full_name
             tickets = db.query(NetworkNodeDB).filter(
-                NetworkNodeDB.nama_teknisi == db_user.full_name, # Simple match
+                NetworkNodeDB.nama_teknisi == db_user.full_name,
                 NetworkNodeDB.ticket_status != "CLOSED"
             ).all()
 
@@ -165,10 +146,8 @@ class BotService:
                 )
                 return ConversationHandler.END
             
-            # 3. Tampilkan list tiket sebagai tombol inline
             keyboard = []
             for t in tickets:
-                # Format: [STO-ND] Status
                 label = f"[{t.sto}-{t.nd}] {t.ticket_status}"
                 keyboard.append([InlineKeyboardButton(label, callback_data=str(t.id))])
             
@@ -189,7 +168,6 @@ class BotService:
             db.close()
 
     async def handle_ticket_selection(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """User milih tiket dari list"""
         query = update.callback_query
         await query.answer()
         
@@ -198,11 +176,8 @@ class BotService:
             await query.edit_message_text("❌ Update dibatalkan.")
             return ConversationHandler.END
             
-        # Simpan ticket_id di context
         context.user_data['ticket_id'] = int(data)
         
-        # Tampilkan pilihan Status
-        # Update bahasa gaul dikit
         keyboard = [
             [InlineKeyboardButton("🚧 PROGRESS (Otw Kerjain)", callback_data="PROGRESS")],
             [InlineKeyboardButton("✅ CLOSED (Beres)", callback_data="CLOSED")],
@@ -224,26 +199,53 @@ class BotService:
         
         status = query.data
         if status == "back":
-            # Harusnya balik ke list tiket, tapi biar simple cancel dulu
             await query.edit_message_text("🔙 Kembali ke awal. Ketik /update_ticket lagi.")
             return ConversationHandler.END
             
         context.user_data['new_status'] = status
         
-        # Minta RFO / Keterangan
+        # BARU: Minta Share Location dulu (Anti-Cheat)
         await query.edit_message_text(
             f"📝 **Status dipilih: {status}**\n\n"
-            "Tulis **Keterangan / RFO** pengerjaannya dong:\n"
+            "📍 **Wajib Check-in Lokasi!**\n"
+            "Silakan tap tombol **Attach (📎)** -> pilih **Location** -> **Send current location**.\n\n"
+            "⚠️ Jangan kirim link Google Maps atau teks koordinat manual!"
+        )
+        return self.REQUEST_LOCATION
+
+    async def handle_location_checkin(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle native location attachment"""
+        if not update.message.location:
+             await update.message.reply_text("⚠️ Wajib kirim lokasi via Attachment (📎) Telegram!")
+             return self.REQUEST_LOCATION
+
+        loc = update.message.location
+        # Simpan koordinat di context
+        context.user_data['lat'] = loc.latitude
+        context.user_data['long'] = loc.longitude
+        
+        # Lanjut ke RFO
+        await update.message.reply_text(
+            f"✅ **Lokasi Diterima!**\n"
+            f"Setpoint: {loc.latitude}, {loc.longitude}\n\n"
+            "Sekarang tulis **Keterangan / RFO** pengerjaannya:\n"
             "(Contoh: Kabel putus digigit tikus, sudah disambung aman)"
         )
         return self.INPUT_RFO
 
+    async def reject_fake_location(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Tolak input teks/link maps"""
+        await update.message.reply_text(
+            "⛔ **DILARANG CURANG!** ⛔\n\n"
+            "Mohon jangan ketik koordinat manual atau kirim link Google Maps.\n"
+            "Gunakan fitur **Share Location** asli dari Telegram (tombol 📎)."
+        )
+        return self.REQUEST_LOCATION
+
     async def handle_rfo_input(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """User input text RFO"""
         rfo_text = update.message.text
         context.user_data['rfo'] = rfo_text
         
-        # Minta Bukti Foto
         await update.message.reply_text(
             "📸 **Upload Bukti Foto (Opsional)**\n"
             "Kirim foto perbaikan biar afdol (atau ketik /skip kalo gak ada)."
@@ -251,44 +253,43 @@ class BotService:
         return self.UPLOAD_EVIDENCE
 
     async def handle_evidence_upload(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """User upload foto"""
-        # photo_file = await update.message.photo[-1].get_file()
-        # TODO: Save photo to server/S3
-        
         context.user_data['evidence'] = "Foto diterima" 
         return await self.finalize_update(update, context)
 
     async def skip_evidence(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """User skip upload foto"""
         context.user_data['evidence'] = None
         return await self.finalize_update(update, context)
 
     async def finalize_update(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Simpan semua perubahan ke DB"""
         ticket_id = context.user_data['ticket_id']
         new_status = context.user_data['new_status']
         rfo = context.user_data['rfo']
+        # Ambil lokasi
+        lat = context.user_data.get('lat')
+        long = context.user_data.get('long')
         
         db: Session = SessionLocal()
         try:
             ticket = db.query(NetworkNodeDB).filter(NetworkNodeDB.id == ticket_id).first()
             if ticket:
                 ticket.ticket_status = new_status
-                # Auto logic for status_rfo
                 if new_status == "CLOSED":
                      ticket.status_rfo = "CLOSE"
                 elif new_status == "KENDALA":
                      ticket.status_rfo = "KENDALA"
                 else:
                      ticket.status_rfo = "ON PROGRESS"
-                     
-                ticket.keterangan = f"{ticket.keterangan or ''} | {datetime.now().strftime('%d/%m %H:%M')}: {rfo}"
+                
+                # Format keterangan dengan Lokasi
+                loc_string = f" | [Loc: {lat}, {long}]" if lat else ""
+                ticket.keterangan = f"{ticket.keterangan or ''} | {datetime.now().strftime('%d/%m %H:%M')}: {rfo}{loc_string}"
                 db.commit()
                 
                 await update.message.reply_text(
                     f"✅ **Tiket #{ticket.id} Berhasil Diupdate!**\n\n"
                     f"Status: {new_status}\n"
-                    f"Ket: {rfo}\n\n"
+                    f"RFO: {rfo}\n"
+                    f"Lokasi: {lat}, {long}\n\n"
                     "Lanjut kerja keras bagai kuda! 🐴"
                 )
             else:
@@ -306,5 +307,5 @@ class BotService:
         await update.message.reply_text("❌ Oke cancel. Update dibatalkan.")
         return ConversationHandler.END
 
-# Singleton instance - biar satau object aja yang idup
+# Singleton instance
 bot_service = BotService()
