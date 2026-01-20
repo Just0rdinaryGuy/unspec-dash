@@ -14,6 +14,7 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 class BotService:
     def __init__(self):
+        self.application = None
         if not TELEGRAM_TOKEN:
             logger.error("TELEGRAM_BOT_TOKEN not found in env")
             return
@@ -28,6 +29,10 @@ class BotService:
         Inisialisasi aplikasi bot.
         Biasanya webhook diset di router, tapi ini buat starting engine-nya.
         """
+        if not self.application:
+            logger.warning("Bot belum init karena token ga ada. Skip start.")
+            return
+
         await self.application.initialize()
         await self.application.start()
 
@@ -36,6 +41,9 @@ class BotService:
         Proses update yang masuk dari webhook Telegram.
         Ini yang bikin bot bisa 'denger' chat.
         """
+        if not self.application:
+            return
+
         update = Update.de_json(update_data, self.application.bot)
         await self.application.process_update(update)
 
