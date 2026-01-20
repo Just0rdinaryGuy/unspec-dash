@@ -34,7 +34,7 @@ Thumbs.db
 npm-debug.log*
 
 # Migration scripts (temporary)
-backend/migrate_*.py
+
 backend/check_*.py
 backend/analyze_*.py
 backend/fix_*.py
