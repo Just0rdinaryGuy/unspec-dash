@@ -93,7 +93,7 @@ graph TD
     W_STAT -->|Step 2| W_RFO["Input RFO"]
     W_RFO -->|Step 3| W_MAT["Input Material"]
     W_MAT -->|Step 4| W_FOTO["Upload 9 Foto"]
-    W_FOTO -->|Step 5| W_LOC["Share Live Loc"]
+    W_FOTO -->|Step 5| W_LOC["Share Location (Check-in)"]
     end
     class BOT_API,TG_GROUP,WIZARD,W_STAT,W_RFO,W_MAT,W_FOTO,W_LOC bot;
     class TECH actor;
@@ -112,6 +112,7 @@ graph TD
 
 ### 3.1 Manajemen Tiket 🎫
 *(Sumber: Import Excel & Input Manual)*
+*Auto-Assign ke teknisi ? menarik but need to verify to be implemented🥴*
 
 #### 1. Format Import Excel (.xlsx)
 

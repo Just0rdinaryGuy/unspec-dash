@@ -72,24 +72,26 @@ Deploy Dashboard Monitoring Unspec ke VPS dengan domain: `wargaonlineceria.my.id
 
 ## 1. Database & Models
 - [x] **Finalize WOC Master Documentation (Spec & Plan)** <!-- id: new -->
-- [ ] Create `Team`, `WOCTicket`, `TicketUpdate` models <!-- id: 10 -->
-- [/] Update `User` model with Telegram fields (`chat_id`, `role`) <!-- id: 11 -->
-- [/] Create migration/init script for new tables <!-- id: 12 -->
+- [ ] Create `WOCTicket`, `TicketUpdate` models <!-- id: 10 -->
+- [x] Create `Team` model <!-- id: 10b -->
+- [x] Update `User` model with Telegram fields (`chat_id`, `role`) <!-- id: 11 -->
+- [x] Create migration/init script for new tables <!-- id: 12 -->
 
 ## 2. Backend Bot Integration
-- [ ] Setup `python-telegram-bot` or raw requests structure <!-- id: 13 -->
-- [ ] Create `bot_service.py` (State Machine Logic) <!-- id: 14 -->
-- [ ] Create `routers/bot_telegram.py` (Webhook Handler) <!-- id: 15 -->
-- [ ] Implement "/link" account flow <!-- id: 16 -->
-- [ ] Implement Ticket Update Wizard (Status -> RFO -> Evidence) <!-- id: 17 -->
-- [ ] Implement Realtime Location Listener (Live Location) <!-- id: 23 -->
+- [x] Setup `python-telegram-bot` or raw requests structure <!-- id: 13 -->
+- [x] Create `bot_service.py` (State Machine Logic) <!-- id: 14 -->
+- [x] Create `routers/bot_telegram.py` (Webhook Handler) <!-- id: 15 -->
+- [x] Implement "/link" account flow <!-- id: 16 -->
+- [x] Implement Ticket Update Wizard (Status -> RFO -> Evidence) <!-- id: 17 -->
+- [x] Implement Single Location Check-in (Anti-Cheat: Native Share Config) <!-- id: 23 -->
+- [ ] Implement Daily Attendance (Location + Selfie + Broadcast) <!-- id: 24 -->
 
 ## 3. Frontend WOC Dashboard
 - [ ] Create `/app/woc` layout and navigation <!-- id: 18 -->
-- [ ] Create Team Management Page (Mapping Chat IDs) <!-- id: 19 -->
+- [ ] Create Team Management Page (by Team Leader via Web) <!-- id: 19 -->
 - [ ] Create Ticket Monitoring Page (Real-time updates) <!-- id: 20 -->
 - [ ] Create Realtime Map Dashboard (Leaflet) <!-- id: 24 -->
 
 ## 4. Integration
-- [ ] Deploy Webhook to VPS <!-- id: 21 -->
-- [ ] Test End-to-End Flow (Bot -> DB -> Dashboard) <!-- id: 22 -->
+- [x] Deploy Webhook to VPS <!-- id: 21 -->
+- [x] Test End-to-End Flow (Bot -> DB -> Dashboard) <!-- id: 22 -->

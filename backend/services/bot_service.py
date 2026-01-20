@@ -129,7 +129,7 @@ class BotService:
             db.commit()
             
             await update.message.reply_text(
-                f"✅ **Berhasil!**\n\n"
+                f"✅ Berhasil!\n\n"
                 f"Akun Telegram Anda sekarang terhubung dengan user: `{user.full_name or user.username}`.\n"
                 "Anda akan menerima notifikasi tiket dan tugas di sini."
             )
@@ -144,11 +144,11 @@ class BotService:
         """Cek Chat/Group ID"""
         chat_id = update.effective_chat.id
         chat_title = update.effective_chat.title or "Private Chat"
-        await update.message.reply_text(f"🆔 **ID Chat Ini:** `{chat_id}`\n({chat_title})")
+        await update.message.reply_text(f"ID: `{chat_id}`\n({chat_title})")
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
-            "📋 **Bantuan Bot WOC**\n\n"
+            "📋 Bantuan Bot WOC\n\n"
             "/start - Mulai bot\n"
             "/link <username> - Hubungkan akun\n"
             "/update_ticket - Update status tiket tugas"
@@ -237,9 +237,9 @@ class BotService:
         
         # BARU: Minta Share Location dulu (Anti-Cheat)
         await query.edit_message_text(
-            f"📝 **Status dipilih: {status}**\n\n"
-            "📍 **Wajib Check-in Lokasi!**\n"
-            "Silakan tap tombol **Attach (📎)** -> pilih **Location** -> **Send current location**.\n\n"
+            f"📝 Status dipilih: {status}\n\n"
+            "📍 Wajib Check-in Lokasi!\n"
+            "Silakan tap tombol Attach (📎) -> pilih Location -> Send current location.\n\n"
             "⚠️ Jangan kirim link Google Maps atau teks koordinat manual!"
         )
         return self.REQUEST_LOCATION
@@ -257,9 +257,9 @@ class BotService:
         
         # Lanjut ke RFO
         await update.message.reply_text(
-            f"✅ **Lokasi Diterima!**\n"
+            f"✅ Lokasi Diterima!\n"
             f"Setpoint: {loc.latitude}, {loc.longitude}\n\n"
-            "Sekarang tulis **Keterangan / RFO** pengerjaannya:\n"
+            "Sekarang tulis Keterangan / RFO pengerjaannya:\n"
             "(Contoh: Kabel putus digigit tikus, sudah disambung aman)"
         )
         return self.INPUT_RFO
@@ -267,9 +267,9 @@ class BotService:
     async def reject_fake_location(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Tolak input teks/link maps"""
         await update.message.reply_text(
-            "⛔ **DILARANG CURANG!** ⛔\n\n"
+            "⛔ DILARANG CURANG! ⛔\n\n"
             "Mohon jangan ketik koordinat manual atau kirim link Google Maps.\n"
-            "Gunakan fitur **Share Location** asli dari Telegram (tombol 📎)."
+            "Gunakan fitur Share Location asli dari Telegram (tombol 📎)."
         )
         return self.REQUEST_LOCATION
 
@@ -278,7 +278,7 @@ class BotService:
         context.user_data['rfo'] = rfo_text
         
         await update.message.reply_text(
-            "📸 **Upload Bukti Foto (Opsional)**\n"
+            "📸 Upload Bukti Foto (Opsional)\n"
             "Kirim foto perbaikan biar afdol (atau ketik /skip kalo gak ada)."
         )
         return self.UPLOAD_EVIDENCE
@@ -350,9 +350,9 @@ class BotService:
                 return ConversationHandler.END
             
             await update.message.reply_text(
-                "☀️ **Absensi Harian**\n\n"
-                "📍 **Wajib Share Location!**\n"
-                "Silakan tap tombol **Attach (📎)** -> **Location** -> **Send current location**."
+                "☀️ Absensi Harian\n\n"
+                "📍 Wajib Share Location!\n"
+                "Silakan tap tombol Attach (📎) -> Location -> Send current location."
             )
             return self.ABSEN_LOCATION
             
@@ -369,8 +369,8 @@ class BotService:
         context.user_data['absen_long'] = loc.longitude
         
         await update.message.reply_text(
-            "📸 **Satu langkah lagi!**\n"
-            "Kirim **Foto Selfie** Anda sekarang (Wajib)."
+            "📸 Satu langkah lagi!\n"
+            "Kirim Foto Selfie Anda sekarang (Wajib)."
         )
         return self.ABSEN_SELFIE
 
