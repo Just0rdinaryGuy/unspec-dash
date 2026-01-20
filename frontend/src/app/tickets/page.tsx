@@ -1,19 +1,29 @@
-import DashboardLayout from "@/components/layout/DashboardLayout"
-import { Wrench } from "lucide-react"
+"use client"
 
-export default function StatusTiketPage() {
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import DashboardLayout from "@/components/layout/DashboardLayout"
+
+export default function TicketsPage() {
     return (
         <DashboardLayout>
-            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-4">
-                <div className="p-4 rounded-full bg-accent/20">
-                    <Wrench className="w-12 h-12 text-muted-foreground" />
+            <div className="space-y-6">
+                <div>
+                    <h2 className="text-2xl font-bold tracking-tight">Status Tiket</h2>
+                    <p className="text-muted-foreground">
+                        Halaman ini sedang dalam pengembangan.
+                    </p>
                 </div>
-                <h1 className="text-2xl font-bold">Status Tiket</h1>
-                <p className="text-muted-foreground max-w-md">
-                    Halaman ini sedang dalam pengembangan.
-                    <br />
-                    Fitur ini akan segera hadir untuk memantau status tiket teknisi.
-                </p>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Daftar Tiket</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center justify-center p-8 text-muted-foreground border-2 border-dashed rounded-lg">
+                            Data tiket akan muncul di sini.
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </DashboardLayout>
     )
