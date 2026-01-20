@@ -2,7 +2,7 @@
 Konfigurasi Database buat GPON Network Dashboard
 PostgreSQL buat production (migrasi dari SQLite)
 """
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean, BigInteger, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
@@ -83,6 +83,9 @@ class UserDB(Base):
     full_name = Column(String)
     role = Column(String, default="user")  # 'admin', 'developer', 'user'
     is_active = Column(Boolean, default=True)
+    chat_id = Column(BigInteger, unique=True, nullable=True)
+    telegram_username = Column(String, nullable=True)
+    team_id = Column(Integer, ForeignKey("teams.id"), nullable=True)
     created_at = Column(DateTime, default=wita_now)
     updated_at = Column(DateTime, default=wita_now, onupdate=wita_now)
 
