@@ -1,6 +1,6 @@
 import os
 import logging
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, BotCommand
 from telegram.ext import Application, CommandHandler, ContextTypes, ConversationHandler, CallbackQueryHandler, MessageHandler, filters
 from sqlalchemy.orm import Session
 from database import SessionLocal, UserDB, NetworkNodeDB
@@ -59,6 +59,17 @@ class BotService:
 
         await self.application.initialize()
         await self.application.start()
+        
+        # Set Menu Command di Telegram
+        commands = [
+            BotCommand("start", "Mulai Bot WOC"),
+            BotCommand("link", "Hubungkan Akun Dashboard"),
+            BotCommand("update_ticket", "Update Status & Lapor"),
+            BotCommand("help", "Bantuan Penggunaan")
+        ]
+        await self.application.bot.set_my_commands(commands)
+        logger.info("Bot commands set successfully.")
+        
         self._is_running = True
 
     async def process_update(self, update_data: dict):
