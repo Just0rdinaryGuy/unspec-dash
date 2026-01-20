@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Ticket, CheckCircle, Clock, AlertCircle } from "lucide-react"
+import { ArrowUpRight, CheckCircle2, AlertCircle, Clock } from "lucide-react"
+import { useEffect, useState } from "react"
 import { API_BASE_URL } from "@/lib/constants"
-import { formatNumber } from "@/lib/utils"
+import axios from "axios"
 
 interface TicketSummary {
     total_tickets: number
@@ -16,45 +16,32 @@ interface TicketSummary {
 }
 
 interface TicketStatsProps {
-    stats?: TicketSummary | null
-    loading?: boolean
-    refreshtrigger?: number // Optional trigger to refetch if self-managed (deprecated setup)
+    stats: TicketSummary | null
+    loading: boolean
 }
 
-export default function TicketStats({ stats: passedStats, loading: passedLoading }: TicketStatsProps) {
-    const [localStats, setLocalStats] = useState<TicketSummary | null>(null)
-    const [localLoading, setLocalLoading] = useState(true)
+export default function TicketStats({ stats, loading }: TicketStatsProps) {
+    // Default values safe for rendering
+    const safeStats = stats || {
+        total_tickets: 0,
+        total_open: 0,
+        total_progress: 0,
+        total_close: 0,
+        total_kendala: 0,
+        avg_resolution_time: 0
+    }
 
-    // Use passed props if available, otherwise use local state
-    const displayStats = passedStats !== undefined ? passedStats : localStats
-    const isLoading = passedLoading !== undefined ? passedLoading : localLoading
-
-    useEffect(() => {
-        // Only fetch if no stats passed (legacy mode)
-        if (passedStats === undefined) {
-            fetch(`${API_BASE_URL}/api/tickets/summary`)
-                .then(res => res.json())
-                .then(data => {
-                    setLocalStats(data)
-                    setLocalLoading(false)
-                })
-                .catch(err => {
-                    console.error("Error fetching stats:", err)
-                    setLocalLoading(false)
-                })
-        }
-    }, [passedStats])
-
-    if (isLoading || !displayStats) {
+    if (loading) {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {[1, 2, 3, 4].map(i => (
-                    <Card key={i} className="animate-pulse">
-                        <CardHeader className="pb-2">
-                            <div className="h-4 bg-muted rounded w-1/2"></div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {[...Array(4)].map((_, i) => (
+                    <Card key={i}>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <div className="h-4 w-24 bg-muted animate-pulse rounded" />
                         </CardHeader>
                         <CardContent>
-                            <div className="h-8 bg-muted rounded w-3/4"></div>
+                            <div className="h-8 w-16 bg-muted animate-pulse rounded mb-1" />
+                            <div className="h-3 w-20 bg-muted animate-pulse rounded" />
                         </CardContent>
                     </Card>
                 ))}
@@ -63,60 +50,56 @@ export default function TicketStats({ stats: passedStats, loading: passedLoading
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {/* Total Tickets */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
-                <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                    <CardTitle className="text-base font-medium">Total</CardTitle>
-                    <Ticket className="h-5 w-5 text-primary" />
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Tickets</CardTitle>
+                    <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-3xl font-bold text-primary">
-                        {formatNumber(displayStats.total_tickets)}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">Semua tiket</p>
+                    <div className="text-2xl font-bold">{safeStats.total_tickets.toLocaleString()}</div>
+                    <p className="text-xs text-muted-foreground">
+                        Semua tiket
+                    </p>
                 </CardContent>
             </Card>
 
-            {/* In Progress */}
             <Card>
-                <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                    <CardTitle className="text-base font-medium">Progress</CardTitle>
-                    <Clock className="h-5 w-5 text-blue-600" />
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Progress</CardTitle>
+                    <Clock className="h-4 w-4 text-blue-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                        {formatNumber(displayStats.total_progress)}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">Sedang dikerjakan</p>
+                    <div className="text-2xl font-bold text-blue-500">{safeStats.total_progress.toLocaleString()}</div>
+                    <p className="text-xs text-muted-foreground">
+                        Sedang dikerjakan
+                    </p>
                 </CardContent>
             </Card>
 
-            {/* Closed */}
             <Card>
-                <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                    <CardTitle className="text-base font-medium">Closed</CardTitle>
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Closed</CardTitle>
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                        {formatNumber(displayStats.total_close)}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">Selesai</p>
+                    <div className="text-2xl font-bold text-green-500">{safeStats.total_close.toLocaleString()}</div>
+                    <p className="text-xs text-muted-foreground">
+                        Selesai
+                    </p>
                 </CardContent>
             </Card>
 
-            {/* Kendala */}
             <Card>
-                <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                    <CardTitle className="text-base font-medium">Kendala</CardTitle>
-                    <AlertCircle className="h-5 w-5 text-red-600" />
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Kendala</CardTitle>
+                    <AlertCircle className="h-4 w-4 text-red-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-3xl font-bold text-red-600 dark:text-red-400">
-                        {formatNumber(displayStats.total_kendala)}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">Bermasalah</p>
+                    <div className="text-2xl font-bold text-red-500">{safeStats.total_kendala.toLocaleString()}</div>
+                    <p className="text-xs text-muted-foreground">
+                        Bermasalah
+                    </p>
                 </CardContent>
             </Card>
         </div>

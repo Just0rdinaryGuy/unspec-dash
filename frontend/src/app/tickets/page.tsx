@@ -1,29 +1,85 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import DashboardLayout from "@/components/layout/DashboardLayout"
+import ServiceRecoveryTable from "@/components/tickets/ServiceRecoveryTable"
+import FilterBar from "@/components/data-explorer/FilterBar"
+import TicketStats from "@/components/tickets/TicketStats"
+import { useState, useEffect } from "react"
+import { API_BASE_URL } from "@/lib/constants"
+import axios from "axios"
 
 export default function TicketsPage() {
+    const [filters, setFilters] = useState({
+        status: "",
+        sto: "",
+        sector: "",
+        redamanStatus: "",
+        search: "",
+        date: ""
+    })
+
+    // State buat Stats
+    const [stats, setStats] = useState(null)
+    const [loadingStats, setLoadingStats] = useState(true)
+
+    const fetchStats = async () => {
+        setLoadingStats(true)
+        try {
+            const response = await axios.get(`${API_BASE_URL}/api/tickets/summary`)
+            setStats(response.data)
+        } catch (error) {
+            console.error("Error fetching stats:", error)
+        } finally {
+            setLoadingStats(false)
+        }
+    }
+
+    // Initial Fetch
+    useEffect(() => {
+        fetchStats()
+    }, [])
+
+    // Handler Export Custom
+    const handleCustomExport = () => {
+        // Bikin export URL dengan filter yang aktif
+        const params = new URLSearchParams()
+        if (filters.status && filters.status !== "ALL") params.append("status", filters.status)
+        if (filters.sto && filters.sto !== "ALL") params.append("sto", filters.sto)
+        if (filters.redamanStatus && filters.redamanStatus !== "ALL") params.append("redaman_status", filters.redamanStatus)
+        if (filters.date && filters.date !== "ALL") params.append("date_filter", filters.date)
+        if (filters.search) params.append("search", filters.search)
+
+        // Buka custom export endpoint
+        window.open(`${API_BASE_URL}/api/tickets/service-recovery/export?${params.toString()}`, '_blank')
+    }
+
     return (
         <DashboardLayout>
-            <div className="space-y-6">
+            <div className="space-y-4">
+                {/* Page Header */}
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight">Status Tiket</h2>
+                    <h1 className="text-2xl font-bold">Service Recovery</h1>
                     <p className="text-muted-foreground">
-                        Halaman ini sedang dalam pengembangan.
+                        Ticket tracking & repair logs untuk maintenance jaringan
                     </p>
                 </div>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Daftar Tiket</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex items-center justify-center p-8 text-muted-foreground border-2 border-dashed rounded-lg">
-                            Data tiket akan muncul di sini.
-                        </div>
-                    </CardContent>
-                </Card>
+                {/* Ticket Stats Summary - Controlled Component */}
+                <TicketStats stats={stats} loading={loadingStats} />
+
+                {/* Filter */}
+                <FilterBar
+                    filters={filters}
+                    setFilters={setFilters}
+                    onExport={handleCustomExport}
+                    persistenceKey="service_recovery_bookmarks"
+                />
+
+                {/* Service Recovery Table - Trigger Stats Refresh */}
+                <ServiceRecoveryTable
+                    filters={filters}
+                    onDataChange={fetchStats}
+                />
             </div>
         </DashboardLayout>
     )
