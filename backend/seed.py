@@ -1,7 +1,8 @@
 from database import SessionLocal, UserDB, init_db
+from models.team import TeamDB
+from models.attendance import AttendanceDB
 from services.auth_service import AuthService
 import sys
-
 def seed_admin():
     db = SessionLocal()
     try:
