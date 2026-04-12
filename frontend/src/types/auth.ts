@@ -3,7 +3,7 @@ export interface User {
     username: string;
     nik: string;
     full_name: string;
-    role: 'admin' | 'developer' | 'user' | 'teknisi';
+    role: 'leader' | 'developer' | 'helpdesk' | 'teknisi';
     is_active: boolean;
 }
 

@@ -46,7 +46,7 @@ export default function UserManagement() {
         nik: "",
         full_name: "",
         password: "",
-        role: "user",
+        role: "helpdesk",
         is_active: true
     })
     const [error, setError] = useState("")
@@ -138,7 +138,7 @@ export default function UserManagement() {
             nik: "",
             full_name: "",
             password: "",
-            role: "user",
+            role: "helpdesk",
             is_active: true
         })
         setError("")
@@ -163,7 +163,7 @@ export default function UserManagement() {
         u.full_name?.toLowerCase().includes(search.toLowerCase())
     )
 
-    if (currentUser?.role !== "admin" && currentUser?.role !== "developer") {
+    if (currentUser?.role !== "leader" && currentUser?.role !== "developer") {
         return <div className="p-8 text-center text-red-500">Access Denied. Admin or Developer only.</div>
     }
 
@@ -251,11 +251,11 @@ export default function UserManagement() {
                                         <SelectValue placeholder="Select role" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="admin">Admin</SelectItem>
+                                        <SelectItem value="leader">Leader</SelectItem>
                                         {currentUser?.role === 'developer' && (
                                             <SelectItem value="developer">Developer</SelectItem>
                                         )}
-                                        <SelectItem value="user">User</SelectItem>
+                                        <SelectItem value="helpdesk">Helpdesk</SelectItem>
                                         <SelectItem value="teknisi">Teknisi</SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -312,7 +312,7 @@ export default function UserManagement() {
                                     <TableCell>{user.nik}</TableCell>
                                     <TableCell>
                                         <Badge variant={
-                                            user.role === 'admin' ? 'default' :
+                                            user.role === 'leader' ? 'default' :
                                                 user.role === 'developer' ? 'secondary' : 
                                                 user.role === 'teknisi' ? 'default' : 'outline'
                                         }>

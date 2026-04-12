@@ -90,7 +90,7 @@ export default function SidebarNav({ onNavigate }: SidebarNavProps) {
             ))}
 
             <div className="pt-4 mt-4 border-t border-border">
-                {(user?.role === 'admin' || user?.role === 'developer') ? (
+                {(user?.role === 'leader' || user?.role === 'developer') ? (
                     <Link
                         href="/users"
                         onClick={onNavigate}

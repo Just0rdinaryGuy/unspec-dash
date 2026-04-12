@@ -36,7 +36,7 @@ async def get_current_active_user(current_user: UserDB = Depends(get_current_use
     return current_user
 
 async def get_admin_user(current_user: UserDB = Depends(get_current_active_user)):
-    if current_user.role not in ["admin", "developer"]:
+    if current_user.role not in ["leader", "developer"]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, 
             detail="The user doesn't have enough privileges"

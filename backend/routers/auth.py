@@ -87,7 +87,7 @@ async def register(
         nik=user.nik,
         password_hash=hashed_password,
         full_name=user.full_name,
-        role="user",
+        role="helpdesk",
         is_active=False # User harus diapprove admin dulu
     )
     db.add(new_user)

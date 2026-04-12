@@ -44,7 +44,7 @@ export default function RegisterPage() {
                     nik: formData.nik,
                     full_name: formData.full_name,
                     password: formData.password,
-                    role: "user", // Default role
+                    role: "helpdesk", // Default role
                     is_active: true
                 }),
             })
