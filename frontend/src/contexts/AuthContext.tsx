@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (res.ok) {
                 const userData = await res.json();
                 setUser(userData);
+                return userData;
             } else {
                 logout();
             }
@@ -66,8 +67,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const login = async (token: string) => {
         setIsLoading(true);
         localStorage.setItem('token', token);
-        await fetchUser(token);
-        router.push('/');
+        const userData = await fetchUser(token);
+        if (userData?.role === 'teknisi') {
+            router.push('/tickets');
+        } else {
+            router.push('/');
+        }
     };
 
     const logout = () => {

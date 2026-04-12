@@ -45,9 +45,20 @@ export default function SidebarNav({ onNavigate }: SidebarNavProps) {
         }))
     }
 
+    // Filter Navigation Groups based on User Role
+    const filteredNavGroups = NAV_GROUPS.map(group => {
+        if (user?.role === 'teknisi') {
+            return {
+                ...group,
+                items: group.items.filter(item => item.id === 'tickets')
+            }
+        }
+        return group
+    }).filter(group => group.items.length > 0)
+
     return (
         <nav className="flex-1 p-4 space-y-4">
-            {NAV_GROUPS.map((group) => (
+            {filteredNavGroups.map((group) => (
                 <div key={group.title} className="space-y-1">
                     <button
                         onClick={() => toggleGroup(group.title)}
