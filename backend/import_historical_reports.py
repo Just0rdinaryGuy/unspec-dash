@@ -40,10 +40,18 @@ DATABASE_URL = os.getenv(
 )
 
 # === KONFIGURASI FOLDER ===
+# Coba cari di dalam folder yang sama dulu (kalo di-run di dalam container)
+# lalu fallback ke parent folder (kalo run lokal di luar container)
 SCRIPT_DIR = Path(__file__).parent
+
+def get_folder_path(folder_name: str) -> Path:
+    if (SCRIPT_DIR / folder_name).exists():
+        return SCRIPT_DIR / folder_name
+    return SCRIPT_DIR.parent / folder_name
+
 DATA_FOLDERS = {
-    "FEB 2026": SCRIPT_DIR.parent / "FEB 2026",
-    "MAR 2026": SCRIPT_DIR.parent / "MAR 2026",
+    "FEB 2026": get_folder_path("FEB 2026"),
+    "MAR 2026": get_folder_path("MAR 2026"),
 }
 
 # Target default saldo unspec
