@@ -81,7 +81,7 @@ class UserDB(Base):
     nik = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
     full_name = Column(String)
-    role = Column(String, default="user")  # 'admin', 'developer', 'user'
+    role = Column(String, default="user")  # 'admin', 'developer', 'user', 'teknisi'
     is_active = Column(Boolean, default=True)
     chat_id = Column(BigInteger, unique=True, nullable=True)
     telegram_username = Column(String, nullable=True)

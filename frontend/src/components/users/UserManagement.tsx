@@ -256,6 +256,7 @@ export default function UserManagement() {
                                             <SelectItem value="developer">Developer</SelectItem>
                                         )}
                                         <SelectItem value="user">User</SelectItem>
+                                        <SelectItem value="teknisi">Teknisi</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -312,7 +313,8 @@ export default function UserManagement() {
                                     <TableCell>
                                         <Badge variant={
                                             user.role === 'admin' ? 'default' :
-                                                user.role === 'developer' ? 'secondary' : 'outline'
+                                                user.role === 'developer' ? 'secondary' : 
+                                                user.role === 'teknisi' ? 'default' : 'outline'
                                         }>
                                             {user.role}
                                         </Badge>
