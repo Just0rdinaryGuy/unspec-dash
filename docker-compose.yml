@@ -46,7 +46,7 @@ services:
     ports:
       - "3005:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://100.71.35.106:8005
+      - NEXT_PUBLIC_API_URL=http://100.121.193.23:8005
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -63,7 +63,7 @@ services:
     env_file:
       - .env
     environment:
-      - CORS_ORIGINS=http://localhost:3000,http://100.71.35.106:3005,http://100.71.35.106:3000
+      - CORS_ORIGINS=http://localhost:3000,http://100.121.193.23:3005,http://100.121.193.23:3000
       - DATABASE_URL=postgresql://gpon_user:gpon_secure_pass_2026@postgres:5432/gpon_network
     volumes:
       - ./backend:/app
