@@ -50,12 +50,24 @@ export const SPEC_RANGE = {
     MAX: -13.5
 }
 
-// API Base URL
-export const API_BASE_URL = typeof window !== 'undefined'
-    ? (window.location.port === '3005' || window.location.port === '3000'
-        ? `${window.location.protocol}//${window.location.hostname}:8005`
-        : `${window.location.protocol}//${window.location.hostname}`)
-    : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+// API Base URL - dievaluasi lazy saat runtime di browser
+export function getApiBaseUrl(): string {
+    if (typeof window !== 'undefined') {
+        const port = window.location.port
+        if (port === '3005' || port === '3000') {
+            return `${window.location.protocol}//${window.location.hostname}:8005`
+        }
+        return `${window.location.protocol}//${window.location.hostname}`
+    }
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+}
+
+// Kompatibel mundur - variabel ini TIDAK BOLEH dipakai di server-side
+// Untuk file "use client", ini aman karena dievaluasi di browser
+export let API_BASE_URL = ''
+if (typeof window !== 'undefined') {
+    API_BASE_URL = getApiBaseUrl()
+}
 
 // Menu navigation items
 export const NAV_ITEMS = [

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { API_BASE_URL } from "@/lib/constants"
+import { API_BASE_URL, getApiBaseUrl } from "@/lib/constants"
 import { AlertCircle, Loader2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
@@ -24,7 +24,7 @@ export default function LoginPage() {
         setLoading(true)
 
         try {
-            const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+            const res = await fetch(`${getApiBaseUrl()}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",

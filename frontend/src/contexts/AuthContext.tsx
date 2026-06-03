@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { User, LoginResponse } from '../types/auth';
-import { API_BASE_URL } from '@/lib/constants';
+import { API_BASE_URL, getApiBaseUrl } from '@/lib/constants';
 
 interface AuthContextType {
     user: User | null;
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const fetchUser = async (token: string) => {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/users/me`, {
+            const res = await fetch(`${getApiBaseUrl()}/api/users/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
