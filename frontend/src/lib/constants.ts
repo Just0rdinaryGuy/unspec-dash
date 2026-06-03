@@ -51,7 +51,11 @@ export const SPEC_RANGE = {
 }
 
 // API Base URL
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+export const API_BASE_URL = typeof window !== 'undefined'
+    ? (window.location.port === '3005' || window.location.port === '3000'
+        ? `${window.location.protocol}//${window.location.hostname}:8005`
+        : `${window.location.protocol}//${window.location.hostname}`)
+    : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
 
 // Menu navigation items
 export const NAV_ITEMS = [
