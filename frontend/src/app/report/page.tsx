@@ -69,6 +69,7 @@ export default function ReportPage() {
 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+    const [uploadingBulk, setUploadingBulk] = useState(false)
 
     // Set mounted state (client-side only)
     useEffect(() => {
@@ -160,6 +161,42 @@ export default function ReportPage() {
         }
     }
 
+    const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (!files || files.length === 0) return
+
+        setUploadingBulk(true)
+        const formData = new FormData()
+        for (let i = 0; i < files.length; i++) {
+            formData.append("files", files[i])
+        }
+
+        try {
+            const token = localStorage.getItem("token")
+            const res = await fetch(`${API_BASE_URL}/api/reports/upload-bulk`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
+            })
+
+            const result = await res.json()
+            if (res.ok && result.status === "success") {
+                alert(`Berhasil mengimpor ${result.imported_count} file laporan!${result.failed_count > 0 ? `\nGagal: ${result.failed_count} file.` : ""}`)
+                fetchReports()
+            } else {
+                alert(`Gagal mengimpor file: ${result.detail || "Terjadi kesalahan"}`)
+            }
+        } catch (error) {
+            console.error("Bulk upload error", error)
+            alert("Terjadi kesalahan saat mengunggah file.")
+        } finally {
+            setUploadingBulk(false)
+            e.target.value = ""
+        }
+    }
+
     // Prepare data for chart (format dates)
     const chartData = data.map(item => ({
         ...item,
@@ -209,10 +246,31 @@ export default function ReportPage() {
                         {/* Actions */}
                         {/* Refresh button removed as per user request (Auto-update enabled) */}
 
-                        <Button variant="secondary" onClick={handleExportExcel}>
+                        <Button variant="secondary" onClick={handleExportExcel} disabled={uploadingBulk}>
                             <FileSpreadsheet className="mr-2 h-4 w-4" />
                             Export Excel
                         </Button>
+                        <Button variant="outline" onClick={() => document.getElementById("bulk-upload-input")?.click()} disabled={uploadingBulk}>
+                            {uploadingBulk ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Uploading...
+                                </>
+                            ) : (
+                                <>
+                                    <Upload className="mr-2 h-4 w-4" />
+                                    Upload Bulk
+                                </>
+                            )}
+                        </Button>
+                        <input
+                            id="bulk-upload-input"
+                            type="file"
+                            multiple
+                            accept=".xlsx,.xls"
+                            className="hidden"
+                            onChange={handleBulkUpload}
+                        />
                     </div>
                 </div>
 
