@@ -15,8 +15,13 @@ from fastapi import APIRouter, Query, Depends
 from models.ticket import ServiceTicket, TicketSummary, ServiceTicketPage
 from database import get_db
 from services.real_data_service import RealDataService
+from middleware.auth_middleware import get_current_active_user
 
-router = APIRouter(prefix="/api/tickets", tags=["tickets"])
+router = APIRouter(
+    prefix="/api/tickets",
+    tags=["tickets"],
+    dependencies=[Depends(get_current_active_user)]
+)
 
 @router.get("/service-recovery", response_model=ServiceTicketPage)
 def get_service_recovery_tickets(

@@ -112,9 +112,12 @@ def hitung_saldo_dari_sheet(file_path: str):
     except:
         return None
 
+from middleware.auth_middleware import get_current_active_user
+
 router = APIRouter(
     prefix="/api/reports",
-    tags=["Reports"]
+    tags=["Reports"],
+    dependencies=[Depends(get_current_active_user)]
 )
 
 @router.get("/", response_model=List[DailyReportResponse])

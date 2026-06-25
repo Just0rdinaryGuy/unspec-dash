@@ -22,6 +22,52 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Middleware Pembatasan Waktu Operasional (08:00 - 22:00 WITA)
+from fastapi import Request
+from fastapi.responses import JSONResponse
+from utils.security_helpers import is_within_operational_hours
+from services.auth_service import AuthService
+
+@app.middleware("http")
+async def check_operational_hours(request: Request, call_next):
+    path = request.url.path
+    
+    # Path yang dikecualikan
+    excluded_paths = [
+        "/",
+        "/health",
+        "/docs",
+        "/redoc",
+        "/openapi.json",
+        "/api/auth/login",
+        "/api/auth/login/json",
+        "/api/auth/register"
+    ]
+    
+    # Webhook Bot Telegram dan path publik tidak dibatasi waktu
+    if path.startswith("/api/bot") or path in excluded_paths:
+        return await call_next(request)
+        
+    # Check jam operasional WITA
+    if not is_within_operational_hours():
+        # Cek apakah user adalah developer (bypass)
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+            try:
+                payload = AuthService.decode_token(token)
+                if payload and payload.get("role") == "developer":
+                    return await call_next(request)
+            except Exception:
+                pass
+                
+        return JSONResponse(
+            status_code=403,
+            content={"detail": "TIME_RESTRICTED: Aplikasi WOC hanya dapat diakses pada jam 08:00 - 22:00 WITA."}
+        )
+        
+    return await call_next(request)
+
 from database import engine, Base
 from models.team import TeamDB 
 from models.attendance import AttendanceDB # Register AttendanceDB

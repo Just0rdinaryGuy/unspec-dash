@@ -9,8 +9,13 @@ from models.network import NetworkSummary, HVCDistribution, StatusKurma, ODPInfo
 from services.real_data_service import RealDataService
 from database import get_db
 from sqlalchemy.orm import Session
+from middleware.auth_middleware import get_current_active_user
 
-router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
+router = APIRouter(
+    prefix="/api/dashboard",
+    tags=["dashboard"],
+    dependencies=[Depends(get_current_active_user)]
+)
 
 
 @router.get("/summary", response_model=NetworkSummary)

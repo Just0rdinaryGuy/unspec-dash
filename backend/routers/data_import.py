@@ -12,7 +12,13 @@ from datetime import datetime
 from database import get_db
 # Import dipindahin ke dalam function biar ga circular dependency
 
-router = APIRouter(prefix="/api/data-import", tags=["data-import"])
+from middleware.auth_middleware import get_current_active_user
+
+router = APIRouter(
+    prefix="/api/data-import",
+    tags=["data-import"],
+    dependencies=[Depends(get_current_active_user)]
+)
 
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 

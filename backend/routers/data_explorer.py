@@ -10,8 +10,13 @@ from models.network import NetworkNode
 from services.real_data_service import RealDataService
 from database import get_db
 from datetime import datetime
+from middleware.auth_middleware import get_current_active_user
 
-router = APIRouter(prefix="/api/data-explorer", tags=["data-explorer"])
+router = APIRouter(
+    prefix="/api/data-explorer",
+    tags=["data-explorer"],
+    dependencies=[Depends(get_current_active_user)]
+)
 
 @router.get("/nodes")
 def get_network_nodes(
