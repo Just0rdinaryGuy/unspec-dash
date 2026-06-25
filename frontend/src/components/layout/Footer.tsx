@@ -11,7 +11,7 @@ export default function Footer() {
                 {/* Social Icons */}
                 <div className="flex items-center gap-4">
                     <Link
-                        href="https://github.com/Just0rdinaryGuy"
+                        href=""
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
@@ -20,7 +20,7 @@ export default function Footer() {
                         <span className="sr-only">GitHub</span>
                     </Link>
                     <Link
-                        href="https://t.me/exprimb"
+                        href=""
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
@@ -29,7 +29,7 @@ export default function Footer() {
                         <span className="sr-only">Telegram</span>
                     </Link>
                     <Link
-                        href="https://just0rdinaryguy.github.io/-/"
+                        href=""
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
@@ -41,7 +41,7 @@ export default function Footer() {
 
                 <div className="text-center text-xs text-muted-foreground/80">
                     <p>
-                        &copy; {currentYear > 2026 ? `2026 - ${currentYear}` : "2026"} Web WOC (Warga Online Ceria) by Just0rdinaryGuy.
+                        &copy; {currentYear > 2026 ? `2026 - ${currentYear}` : "2026"} Web WOC (Warga Online Ceria) by Arya Dharma
                     </p>
                 </div>
             </div>
