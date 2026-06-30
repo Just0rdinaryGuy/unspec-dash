@@ -51,12 +51,17 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
     const [distance, setDistance] = useState<number | null>(null);
     
     // State Bypass Keamanan untuk mencegah interval/listener menimpa status blokir
-    const [bypassActive, setBypassActive] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return sessionStorage.getItem('bypass_security') === 'true';
+    const [bypassActive, setBypassActive] = useState(false);
+    
+    // Sinkronisasi status bypass dari sessionStorage setelah komponen terpasang di klien (mencegah bug SSR Next.js)
+    useEffect(() => {
+        const isBypassed = sessionStorage.getItem('bypass_security') === 'true';
+        if (isBypassed) {
+            setBypassActive(true);
+            setTimeBlocked(false);
+            setLocationBlocked(false);
         }
-        return false;
-    });
+    }, []);
     
     // 1. Live Clock & Time-based check
     useEffect(() => {
