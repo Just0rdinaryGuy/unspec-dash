@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
+from dotenv import load_dotenv
+
+# Load file .env (penting untuk mode bare-metal non-docker)
+load_dotenv()
 
 # Import router yang udah kita bikin
 from routers import dashboard, data_explorer, tickets, data_import, auth, users, report, bot_telegram
