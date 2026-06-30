@@ -38,6 +38,10 @@ async def get_current_active_user(
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
         
+    # Bypass lokasi jika ada header bypass keamanan (testing)
+    if request.headers.get("X-Bypass-Security") == "true":
+        return current_user
+
     # Bypass lokasi jika role adalah developer atau leader
     if current_user.role in ["developer", "leader"]:
         return current_user

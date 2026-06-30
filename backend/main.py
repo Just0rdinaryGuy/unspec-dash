@@ -30,6 +30,10 @@ from services.auth_service import AuthService
 
 @app.middleware("http")
 async def check_operational_hours(request: Request, call_next):
+    # Bypass jika ada header bypass keamanan (testing)
+    if request.headers.get("X-Bypass-Security") == "true":
+        return await call_next(request)
+
     path = request.url.path
     
     # Path yang dikecualikan

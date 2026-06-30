@@ -87,7 +87,7 @@ def ekstrak_tanggal_dari_nama_file(nama_file: str):
     Contoh: 'LAPORAN UNSPEC HD 01 FEBRUARI 2026.xlsx' -> date(2026, 2, 1)
     """
     try:
-        pola = r"HD\s+(\d{1,2})\s+(\w+)\s+(\d{4})"
+        pola = r"(?:HD|TEKNISI).*?(\d{1,2})\s+(\w+)\s+(\d{4})"
         cocok = re.search(pola, nama_file, re.IGNORECASE)
         if not cocok:
             return None
@@ -105,6 +105,7 @@ def ekstrak_tanggal_dari_nama_file(nama_file: str):
     except Exception as e:
         print(f"  [!] Gagal parse tanggal: {e}")
         return None
+
 
 
 def cari_sheet_hi(workbook):

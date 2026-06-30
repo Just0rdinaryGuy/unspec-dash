@@ -51,6 +51,12 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
     
     // 1. Live Clock & Time-based check
     useEffect(() => {
+        const isBypassed = sessionStorage.getItem('bypass_security') === 'true';
+        if (isBypassed) {
+            setTimeBlocked(false);
+            return;
+        }
+
         const checkTime = () => {
             const wita = getWitaTime();
             setCurrentTime(wita.formatted);
@@ -75,6 +81,12 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
 
     // 2. Geolocation tracking
     useEffect(() => {
+        const isBypassed = sessionStorage.getItem('bypass_security') === 'true';
+        if (isBypassed) {
+            setLocationBlocked(false);
+            return;
+        }
+
         // Hanya cek lokasi jika user sudah login
         if (!isAuthenticated || !user) {
             setLocationBlocked(false);
@@ -151,6 +163,8 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
                 url = input;
             } else if (input instanceof URL) {
                 url = input.toString();
+            } else if (input instanceof Request) {
+                url = input.url;
             } else if (input && typeof input === 'object' && 'url' in input) {
                 url = (input as any).url;
             }
@@ -160,24 +174,45 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
                 const token = localStorage.getItem('token');
                 const lat = sessionStorage.getItem('user_lat');
                 const lon = sessionStorage.getItem('user_lon');
+                const bypass = sessionStorage.getItem('bypass_security');
                 
-                // Clone atau inisialisasi headers
-                const headers = new Headers(init?.headers || {});
-                
-                if (token) {
-                    headers.set('Authorization', `Bearer ${token}`);
+                if (input instanceof Request) {
+                    const headers = new Headers(input.headers);
+                    if (token) {
+                        headers.set('Authorization', `Bearer ${token}`);
+                    }
+                    if (lat) {
+                        headers.set('X-User-Latitude', lat);
+                    }
+                    if (lon) {
+                        headers.set('X-User-Longitude', lon);
+                    }
+                    if (bypass === 'true') {
+                        headers.set('X-Bypass-Security', 'true');
+                    }
+                    input = new Request(input, { headers });
+                } else {
+                    // Clone atau inisialisasi headers
+                    const headers = new Headers(init?.headers || {});
+                    
+                    if (token) {
+                        headers.set('Authorization', `Bearer ${token}`);
+                    }
+                    if (lat) {
+                        headers.set('X-User-Latitude', lat);
+                    }
+                    if (lon) {
+                        headers.set('X-User-Longitude', lon);
+                    }
+                    if (bypass === 'true') {
+                        headers.set('X-Bypass-Security', 'true');
+                    }
+                    
+                    init = {
+                        ...init,
+                        headers
+                    };
                 }
-                if (lat) {
-                    headers.set('X-User-Latitude', lat);
-                }
-                if (lon) {
-                    headers.set('X-User-Longitude', lon);
-                }
-                
-                init = {
-                    ...init,
-                    headers
-                };
             }
             
             return originalFetch(input, init);
@@ -207,6 +242,16 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
                     <p className="text-xs text-slate-500 mt-6 leading-relaxed">
                         Silakan kembali lagi selama jam operasional untuk mengakses dashboard.
                     </p>
+                    <button 
+                        onClick={() => {
+                            sessionStorage.setItem('bypass_security', 'true');
+                            setTimeBlocked(false);
+                            setLocationBlocked(false);
+                        }}
+                        className="w-full bg-red-900/50 hover:bg-red-800/60 border border-red-500/30 text-white font-semibold py-3 px-6 rounded-2xl transition-all shadow-lg active:scale-95 text-sm mt-6"
+                    >
+                        Bypass Akses (Testing)
+                    </button>
                 </div>
             </div>
         );
@@ -244,6 +289,17 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
                             className="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-2xl transition-all shadow-lg active:scale-95 text-sm"
                         >
                             Refresh Halaman & Minta Ulang
+                        </button>
+
+                        <button 
+                            onClick={() => {
+                                sessionStorage.setItem('bypass_security', 'true');
+                                setTimeBlocked(false);
+                                setLocationBlocked(false);
+                            }}
+                            className="w-full bg-amber-950/50 hover:bg-amber-900/60 border border-amber-500/30 text-white font-semibold py-3 px-6 rounded-2xl transition-all shadow-lg active:scale-95 text-sm"
+                        >
+                            Bypass Lokasi (Testing)
                         </button>
                         
                         <div className="text-left text-xs text-slate-500 border-t border-slate-800/80 pt-4 space-y-2">

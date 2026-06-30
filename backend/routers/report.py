@@ -19,7 +19,7 @@ BULAN_MAP = {
 
 def ekstrak_tanggal_dari_nama_file(nama_file: str):
     try:
-        pola = r"HD\s+(\d{1,2})\s+(\w+)\s+(\d{4})"
+        pola = r"(?:HD|TEKNISI).*?(\d{1,2})\s+(\w+)\s+(\d{4})"
         cocok = re.search(pola, nama_file, re.IGNORECASE)
         if not cocok:
             return None
@@ -35,6 +35,32 @@ def ekstrak_tanggal_dari_nama_file(nama_file: str):
         return date(tahun, bulan, tanggal)
     except:
         return None
+
+def ekstrak_info_dari_nama_file(nama_file: str):
+    try:
+        # Cari role hd atau teknisi
+        pola_role = r"(hd|teknisi)"
+        cocok_role = re.search(pola_role, nama_file, re.IGNORECASE)
+        role = cocok_role.group(1).lower() if cocok_role else "hd"
+
+        # Cari tanggal
+        pola_tgl = r"(?:hd|teknisi).*?(\d{1,2})\s+(\w+)\s+(\d{4})"
+        cocok_tgl = re.search(pola_tgl, nama_file, re.IGNORECASE)
+        if not cocok_tgl:
+            return None, None
+
+        tanggal = int(cocok_tgl.group(1))
+        bulan_str = cocok_tgl.group(2).upper()
+        tahun = int(cocok_tgl.group(3))
+
+        bulan = BULAN_MAP.get(bulan_str)
+        if not bulan:
+            return None, None
+
+        return date(tahun, bulan, tanggal), role
+    except:
+        return None, None
+
 
 def cari_sheet_hi(workbook):
     for nama_sheet in workbook.sheetnames:
@@ -264,7 +290,7 @@ async def upload_bulk_reports(
     db: Session = Depends(get_db)
 ):
     """
-    Upload bulk Excel files laporan harian (HD) dan simpan ke database.
+    Upload bulk Excel files laporan harian (HD & Teknisi) dan simpan ke database.
     """
     if not files:
         raise HTTPException(status_code=400, detail="Tidak ada file yang diunggah")
@@ -273,53 +299,84 @@ async def upload_bulk_reports(
     imported_list = []
     errors_list = []
 
-    # Sort files to process revisions (2) last
-    def get_sort_key(f):
-        tgl = ekstrak_tanggal_dari_nama_file(f.filename)
-        has_suffix = 1 if "(2)" in f.filename else 0
-        return (tgl or date(1970, 1, 1), has_suffix, f.filename)
-        
-    sorted_files = sorted(files, key=get_sort_key)
+    # Group files by date and role, prioritizing revisions (2)
+    grouped_files = {}  # date -> {role: (has_revision, file)}
 
-    for file in sorted_files:
+    for file in files:
         if not file.filename.endswith(('.xlsx', '.xls')):
             errors_list.append(f"{file.filename} bukan file Excel")
             continue
 
-        # Simpan file sementara
-        suffix = os.path.splitext(file.filename)[1]
-        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
+        tanggal, role = ekstrak_info_dari_nama_file(file.filename)
+        if not tanggal:
+            errors_list.append(f"{file.filename}: Nama file tidak sesuai format (contoh: LAPORAN UNSPEC HD 1 APRIL 2026.xlsx)")
+            continue
+
+        has_suffix = "(2)" in file.filename
+
+        if tanggal not in grouped_files:
+            grouped_files[tanggal] = {}
+
+        if role not in grouped_files[tanggal]:
+            grouped_files[tanggal][role] = (has_suffix, file)
+        else:
+            # Overwrite only if new file is a revision (2) or existing is not a revision
+            existing_suffix, _ = grouped_files[tanggal][role]
+            if has_suffix and not existing_suffix:
+                grouped_files[tanggal][role] = (has_suffix, file)
+
+    for tanggal, roles_dict in sorted(grouped_files.items()):
+        total_saldo_sum = 0
+        close_sum = 0
+        saldo_lama_sum = 0
+        processed_files = []
+
+        for role, (has_suffix, file) in roles_dict.items():
+            # Simpan file sementara
+            suffix = os.path.splitext(file.filename)[1]
+            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
+            try:
+                content = await file.read()
+                temp_file.write(content)
+                temp_file.close()
+
+                # Hitung data dari sheet
+                data_saldo = hitung_saldo_dari_sheet(temp_file.name)
+                if not data_saldo:
+                    errors_list.append(f"{file.filename}: Gagal membaca data sheet unspec")
+                    continue
+
+                total_saldo_sum += data_saldo["total_saldo"]
+                close_sum += data_saldo["close"]
+                saldo_lama_sum += data_saldo["saldo_lama"]
+                processed_files.append(file.filename)
+
+            except Exception as e:
+                errors_list.append(f"{file.filename}: Error {str(e)}")
+            finally:
+                try:
+                    os.unlink(temp_file.name)
+                except:
+                    pass
+
+        if not processed_files:
+            continue
+
+        # Update atau Insert ke Database
         try:
-            content = await file.read()
-            temp_file.write(content)
-            temp_file.close()
-
-            # Parse tanggal dari nama file
-            tanggal = ekstrak_tanggal_dari_nama_file(file.filename)
-            if not tanggal:
-                errors_list.append(f"{file.filename}: Nama file tidak sesuai format (contoh: LAPORAN UNSPEC HD 1 APRIL 2026.xlsx)")
-                continue
-
-            # Hitung data dari sheet
-            data_saldo = hitung_saldo_dari_sheet(temp_file.name)
-            if not data_saldo:
-                errors_list.append(f"{file.filename}: Gagal membaca data sheet unspec")
-                continue
-
-            # Update atau Insert ke Database
             report = db.query(DailyReportDB).filter(DailyReportDB.date == tanggal).first()
             if report:
-                report.total_saldo = data_saldo["total_saldo"]
-                report.close = data_saldo["close"]
-                report.saldo_lama = data_saldo["saldo_lama"]
+                report.total_saldo = total_saldo_sum
+                report.close = close_sum
+                report.saldo_lama = saldo_lama_sum
                 report.target = TARGET_DEFAULT
                 action = "updated"
             else:
                 report = DailyReportDB(
                     date=tanggal,
-                    total_saldo=data_saldo["total_saldo"],
-                    close=data_saldo["close"],
-                    saldo_lama=data_saldo["saldo_lama"],
+                    total_saldo=total_saldo_sum,
+                    close=close_sum,
+                    saldo_lama=saldo_lama_sum,
                     target=TARGET_DEFAULT,
                 )
                 db.add(report)
@@ -327,22 +384,17 @@ async def upload_bulk_reports(
 
             db.commit()
             imported_list.append({
-                "filename": file.filename,
+                "filenames": processed_files,
                 "date": tanggal.isoformat(),
-                "total_saldo": data_saldo["total_saldo"],
-                "close": data_saldo["close"],
-                "saldo_lama": data_saldo["saldo_lama"],
+                "total_saldo": total_saldo_sum,
+                "close": close_sum,
+                "saldo_lama": saldo_lama_sum,
                 "action": action
             })
 
         except Exception as e:
             db.rollback()
-            errors_list.append(f"{file.filename}: Error {str(e)}")
-        finally:
-            try:
-                os.unlink(temp_file.name)
-            except:
-                pass
+            errors_list.append(f"Database error for date {tanggal.isoformat()}: {str(e)}")
 
     return {
         "status": "success" if len(imported_list) > 0 else "failed",
@@ -351,3 +403,4 @@ async def upload_bulk_reports(
         "imported": imported_list,
         "errors": errors_list
     }
+
