@@ -14,6 +14,38 @@ show_header() {
     echo -e "${CYAN}=================================================${NC}"
 }
 
+start_pm2_service() {
+    local name=$1
+    local cmd=$2
+    local dir=$3
+    
+    if npx pm2 describe "$name" > /dev/null 2>&1; then
+        echo -e "${GREEN}Memulai kembali $name...${NC}"
+        npx pm2 start "$name"
+    else
+        echo -e "${YELLOW}Mendaftarkan dan memulai $name...${NC}"
+        cd "$dir" || return
+        npx pm2 start "$cmd" --name "$name"
+        cd - > /dev/null || return
+    fi
+}
+
+restart_pm2_service() {
+    local name=$1
+    local cmd=$2
+    local dir=$3
+    
+    if npx pm2 describe "$name" > /dev/null 2>&1; then
+        echo -e "${GREEN}Mereset dan merestart $name...${NC}"
+        npx pm2 restart "$name" --update-env
+    else
+        echo -e "${YELLOW}Mendaftarkan dan memulai $name...${NC}"
+        cd "$dir" || return
+        npx pm2 start "$cmd" --name "$name"
+        cd - > /dev/null || return
+    fi
+}
+
 while true; do
     show_header
     echo -e "${YELLOW}MANAJEMEN SERVER:${NC}"
@@ -45,8 +77,8 @@ while true; do
         1)
             echo -e "${GREEN}Menyalakan database (Docker) & apps (PM2)...${NC}"
             docker compose up -d postgres
-            npx pm2 start gpon-backend || true
-            npx pm2 start gpon-frontend || true
+            start_pm2_service "gpon-backend" "./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8005" "backend"
+            start_pm2_service "gpon-frontend" "npm run start -- -p 3005" "frontend"
             ;;
         2)
             echo -e "${RED}Mematikan database (Docker) & apps (PM2)...${NC}"
@@ -57,7 +89,8 @@ while true; do
         3)
             echo -e "${CYAN}Memulai ulang seluruh sistem...${NC}"
             docker compose restart postgres
-            npx pm2 restart gpon-backend gpon-frontend --update-env
+            restart_pm2_service "gpon-backend" "./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8005" "backend"
+            restart_pm2_service "gpon-frontend" "npm run start -- -p 3005" "frontend"
             ;;
         4)
             echo -e "${CYAN}--- Status Database (Docker) ---${NC}"
@@ -67,11 +100,11 @@ while true; do
             ;;
         R1|r1)
             echo -e "${GREEN}Memulai ulang Backend (PM2)...${NC}"
-            npx pm2 restart gpon-backend --update-env
+            restart_pm2_service "gpon-backend" "./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8005" "backend"
             ;;
         R2|r2)
             echo -e "${GREEN}Memulai ulang Frontend (PM2)...${NC}"
-            npx pm2 restart gpon-frontend --update-env
+            restart_pm2_service "gpon-frontend" "npm run start -- -p 3005" "frontend"
             ;;
         R3|r3)
             echo -e "${GREEN}Memulai ulang Database (Docker)...${NC}"
@@ -108,7 +141,8 @@ while true; do
             
             # Restart PM2
             echo -e "${GREEN}Merestart aplikasi di PM2...${NC}"
-            npx pm2 restart gpon-backend gpon-frontend --update-env
+            restart_pm2_service "gpon-backend" "./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8005" "backend"
+            restart_pm2_service "gpon-frontend" "npm run start -- -p 3005" "frontend"
             
             echo -e "${GREEN}✓ Update Sukses!${NC}"
             ;;
