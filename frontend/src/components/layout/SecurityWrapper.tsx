@@ -8,7 +8,7 @@ import { MapPin, Clock, RotateCw, ShieldAlert, Key } from 'lucide-react';
 // Koordinat Pusat Balikpapan
 const BALIKPAPAN_LAT = -1.256257;
 const BALIKPAPAN_LON = 116.866563;
-const MAX_RADIUS_KM = 50.0;
+const MAX_RADIUS_KM = 0.5;
 
 // Helper menghitung jarak Haversine di client
 function calculateDistance(lat1: number, lon1: number, lat2 = BALIKPAPAN_LAT, lon2 = BALIKPAPAN_LON): number {

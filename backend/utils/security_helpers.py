@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 # Koordinat Pusat Balikpapan (Kantor Telkom/Pusat Operasional WOC)
 BALIKPAPAN_LAT = -1.256257
 BALIKPAPAN_LON = 116.866563
-MAX_RADIUS_KM = 50.0
+MAX_RADIUS_KM = 0.5
 
 def get_wita_now():
     """Mengembalikan waktu saat ini dalam WITA (UTC+8)"""
