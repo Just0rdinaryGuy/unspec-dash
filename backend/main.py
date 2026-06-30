@@ -2,9 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 
-# Load file .env (override=True penting agar PM2 environment cache bisa ditimpa)
-load_dotenv(override=True)
+# Cari file .env secara dinamis (di folder backend atau induknya/root proyek)
+base_dir = Path(__file__).resolve().parent
+dotenv_path = base_dir / ".env"
+if not dotenv_path.exists():
+    dotenv_path = base_dir.parent / ".env"
+
+load_dotenv(dotenv_path=dotenv_path, override=True)
 
 # Import router yang udah kita bikin
 from routers import dashboard, data_explorer, tickets, data_import, auth, users, report, bot_telegram
