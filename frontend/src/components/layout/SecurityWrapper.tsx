@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_BASE_URL } from '@/lib/constants';
+import { MapPin, Clock, RotateCw, ShieldAlert, Key } from 'lucide-react';
 
 // Koordinat Pusat Balikpapan
 const BALIKPAPAN_LAT = -1.256257;
@@ -226,30 +227,37 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
     // RENDER OVERLAY PEMBATASAN WAKTU
     if (timeBlocked) {
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-xl p-4 transition-all">
-                <div className="max-w-md w-full bg-slate-900/90 border border-red-500/20 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-orange-500 to-red-500"></div>
-                    <div className="w-16 h-16 bg-red-950/50 border border-red-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <span className="text-3xl">⏰</span>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-xl p-4 transition-all duration-300">
+                <div className="max-w-md w-full bg-slate-900/90 border border-red-500/20 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden backdrop-blur-md">
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 via-orange-500 to-red-500"></div>
+                    
+                    <div className="w-20 h-20 bg-red-950/50 border border-red-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner animate-pulse">
+                        <Clock className="h-10 w-10 text-red-500" />
                     </div>
-                    <h2 className="text-2xl font-bold text-white mb-2">Akses Waktu Dibatasi</h2>
+                    
+                    <h2 className="text-2xl font-extrabold text-white tracking-tight mb-2">Akses Waktu Dibatasi</h2>
+                    
                     <p className="text-slate-400 text-sm mb-6 leading-relaxed">
                         Aplikasi Warga Online Ceria (WOC) hanya dapat diakses selama jam operasional pada pukul <span className="font-semibold text-red-400">08:00 - 22:00 WITA</span>.
                     </p>
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 font-mono text-xl text-red-500 tracking-wider">
+                    
+                    <div className="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 font-mono text-2xl font-bold text-red-500 tracking-wider shadow-inner">
                         {currentTime || "00:00:00 WITA"}
                     </div>
+                    
                     <p className="text-xs text-slate-500 mt-6 leading-relaxed">
                         Silakan kembali lagi selama jam operasional untuk mengakses dashboard.
                     </p>
+                    
                     <button 
                         onClick={() => {
                             sessionStorage.setItem('bypass_security', 'true');
                             setTimeBlocked(false);
                             setLocationBlocked(false);
                         }}
-                        className="w-full bg-red-900/50 hover:bg-red-800/60 border border-red-500/30 text-white font-semibold py-3 px-6 rounded-2xl transition-all shadow-lg active:scale-95 text-sm mt-6"
+                        className="w-full mt-6 bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-white font-medium py-3 px-6 rounded-2xl transition-all shadow-md active:scale-95 text-sm flex items-center justify-center gap-2 cursor-pointer"
                     >
+                        <Key className="h-4 w-4" />
                         Bypass Akses (Testing)
                     </button>
                 </div>
@@ -260,54 +268,83 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
     // RENDER OVERLAY PEMBATASAN LOKASI
     if (locationBlocked) {
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-xl p-4 transition-all">
-                <div className="max-w-md w-full bg-slate-900/90 border border-amber-500/20 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500"></div>
-                    <div className="w-16 h-16 bg-amber-950/50 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <span className="text-3xl">📍</span>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-xl p-4 transition-all duration-300">
+                <div className="max-w-lg w-full bg-slate-900/90 border border-amber-500/25 rounded-3xl p-8 shadow-[0_0_50px_rgba(245,158,11,0.1)] relative overflow-hidden backdrop-blur-md">
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500"></div>
+                    
+                    <div className="w-20 h-20 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse">
+                        <MapPin className="h-10 w-10 text-amber-500" />
                     </div>
-                    <h2 className="text-2xl font-bold text-white mb-2">Izin Lokasi Diperlukan</h2>
-                    <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+                    
+                    <h2 className="text-2xl font-extrabold text-white text-center tracking-tight mb-2">Izin Lokasi Diperlukan</h2>
+                    
+                    <p className="text-slate-400 text-sm text-center mb-6 leading-relaxed">
                         Sistem mendeteksi bahwa Anda berada di luar wilayah operasional WOC Balikpapan atau izin geolokasi browser ditolak.
                     </p>
                     
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-sm text-left text-slate-300 mb-6 space-y-2">
-                        <div className="font-semibold text-amber-500">Pesan Status:</div>
-                        <div className="font-mono text-xs leading-relaxed text-slate-400">
+                    {/* Status Box */}
+                    <div className="bg-slate-950/50 border border-slate-800/80 rounded-2xl p-4 text-sm text-left mb-6 shadow-inner">
+                        <div className="flex items-center gap-2 font-semibold text-amber-500 mb-2">
+                            <ShieldAlert className="h-4 w-4" />
+                            <span>Pesan Status Jaringan:</span>
+                        </div>
+                        <div className="font-mono text-xs leading-relaxed text-slate-400 break-words">
                             {locationError || "Mendeteksi koordinat lokasi..."}
                         </div>
                         {coords && (
-                            <div className="text-xs text-slate-500 border-t border-slate-800/80 pt-2 font-mono">
-                                Lat: {coords.latitude.toFixed(6)}, Lon: {coords.longitude.toFixed(6)}
+                            <div className="text-xs text-slate-500 border-t border-slate-800/50 pt-2 mt-2 font-mono flex justify-between">
+                                <span>Lat: {coords.latitude.toFixed(6)}</span>
+                                <span>Lon: {coords.longitude.toFixed(6)}</span>
                             </div>
                         )}
                     </div>
 
-                    <div className="space-y-3">
-                        <button 
-                            onClick={() => window.location.reload()}
-                            className="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-2xl transition-all shadow-lg active:scale-95 text-sm"
-                        >
-                            Refresh Halaman & Minta Ulang
-                        </button>
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button 
+                                onClick={() => window.location.reload()}
+                                className="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 px-6 rounded-2xl transition-all shadow-lg active:scale-95 text-sm flex items-center justify-center gap-2 cursor-pointer"
+                            >
+                                <RotateCw className="h-4 w-4" />
+                                Refresh Halaman
+                            </button>
 
-                        <button 
-                            onClick={() => {
-                                sessionStorage.setItem('bypass_security', 'true');
-                                setTimeBlocked(false);
-                                setLocationBlocked(false);
-                            }}
-                            className="w-full bg-amber-950/50 hover:bg-amber-900/60 border border-amber-500/30 text-white font-semibold py-3 px-6 rounded-2xl transition-all shadow-lg active:scale-95 text-sm"
-                        >
-                            Bypass Lokasi (Testing)
-                        </button>
+                            <button 
+                                onClick={() => {
+                                    sessionStorage.setItem('bypass_security', 'true');
+                                    setTimeBlocked(false);
+                                    setLocationBlocked(false);
+                                }}
+                                className="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 px-6 rounded-2xl transition-all border border-slate-700/50 shadow-md active:scale-95 text-sm flex items-center justify-center gap-2 cursor-pointer"
+                            >
+                                <Key className="h-4 w-4" />
+                                Bypass Lokasi (Test)
+                            </button>
+                        </div>
                         
-                        <div className="text-left text-xs text-slate-500 border-t border-slate-800/80 pt-4 space-y-2">
-                            <span className="font-semibold block text-slate-400">Cara mengaktifkan lokasi browser:</span>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li>Klik ikon gembok (🔒) di sebelah kiri bilah alamat URL browser Anda.</li>
-                                <li>Aktifkan pilihan <span className="font-semibold">Location / Lokasi</span> menjadi "Allow" atau "Izinkan".</li>
-                            </ul>
+                        {/* Guide Section */}
+                        <div className="text-left border-t border-slate-800/80 pt-4 mt-2">
+                            <span className="font-bold text-xs text-slate-300 uppercase tracking-wider block mb-3">Cara Mengaktifkan Lokasi Browser:</span>
+                            <div className="space-y-2.5">
+                                <div className="flex gap-3 items-start bg-slate-950/20 border border-slate-800/30 p-3 rounded-xl">
+                                    <div className="bg-slate-800 text-slate-300 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</div>
+                                    <p className="text-xs text-slate-400 leading-relaxed">
+                                        Klik ikon gembok (<span className="font-semibold text-slate-300">🔒</span>) atau info di sebelah kiri bilah URL peramban Anda.
+                                    </p>
+                                </div>
+                                <div className="flex gap-3 items-start bg-slate-950/20 border border-slate-800/30 p-3 rounded-xl">
+                                    <div className="bg-slate-800 text-slate-300 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</div>
+                                    <p className="text-xs text-slate-400 leading-relaxed">
+                                        Ubah status izin <span className="font-semibold text-slate-300">Location / Lokasi</span> menjadi <span className="font-semibold text-amber-500">Allow / Izinkan</span>.
+                                    </p>
+                                </div>
+                                <div className="flex gap-3 items-start bg-slate-950/20 border border-slate-800/30 p-3 rounded-xl">
+                                    <div className="bg-slate-800 text-slate-300 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</div>
+                                    <p className="text-xs text-slate-400 leading-relaxed">
+                                        Klik tombol <span className="font-semibold text-slate-300">Refresh Halaman</span> di atas untuk mendeteksi ulang lokasi Anda.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
