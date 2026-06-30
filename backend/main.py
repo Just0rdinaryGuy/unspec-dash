@@ -30,6 +30,10 @@ from services.auth_service import AuthService
 
 @app.middleware("http")
 async def check_operational_hours(request: Request, call_next):
+    # Bypass OPTIONS request untuk preflight CORS (mencegah CORS 403 Forbidden)
+    if request.method == "OPTIONS":
+        return await call_next(request)
+
     # Bypass jika ada header bypass keamanan (testing)
     if request.headers.get("X-Bypass-Security") == "true":
         return await call_next(request)
