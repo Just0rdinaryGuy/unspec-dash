@@ -4,7 +4,7 @@ Validasi based on struktur Excel, bukan nama file
 """
 import pandas as pd
 from datetime import datetime
-from typing import Dict, Tuple, List, Any
+from typing import Dict, Tuple, List, Any, Optional
 
 
 # Konstanta
@@ -25,90 +25,129 @@ def determine_spec_status(rx_power):
         return "UNSPEC"
     return "SPEC"
 
-def detect_file_type(file_path: str) -> str:
+def find_excel_header_row(file_path: str, expected_keywords: List[str]) -> int:
     """
-    Deteksi tipe file based on struktur kolom
-    Kedua file punya multi-row headers:
-    - UKUR-MASSAL: header di row 2 (index 2)
-    - UNSPEC-SEMESTA: header di row 4 (index 4)
-    
-    Returns: 'unspec' atau 'ukur'
-    Raises: ValueError kalo ga cocok kedua struktur
+    Mencari baris header terbaik di dalam 15 baris pertama berkas Excel.
+    Mengembalikan index baris header (0-indexed). Jika tidak ditemukan, kembalikan 0.
     """
     try:
-        # Coba UNSPEC-SEMESTA dulu (header di row 4 - skip 4 rows pertama)
-        df_unspec = pd.read_excel(file_path, header=4, nrows=0)
-        columns_unspec = set(df_unspec.columns)
+        df = pd.read_excel(file_path, header=None, nrows=15)
+        best_row = 0
+        max_matches = 0
         
-        # Cek UNSPEC-SEMESTA dengan nyari kolom kunci
-        # File user punya nama kolom beda, jadi cek pattern
-        has_no = any('NO' in str(col).upper() for col in df_unspec.columns)
-        has_sto = any('STO' in str(col).upper() or 'KOTA' in str(col).upper() for col in df_unspec.columns)
-        has_nd = any(str(col).upper().strip() in ['ND', 'NODE'] or 'NODE' in str(col).upper() for col in df_unspec.columns)
+        for idx, row in df.iterrows():
+            row_str = [str(val).upper().strip() for val in row if pd.notna(val)]
+            matches = 0
+            for keyword in expected_keywords:
+                if any(keyword.upper() in val for val in row_str):
+                    matches += 1
+            if matches > max_matches:
+                max_matches = matches
+                best_row = idx
+                
+        if max_matches >= 2:
+            return best_row
+        return 0
+    except:
+        return 0
+
+def detect_file_info(file_path: str) -> Tuple[str, Optional[int]]:
+    """
+    Mendeteksi tipe file ('unspec' atau 'ukur') beserta index baris header-nya.
+    Jika file 'ukur' tidak memiliki header, mengembalikan ('ukur', None).
+    """
+    try:
+        # 1. Cari header unspec-semesta
+        unspec_keywords = ['SEKTOR', 'ND', 'ODP', 'RX POWER', 'ONU RX POWER', 'NOMOR TIKET', 'STATUS TIKET']
+        unspec_header = find_excel_header_row(file_path, unspec_keywords)
         
-        # Kalo nemu kolom-kolom typical UNSPEC, berarti kemungkinan UNSPEC
-        if has_no and (has_sto or has_nd):
-            return 'unspec'
+        # Coba baca dengan header tersebut untuk verifikasi
+        df_unspec = pd.read_excel(file_path, header=unspec_header, nrows=2)
+        has_sektor = any('SEKTOR' in str(col).upper() or 'SECTOR' in str(col).upper() for col in df_unspec.columns)
+        has_nd = any(str(col).upper().strip() in ['ND', 'NODE'] for col in df_unspec.columns)
         
-        # Coba UKUR-MASSAL (header di row 2)
-        df_ukur = pd.read_excel(file_path, header=2, nrows=0)
+        if has_sektor or (has_nd and len(df_unspec.columns) > 15):
+            return 'unspec', unspec_header
+
+        # 2. Cari header ukur-massal
+        ukur_keywords = ['ND', 'ONU RX POWER', 'RX DBM', 'RX_POWER']
+        ukur_header = find_excel_header_row(file_path, ukur_keywords)
         
-        # Cari kolom "Rx dBm" atau kolom RX power sejenis
-        has_rx = False
-        for col in df_ukur.columns:
-            col_str = str(col).upper()
-            if ('RX' in col_str and 'DBM' in col_str) or 'RX DBM' in col_str:
-                has_rx = True
-                break
-        
-        if has_rx:
-            return 'ukur'
-        
+        if ukur_header > 0 or (ukur_header == 0 and any('RX' in str(col).upper() for col in pd.read_excel(file_path, header=0, nrows=2).columns)):
+            return 'ukur', ukur_header
+            
+        # 3. Cek jika ukur-massal TANPA header
+        df_raw = pd.read_excel(file_path, header=None, nrows=3)
+        if len(df_raw) > 0 and len(df_raw.columns) > 10:
+            val_nd = str(df_raw.iloc[0, 1]).strip()
+            val_rx_10 = df_raw.iloc[0, 10]
+            val_rx_12 = df_raw.iloc[0, 12]
+            
+            is_nd = val_nd.split('.')[0].isdigit() and len(val_nd.split('.')[0]) >= 10
+            is_rx = (isinstance(val_rx_10, (int, float)) and val_rx_10 < 0) or (isinstance(val_rx_12, (int, float)) and val_rx_12 < 0)
+            
+            if is_nd and is_rx:
+                return 'ukur', None
+                
         raise ValueError(
-            f"File structure tidak dikenali. "
-            f"Pastikan file adalah unspec-semesta (header row 5) atau ukur-massal (header row 3)"
+            "Struktur file tidak dikenali. "
+            "Pastikan file adalah unspec-semesta (memiliki kolom ND, SEKTOR, dll) atau ukur-massal (iBooster/NMS export)."
         )
-    
     except Exception as e:
-        raise ValueError(f"Error baca file Excel: {str(e)}")
+        if "Struktur file" in str(e):
+            raise e
+        raise ValueError(f"Gagal membaca struktur berkas Excel: {str(e)}")
+
+def detect_file_type(file_path: str) -> str:
+    """Helper method kompatibilitas"""
+    ftype, _ = detect_file_info(file_path)
+    return ftype
 
 def parse_ukur_massal_only(file_path: str) -> List[Dict[str, Any]]:
     """Parse file Ukur Massal aja buat update Redaman"""
     try:
-        df_ukur = pd.read_excel(file_path, header=2)
-        
-        data = []
-        
-        # Cari kolom ND
-        nd_column = None
-        for col in df_ukur.columns:
-            col_str = str(col).upper().strip()
-            if col_str == 'ND' or 'ND' in col_str or col == df_ukur.columns[1]:
-                nd_column = col
-                break
-        if not nd_column and len(df_ukur.columns) > 1:
-            nd_column = df_ukur.columns[1]
+        ftype, header_idx = detect_file_info(file_path)
+        if ftype != 'ukur':
+            raise ValueError("Berkas bukan tipe Ukur Massal")
             
-        # Cari kolom Rx dBm
-        rx_column = None
-        for col in df_ukur.columns:
-            col_str = str(col).upper()
-            if ('RX' in col_str and 'DBM' in col_str) or 'RX DBM' in col_str:
-                rx_column = col
-                break
-        if not rx_column and len(df_ukur.columns) > 21:
-             # Fallback by posisi kalo typical index -21 valid
-            sample_val = df_ukur.iloc[0, 21] if len(df_ukur) > 0 else None
-            if pd.notna(sample_val) and isinstance(sample_val, (int, float)):
-                 rx_column = df_ukur.columns[21]
+        df_ukur = pd.read_excel(file_path, header=header_idx)
+        
+        if header_idx is None:
+            df_ukur.columns = [f"col_{i}" for i in range(len(df_ukur.columns))]
+            nd_column = "col_1"
+            rx_column = "col_12" if len(df_ukur.columns) > 12 else "col_10"
+        else:
+            nd_column = None
+            for col in df_ukur.columns:
+                col_str = str(col).upper().strip()
+                if col_str == 'ND' or 'ND' in col_str or col == df_ukur.columns[1]:
+                    nd_column = col
+                    break
+            if not nd_column and len(df_ukur.columns) > 1:
+                nd_column = df_ukur.columns[1]
+                
+            rx_column = None
+            for col in df_ukur.columns:
+                col_str = str(col).upper()
+                if ('RX' in col_str and 'DBM' in col_str) or 'RX DBM' in col_str:
+                    rx_column = col
+                    break
+            if not rx_column:
+                if len(df_ukur.columns) > 12:
+                    rx_column = df_ukur.columns[12]
+                elif len(df_ukur.columns) > 10:
+                    rx_column = df_ukur.columns[10]
             
         if not nd_column or not rx_column:
-             raise ValueError("Kolom ND atau Rx dBm ga ketemu di Ukur Massal")
+             raise ValueError("Kolom ND atau Rx Power tidak ditemukan pada berkas Ukur Massal")
              
+        data = []
         for _, row in df_ukur.iterrows():
             nd = str(row[nd_column]).strip()
+            if '.' in nd:
+                nd = nd.split('.')[0]
             rx = row[rx_column]
-            if nd and pd.notna(rx):
+            if nd and nd != 'nan' and pd.notna(rx):
                 data.append({
                     "ND": nd,
                     "UKUR_ULANG": rx 
@@ -116,69 +155,70 @@ def parse_ukur_massal_only(file_path: str) -> List[Dict[str, Any]]:
         return data
         
     except Exception as e:
-        raise ValueError(f"Error parse file Ukur Massal: {str(e)}")
+        raise ValueError(f"Gagal memproses file Ukur Massal: {str(e)}")
         
 def parse_and_merge_files(
     file_path_1: str,
     file_path_2: str
 ) -> List[Dict]:
-    """
-    Parse 2 file Excel, gabungin, dan return list of dicts
-    TIDAK berinteraksi sama Database.
-    """
+    """Parse 2 file Excel, gabungin, dan return list of dicts"""
     
     # Step 1: Deteksi tipe file
-    type1 = detect_file_type(file_path_1)
-    type2 = detect_file_type(file_path_2)
+    type1, header1 = detect_file_info(file_path_1)
+    type2, header2 = detect_file_info(file_path_2)
     
-    # Validasi kedua file berbeda
     if type1 == type2:
         raise ValueError(
             f"Kedua file memiliki structure yang sama ({type1}). "
             "Upload 1 file unspec-semesta dan 1 file ukur-massal."
         )
     
-    # Assign path
     unspec_path = file_path_1 if type1 == 'unspec' else file_path_2
+    unspec_header = header1 if type1 == 'unspec' else header2
+    
     ukur_path = file_path_1 if type1 == 'ukur' else file_path_2
+    ukur_header = header1 if type1 == 'ukur' else header2
     
     # Step 2: Parse ukur-massal buat VLOOKUP
     try:
-        df_ukur = pd.read_excel(ukur_path, header=2)
+        df_ukur = pd.read_excel(ukur_path, header=ukur_header)
+        if ukur_header is None:
+            df_ukur.columns = [f"col_{i}" for i in range(len(df_ukur.columns))]
+            nd_column = "col_1"
+            rx_column = "col_12" if len(df_ukur.columns) > 12 else "col_10"
+        else:
+            nd_column = None
+            for col in df_ukur.columns:
+                col_str = str(col).upper().strip()
+                if col_str == 'ND' or 'ND' in col_str or col == df_ukur.columns[1]:
+                    nd_column = col
+                    break
+            if not nd_column and len(df_ukur.columns) > 1:
+                nd_column = df_ukur.columns[1]
+            
+            rx_column = None
+            for col in df_ukur.columns:
+                col_str = str(col).upper()
+                if ('RX' in col_str and 'DBM' in col_str) or 'RX DBM' in col_str:
+                    rx_column = col
+                    break
+                    
+            if not rx_column:
+                if len(df_ukur.columns) > 12:
+                    rx_column = df_ukur.columns[12]
+                elif len(df_ukur.columns) > 10:
+                    rx_column = df_ukur.columns[10]
     except Exception as e:
          raise ValueError(f"Error parse file Ukur Massal: {str(e)}")
 
     lookup = {}
-    
-    # Cari kolom ND (harusnya kolom B, index 1)
-    nd_column = None
-    for col in df_ukur.columns:
-        col_str = str(col).upper().strip()
-        if col_str == 'ND' or 'ND' in col_str or col == df_ukur.columns[1]:
-            nd_column = col
-            break
-    if not nd_column and len(df_ukur.columns) > 1:
-        nd_column = df_ukur.columns[1]
-    
-    # Cari kolom Rx dBm (harusnya kolom V, sekitar index 21)
-    rx_column = None
-    for col in df_ukur.columns:
-        col_str = str(col).upper()
-        if ('RX' in col_str and 'DBM' in col_str) or 'RX DBM' in col_str:
-            rx_column = col
-            break
-            
-    # Fallback by posisi
-    if not rx_column and len(df_ukur.columns) > 21:
-        sample_val = df_ukur.iloc[0, 21] if len(df_ukur) > 0 else None
-        if pd.notna(sample_val) and isinstance(sample_val, (int, float)):
-             rx_column = df_ukur.columns[21]
-    
     if nd_column and rx_column:
         for _, row in df_ukur.iterrows():
             nd = str(row[nd_column]).strip()
+            if '.' in nd:
+                nd = nd.split('.')[0]
             rx = row[rx_column]
-            if nd and pd.notna(rx):
+            if nd and nd != 'nan' and pd.notna(rx):
                 try:
                     lookup[nd] = float(rx)
                 except:
@@ -186,14 +226,13 @@ def parse_and_merge_files(
     
     # Step 3: Parse unspec-semesta
     try:
-        df_unspec = pd.read_excel(unspec_path, header=4)
+        df_unspec = pd.read_excel(unspec_path, header=unspec_header)
     except Exception as e:
         raise ValueError(f"Error parse file Unspec Semesta: {str(e)}")
     
     # Step 4: Map ke output schema
     parsed_data = []
     
-    # Cari kolom by pattern matching
     def find_column(df, patterns):
         for col in df.columns:
             col_str = str(col).upper().strip()
@@ -205,7 +244,6 @@ def parse_and_merge_files(
     col_sto = find_column(df_unspec, ['STO', 'KOTA', 'CMDF'])
     col_sektor = find_column(df_unspec, ['SEKTOR', 'SECTOR'])
     
-    # ND harus strict
     col_nd = None
     for col in df_unspec.columns:
         if str(col).upper().strip() == 'ND':
@@ -224,11 +262,9 @@ def parse_and_merge_files(
     for idx, row in df_unspec.iterrows():
         try:
             nd = str(row[col_nd]).strip() if col_nd and pd.notna(row[col_nd]) else ''
-            
-            # Skip kalo ND kosong? Mungkin engga, simpen semua buat audit
-            # RealDataService nanti kasih default
-            
-            # Get values
+            if '.' in nd:
+                nd = nd.split('.')[0]
+                
             item = {
                 "STO": str(row[col_sto]).strip() if col_sto and pd.notna(row[col_sto]) else 'UNMAP',
                 "SEKTOR": str(row[col_sektor]).strip() if col_sektor and pd.notna(row[col_sektor]) else 'UNMAP',
@@ -240,18 +276,11 @@ def parse_and_merge_files(
                 "FLAG HVC": str(row[col_hvc]).strip() if col_hvc and pd.notna(row[col_hvc]) else 'Regular',
             }
             
-            # Mapping Power
-            # rx_from_unspec: Value di file Unspec (Base Value) -> ONU RX POWER
             rx_from_unspec = row[col_rx_after] if col_rx_after and pd.notna(row[col_rx_after]) else None
-            
-            # rx_from_ukur: Value dari Ukur Massal (New Value) -> UKUR ULANG
             rx_from_ukur = lookup.get(nd)
             
-            # FIX YANG KETUKER:
-            # Ukur Massal nyediain value BARU (UKUR ULANG)
-            # File Unspec nyediain value LAMA/Base (ONU RX POWER)
-            item["ONU RX POWER"] = rx_from_unspec   # Dulu rx_before (lookup) -> SALAH
-            item["UKUR ULANG"] = rx_from_ukur       # Dulu rx_after (row) -> SALAH
+            item["ONU RX POWER"] = rx_from_unspec
+            item["UKUR ULANG"] = rx_from_ukur
             
             parsed_data.append(item)
             
