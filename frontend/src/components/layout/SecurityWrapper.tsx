@@ -50,10 +50,17 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
     const [coords, setCoords] = useState<{ latitude: number; longitude: number } | null>(null);
     const [distance, setDistance] = useState<number | null>(null);
     
+    // State Bypass Keamanan untuk mencegah interval/listener menimpa status blokir
+    const [bypassActive, setBypassActive] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return sessionStorage.getItem('bypass_security') === 'true';
+        }
+        return false;
+    });
+    
     // 1. Live Clock & Time-based check
     useEffect(() => {
-        const isBypassed = sessionStorage.getItem('bypass_security') === 'true';
-        if (isBypassed) {
+        if (bypassActive) {
             setTimeBlocked(false);
             return;
         }
@@ -78,12 +85,11 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
         checkTime();
         const interval = setInterval(checkTime, 1000);
         return () => clearInterval(interval);
-    }, [user]);
+    }, [user, bypassActive]);
 
     // 2. Geolocation tracking
     useEffect(() => {
-        const isBypassed = sessionStorage.getItem('bypass_security') === 'true';
-        if (isBypassed) {
+        if (bypassActive) {
             setLocationBlocked(false);
             return;
         }
@@ -152,7 +158,7 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
         });
 
         return () => navigator.geolocation.clearWatch(watchId);
-    }, [isAuthenticated, user]);
+    }, [isAuthenticated, user, bypassActive]);
 
     // 3. Global Fetch Interceptor
     useEffect(() => {
@@ -252,6 +258,7 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
                     <button 
                         onClick={() => {
                             sessionStorage.setItem('bypass_security', 'true');
+                            setBypassActive(true);
                             setTimeBlocked(false);
                             setLocationBlocked(false);
                         }}
@@ -312,6 +319,7 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
                             <button 
                                 onClick={() => {
                                     sessionStorage.setItem('bypass_security', 'true');
+                                    setBypassActive(true);
                                     setTimeBlocked(false);
                                     setLocationBlocked(false);
                                 }}
