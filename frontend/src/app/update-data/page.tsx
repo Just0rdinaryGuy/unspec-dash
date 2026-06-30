@@ -5,7 +5,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Upload, CheckCircle2, AlertCircle, Database, FileSpreadsheet, X, Info } from "lucide-react"
+import { Upload, CheckCircle2, AlertCircle, Database, FileSpreadsheet, X, Info, Loader2 } from "lucide-react"
 import { API_BASE_URL } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 
@@ -24,10 +24,46 @@ export default function SignalMonitoringPage() {
     const [file1, setFile1] = useState<File | null>(null)
     const [file2, setFile2] = useState<File | null>(null)
     const [uploading, setUploading] = useState(false)
+    const [uploadingBulk, setUploadingBulk] = useState(false)
     const [result, setResult] = useState<ImportResult | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [dragActive1, setDragActive1] = useState(false)
     const [dragActive2, setDragActive2] = useState(false)
+
+    const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (!files || files.length === 0) return
+
+        setUploadingBulk(true)
+        const formData = new FormData()
+        for (let i = 0; i < files.length; i++) {
+            formData.append("files", files[i])
+        }
+
+        try {
+            const token = localStorage.getItem("token")
+            const res = await fetch(`${API_BASE_URL}/api/reports/upload-bulk`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
+            })
+
+            const result = await res.json()
+            if (res.ok && result.status === "success") {
+                alert(`Berhasil mengimpor ${result.imported_count} file laporan!${result.failed_count > 0 ? `\nGagal: ${result.failed_count} file.` : ""}`)
+            } else {
+                alert(`Gagal mengimpor file: ${result.detail || "Terjadi kesalahan"}`)
+            }
+        } catch (error) {
+            console.error("Bulk upload error", error)
+            alert("Terjadi kesalahan saat mengunggah file.")
+        } finally {
+            setUploadingBulk(false)
+            e.target.value = ""
+        }
+    }
 
     const handleDrag = useCallback((e: React.DragEvent, fileNum: 1 | 2, active: boolean) => {
         e.preventDefault()
@@ -129,11 +165,36 @@ export default function SignalMonitoringPage() {
         <DashboardLayout>
             <div className="space-y-4">
                 {/* Simple Header */}
-                <div>
-                    <h1 className="text-2xl font-bold">Update Data</h1>
-                    <p className="text-muted-foreground">
-                        Upload file Excel untuk update ke database Unspec
-                    </p>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold">Update Data</h1>
+                        <p className="text-muted-foreground">
+                            Upload file Excel untuk update ke database Unspec
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button variant="outline" onClick={() => document.getElementById("bulk-upload-input")?.click()} disabled={uploadingBulk}>
+                            {uploadingBulk ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Uploading...
+                                </>
+                            ) : (
+                                <>
+                                    <Upload className="mr-2 h-4 w-4" />
+                                    Upload Bulk (Laporan Harian)
+                                </>
+                            )}
+                        </Button>
+                        <input
+                            id="bulk-upload-input"
+                            type="file"
+                            multiple
+                            accept=".xlsx,.xls"
+                            className="hidden"
+                            onChange={handleBulkUpload}
+                        />
+                    </div>
                 </div>
 
                 {/* Upload Section */}
