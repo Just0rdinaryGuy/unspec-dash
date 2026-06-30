@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_BASE_URL } from '@/lib/constants';
 import { MapPin, Clock, RotateCw, ShieldAlert, Key } from 'lucide-react';
+import axios from 'axios';
 
 // Koordinat Pusat Balikpapan
 const BALIKPAPAN_LAT = -1.256257;
@@ -165,7 +166,7 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
         return () => navigator.geolocation.clearWatch(watchId);
     }, [isAuthenticated, user, bypassActive]);
 
-    // 3. Global Fetch Interceptor
+    // 3. Global Fetch & Axios Interceptor
     useEffect(() => {
         const originalFetch = window.fetch;
         
@@ -230,8 +231,36 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
             return originalFetch(input, init);
         };
 
+        // Setup Axios interceptor
+        const axiosInterceptor = axios.interceptors.request.use((config) => {
+            const url = config.url || '';
+            if (url.startsWith(API_BASE_URL) || url.startsWith('/api') || url.includes('/api/')) {
+                const token = localStorage.getItem('token');
+                const lat = sessionStorage.getItem('user_lat');
+                const lon = sessionStorage.getItem('user_lon');
+                const bypass = sessionStorage.getItem('bypass_security');
+                
+                if (token) {
+                    config.headers['Authorization'] = `Bearer ${token}`;
+                }
+                if (lat) {
+                    config.headers['X-User-Latitude'] = lat;
+                }
+                if (lon) {
+                    config.headers['X-User-Longitude'] = lon;
+                }
+                if (bypass === 'true') {
+                    config.headers['X-Bypass-Security'] = 'true';
+                }
+            }
+            return config;
+        }, (error) => {
+            return Promise.reject(error);
+        });
+
         return () => {
             window.fetch = originalFetch;
+            axios.interceptors.request.eject(axiosInterceptor);
         };
     }, []);
 
