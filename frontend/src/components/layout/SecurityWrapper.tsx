@@ -5,8 +5,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { API_BASE_URL } from '@/lib/constants';
 
 // Koordinat Pusat Balikpapan
-const BALIKPAPAN_LAT = -1.265;
-const BALIKPAPAN_LON = 116.83;
+const BALIKPAPAN_LAT = -1.256257;
+const BALIKPAPAN_LON = 116.866563;
 const MAX_RADIUS_KM = 50.0;
 
 // Helper menghitung jarak Haversine di client

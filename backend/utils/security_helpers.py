@@ -2,8 +2,8 @@ import math
 from datetime import datetime, timedelta
 
 # Koordinat Pusat Balikpapan (Kantor Telkom/Pusat Operasional WOC)
-BALIKPAPAN_LAT = -1.265
-BALIKPAPAN_LON = 116.83
+BALIKPAPAN_LAT = -1.256257
+BALIKPAPAN_LON = 116.866563
 MAX_RADIUS_KM = 50.0
 
 def get_wita_now():
