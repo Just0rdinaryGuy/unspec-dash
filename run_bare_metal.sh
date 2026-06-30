@@ -22,6 +22,10 @@ else
     echo "DATABASE_URL=postgresql://gpon_user:gpon_secure_pass_2026@localhost:5432/gpon_network" >> .env
 fi
 
+# Fix ownership of files that were created by Docker root user
+echo "Fixing ownership of project files (may prompt for sudo password)..."
+sudo chown -R $(whoami):$(whoami) .
+
 # 3. Backend Setup
 echo "Setting up Python virtual environment for backend..."
 cd backend
