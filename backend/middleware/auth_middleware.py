@@ -42,8 +42,8 @@ async def get_current_active_user(
     if request.headers.get("X-Bypass-Security") == "true":
         return current_user
 
-    # Bypass lokasi jika role adalah developer atau leader
-    if current_user.role in ["developer", "leader"]:
+    # Bypass lokasi jika role adalah developer atau teknisi
+    if current_user.role in ["developer", "teknisi"]:
         return current_user
         
     # Ambil lokasi dari request headers

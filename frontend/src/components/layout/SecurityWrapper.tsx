@@ -61,8 +61,8 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
             const wita = getWitaTime();
             setCurrentTime(wita.formatted);
             
-            // Bypass time check hanya jika user adalah developer
-            if (user?.role === 'developer') {
+            // Bypass time check jika user adalah developer atau teknisi
+            if (user?.role === 'developer' || user?.role === 'teknisi') {
                 setTimeBlocked(false);
                 return;
             }
@@ -93,8 +93,8 @@ export default function SecurityWrapper({ children }: { children: React.ReactNod
             return;
         }
 
-        // Bypass lokasi jika developer atau leader
-        if (user.role === 'developer' || user.role === 'leader') {
+        // Bypass lokasi jika developer atau teknisi
+        if (user.role === 'developer' || user.role === 'teknisi') {
             setLocationBlocked(false);
             return;
         }

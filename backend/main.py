@@ -54,13 +54,13 @@ async def check_operational_hours(request: Request, call_next):
         
     # Check jam operasional WITA
     if not is_within_operational_hours():
-        # Cek apakah user adalah developer (bypass)
+        # Cek apakah user adalah developer atau teknisi (bypass)
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
             token = auth_header.split(" ")[1]
             try:
                 payload = AuthService.decode_token(token)
-                if payload and payload.get("role") == "developer":
+                if payload and payload.get("role") in ["developer", "teknisi"]:
                     return await call_next(request)
             except Exception:
                 pass
