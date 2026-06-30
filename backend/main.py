@@ -4,11 +4,11 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Cari file .env secara dinamis (di folder backend atau induknya/root proyek)
+# Cari file .env secara dinamis (prioritaskan root proyek induk, lalu folder backend)
 base_dir = Path(__file__).resolve().parent
-dotenv_path = base_dir / ".env"
+dotenv_path = base_dir.parent / ".env"
 if not dotenv_path.exists():
-    dotenv_path = base_dir.parent / ".env"
+    dotenv_path = base_dir / ".env"
 
 load_dotenv(dotenv_path=dotenv_path, override=True)
 
