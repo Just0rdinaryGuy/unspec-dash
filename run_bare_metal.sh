@@ -3,7 +3,17 @@ set -e
 
 echo "=== GPON Network Dashboard: Bare-metal Migration ==="
 
-# 1. Stop and remove frontend and backend Docker containers
+# 1. Initialize .env file first to prevent docker compose from complaining about missing env file
+echo "Initializing .env file..."
+if [ ! -f .env ]; then
+    echo "CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3005,http://localhost:3005" > .env
+    echo "DATABASE_URL=postgresql://gpon_user:gpon_secure_pass_2026@localhost:5432/gpon_network" >> .env
+else
+    # Replace postgres with localhost
+    sed -i 's/@postgres:5432/@localhost:5432/g' .env
+fi
+
+# 2. Stop and remove frontend and backend Docker containers
 echo "Stopping Docker containers for frontend and backend..."
 docker compose stop frontend backend || true
 docker compose rm -f frontend backend || true
@@ -11,16 +21,6 @@ docker compose rm -f frontend backend || true
 # Ensure postgres is running
 echo "Starting Postgres database container..."
 docker compose up -d postgres
-
-# 2. Update .env file to point to localhost instead of docker name 'postgres'
-echo "Updating .env file..."
-if [ -f .env ]; then
-    # Replace postgres with localhost
-    sed -i 's/@postgres:5432/@localhost:5432/g' .env
-else
-    echo "CORS_ORIGINS=http://localhost:3000,http://100.121.193.23:3005,http://100.121.193.23:3000" > .env
-    echo "DATABASE_URL=postgresql://gpon_user:gpon_secure_pass_2026@localhost:5432/gpon_network" >> .env
-fi
 
 # Fix ownership of files that were created by Docker root user
 echo "Fixing ownership of project files (may prompt for sudo password)..."
