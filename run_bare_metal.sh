@@ -31,9 +31,9 @@ echo "Setting up Python virtual environment for backend..."
 cd backend
 rm -rf venv
 python3 -m venv venv
-./venv/bin/pip install --upgrade pip
-./venv/bin/pip install wheel hatchling
-./venv/bin/pip install .
+./venv/bin/pip install --default-timeout=1000 --upgrade pip
+./venv/bin/pip install --default-timeout=1000 -i https://pypi.tuna.tsinghua.edu.cn/simple wheel hatchling
+./venv/bin/pip install --default-timeout=1000 -i https://pypi.tuna.tsinghua.edu.cn/simple .
 cd ..
 
 # 4. Frontend Setup
